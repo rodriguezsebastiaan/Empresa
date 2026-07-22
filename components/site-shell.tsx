@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { FloatingSocialButtons } from '@/components/floating-social-buttons'
 import { SiteFooterMain } from '@/components/site-footer-main'
 import { SiteHeaderMain } from '@/components/site-header-main'
 import { cn } from '@/lib/utils'
@@ -18,6 +19,7 @@ export function SiteShell({ children, className }: SiteShellProps) {
     >
       <SiteHeaderMain />
       {children}
+      <FloatingSocialButtons />
       <SiteFooterMain />
     </main>
   )

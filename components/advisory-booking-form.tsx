@@ -11,7 +11,7 @@ import {
   type AdvisoryBookingFormData,
   type FieldErrors,
 } from '@/lib/validation'
-import { buildWhatsAppUrl, hasConfiguredWhatsApp } from '@/lib/site'
+import { buildWhatsAppUrl } from '@/lib/site'
 
 type AvailabilityResponse = {
   configured?: boolean
@@ -61,6 +61,7 @@ function createInitialState(): AdvisoryBookingFormData {
 }
 
 export function AdvisoryBookingForm() {
+  const whatsappHref = buildWhatsAppUrl()
   const [form, setForm] = useState<AdvisoryBookingFormData>(createInitialState)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [loadingSlots, setLoadingSlots] = useState(false)
@@ -275,13 +276,11 @@ export function AdvisoryBookingForm() {
           </p>
           <div className="mt-6 flex flex-col gap-3">
             <SiteAction href={siteConfig.routes.home}>VOLVER AL INICIO</SiteAction>
-            <SiteAction
-              href={buildWhatsAppUrl()}
-              external={hasConfiguredWhatsApp()}
-              variant="secondary"
-            >
-              HABLAR POR WHATSAPP
-            </SiteAction>
+            {whatsappHref ? (
+              <SiteAction href={whatsappHref} external variant="secondary">
+                HABLAR POR WHATSAPP
+              </SiteAction>
+            ) : null}
           </div>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import { MessageCircle } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import { SiteAction } from '@/components/site-action'
-import { buildWhatsAppUrl, hasConfiguredWhatsApp } from '@/lib/site'
+import { buildWhatsAppUrl } from '@/lib/site'
 
 export function HomeCallToAction() {
+  const whatsappHref = buildWhatsAppUrl()
+
   return (
     <section className="relative border-t border-border/60 bg-secondary/20">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
@@ -28,14 +30,16 @@ export function HomeCallToAction() {
             <SiteAction href={siteConfig.routes.diagnostics} variant="secondary">
               SOLICITAR DIAGNÓSTICO
             </SiteAction>
-            <SiteAction
-              href={buildWhatsAppUrl()}
-              external={hasConfiguredWhatsApp()}
-              icon={MessageCircle}
-              variant="secondary"
-            >
-              HABLAR POR WHATSAPP
-            </SiteAction>
+            {whatsappHref ? (
+              <SiteAction
+                href={whatsappHref}
+                external
+                icon={MessageCircle}
+                variant="secondary"
+              >
+                HABLAR POR WHATSAPP
+              </SiteAction>
+            ) : null}
           </div>
         </div>
       </div>

@@ -11,17 +11,24 @@ export function hasConfiguredWhatsApp() {
   )
 }
 
+export function hasConfiguredInstagram() {
+  return !siteConfig.social.instagramIsProvisional && siteConfig.social.instagramUrl.length > 0
+}
+
 export function hasConfiguredEmail() {
   return !siteConfig.contact.emailIsProvisional && siteConfig.contact.email.length > 3
 }
 
 export function hasConfiguredPhone() {
-  return !siteConfig.contact.phoneIsProvisional && stripNonDigits(siteConfig.contact.phoneE164).length >= 7
+  return (
+    !siteConfig.contact.phoneIsProvisional &&
+    stripNonDigits(siteConfig.contact.phoneE164).length >= 7
+  )
 }
 
 export function buildWhatsAppUrl(message = siteConfig.contact.whatsappMessage) {
   if (!hasConfiguredWhatsApp()) {
-    return siteConfig.routes.contact
+    return null
   }
 
   const number = stripNonDigits(siteConfig.contact.whatsappNumber)
@@ -29,9 +36,17 @@ export function buildWhatsAppUrl(message = siteConfig.contact.whatsappMessage) {
   return `https://wa.me/${number}?${params.toString()}`
 }
 
+export function buildInstagramUrl() {
+  if (!hasConfiguredInstagram()) {
+    return null
+  }
+
+  return siteConfig.social.instagramUrl
+}
+
 export function buildMailtoUrl(subject?: string) {
   if (!hasConfiguredEmail()) {
-    return siteConfig.routes.contact
+    return null
   }
 
   const params = new URLSearchParams()
@@ -46,7 +61,7 @@ export function buildMailtoUrl(subject?: string) {
 
 export function buildPhoneUrl() {
   if (!hasConfiguredPhone()) {
-    return siteConfig.routes.contact
+    return null
   }
 
   return `tel:${siteConfig.contact.phoneE164}`

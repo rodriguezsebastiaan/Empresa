@@ -21,8 +21,6 @@ import {
   buildMailtoUrl,
   buildPhoneUrl,
   buildWhatsAppUrl,
-  hasConfiguredEmail,
-  hasConfiguredPhone,
   hasConfiguredWhatsApp,
 } from '@/lib/site'
 
@@ -30,87 +28,94 @@ type ContactChannel = {
   title: string
   value: string
   note: string
-  href?: string
+  href?: string | null
   icon: LucideIcon
   external: boolean
   provisional: boolean
 }
 
-const contactChannels: ContactChannel[] = [
-  {
-    title: 'Agendar una asesoría',
-    value: 'Programar reunión inicial de 30 minutos',
-    note: 'Ideal para comprender la necesidad y definir el mejor siguiente paso.',
-    href: siteConfig.routes.advisory,
-    icon: CalendarDays,
-    external: false,
-    provisional: false,
-  },
-  {
-    title: 'Solicitar diagnóstico',
-    value: 'Formulario guiado por pasos',
-    note: 'Permite explicar el problema con más detalle antes de una reunión.',
-    href: siteConfig.routes.diagnostics,
-    icon: CalendarDays,
-    external: false,
-    provisional: false,
-  },
-  {
-    title: 'WhatsApp',
-    value: siteConfig.contact.whatsappDisplay,
-    note: 'Canal útil para una conversación inicial o seguimiento rápido.',
-    href: buildWhatsAppUrl(),
-    icon: MessageCircle,
-    external: hasConfiguredWhatsApp(),
-    provisional: siteConfig.contact.whatsappIsProvisional,
-  },
-  {
-    title: 'Correo',
-    value: siteConfig.contact.email,
-    note: 'Puede compartir contexto, dudas o necesidades con más detalle.',
-    href: buildMailtoUrl('Consulta desde contacto web'),
-    icon: Mail,
-    external: hasConfiguredEmail(),
-    provisional: siteConfig.contact.emailIsProvisional,
-  },
-  {
-    title: 'Teléfono',
-    value: siteConfig.contact.phoneDisplay,
-    note: 'Disponible como canal complementario de contacto.',
-    href: buildPhoneUrl(),
-    icon: Phone,
-    external: hasConfiguredPhone(),
-    provisional: siteConfig.contact.phoneIsProvisional,
-  },
-  {
-    title: 'Ciudad y cobertura',
-    value: siteConfig.contact.city,
-    note: siteConfig.contact.coverage,
-    icon: MapPin,
-    external: false,
-    provisional: false,
-  },
-  {
-    title: 'Horario',
-    value: siteConfig.contact.schedule,
-    note: 'Horario base para atención y coordinación inicial.',
-    icon: Clock3,
-    external: false,
-    provisional: false,
-  },
-  {
-    title: 'Cobertura',
-    value: siteConfig.contact.country,
-    note: 'Trabajo remoto para empresas en Colombia.',
-    icon: Globe,
-    external: false,
-    provisional: false,
-  },
-]
-
 export const metadata = buildPageMetadata('contact')
 
 export default function ContactPage() {
+  const whatsappHref = buildWhatsAppUrl()
+  const emailHref = buildMailtoUrl('Consulta desde contacto web')
+  const phoneHref = buildPhoneUrl()
+  const hasWhatsApp = hasConfiguredWhatsApp()
+
+  const contactChannels: ContactChannel[] = [
+    {
+      title: 'Agendar una asesoría',
+      value: 'Programar reunión inicial de 30 minutos',
+      note: 'Ideal para comprender la necesidad y definir el mejor siguiente paso.',
+      href: siteConfig.routes.advisory,
+      icon: CalendarDays,
+      external: false,
+      provisional: false,
+    },
+    {
+      title: 'Solicitar diagnóstico',
+      value: 'Formulario guiado por pasos',
+      note: 'Permite explicar el problema con más detalle antes de una reunión.',
+      href: siteConfig.routes.diagnostics,
+      icon: CalendarDays,
+      external: false,
+      provisional: false,
+    },
+    {
+      title: 'WhatsApp',
+      value: siteConfig.contact.whatsappDisplay,
+      note: hasWhatsApp
+        ? 'Canal útil para una conversación inicial o seguimiento rápido.'
+        : 'El acceso directo se publicará cuando exista un número oficial configurado.',
+      href: whatsappHref,
+      icon: MessageCircle,
+      external: Boolean(whatsappHref),
+      provisional: siteConfig.contact.whatsappIsProvisional,
+    },
+    {
+      title: 'Correo',
+      value: siteConfig.contact.email,
+      note: 'Puede compartir contexto, dudas o necesidades con más detalle.',
+      href: emailHref,
+      icon: Mail,
+      external: false,
+      provisional: siteConfig.contact.emailIsProvisional,
+    },
+    {
+      title: 'Teléfono',
+      value: siteConfig.contact.phoneDisplay,
+      note: 'Disponible como canal complementario de contacto.',
+      href: phoneHref,
+      icon: Phone,
+      external: false,
+      provisional: siteConfig.contact.phoneIsProvisional,
+    },
+    {
+      title: 'Base operativa',
+      value: siteConfig.contact.city,
+      note: 'Coordinación inicial y seguimiento desde Manizales, Caldas.',
+      icon: MapPin,
+      external: false,
+      provisional: false,
+    },
+    {
+      title: 'Horario',
+      value: siteConfig.contact.schedule,
+      note: 'Horario base para atención y coordinación inicial.',
+      icon: Clock3,
+      external: false,
+      provisional: false,
+    },
+    {
+      title: 'Cobertura',
+      value: siteConfig.contact.country,
+      note: siteConfig.contact.coverage,
+      icon: Globe,
+      external: false,
+      provisional: false,
+    },
+  ]
+
   return (
     <SiteShell>
       <PageHero
@@ -123,22 +128,20 @@ export default function ContactPage() {
             <SiteAction href={siteConfig.routes.diagnostics} variant="secondary">
               SOLICITAR DIAGNÓSTICO
             </SiteAction>
-            <SiteAction
-              href={buildWhatsAppUrl()}
-              external={hasConfiguredWhatsApp()}
-              variant="secondary"
-            >
-              HABLAR POR WHATSAPP
-            </SiteAction>
+            {whatsappHref ? (
+              <SiteAction href={whatsappHref} external variant="secondary">
+                HABLAR POR WHATSAPP
+              </SiteAction>
+            ) : null}
           </>
         }
         aside={
           <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
             <p>
-              Los canales de contacto se administran desde una configuración
-              central para mantener consistencia entre header, footer, formularios
-              y CTAs.
+              Los canales de contacto se administran desde una configuración central
+              para mantener consistencia entre header, footer, formularios y CTAs.
             </p>
+            <p>{siteConfig.contact.coverage}</p>
             <p>
               Mientras algunos datos sigan provisionales, esta interfaz los deja
               claramente identificados.
@@ -157,6 +160,9 @@ export default function ContactPage() {
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {contactChannels.map((channel, index) => {
             const Icon = channel.icon
+            const isHttpLink = channel.href?.startsWith('http')
+            const isProtocolLink =
+              channel.href?.startsWith('mailto:') || channel.href?.startsWith('tel:')
 
             return (
               <Reveal
@@ -180,11 +186,18 @@ export default function ContactPage() {
                   {channel.title}
                 </p>
 
-                {channel.href && channel.external ? (
+                {channel.href && isHttpLink ? (
                   <a
                     href={channel.href}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
+                    className="mt-3 block text-base font-medium text-foreground transition-colors hover:text-primary"
+                  >
+                    {channel.value}
+                  </a>
+                ) : channel.href && isProtocolLink ? (
+                  <a
+                    href={channel.href}
                     className="mt-3 block text-base font-medium text-foreground transition-colors hover:text-primary"
                   >
                     {channel.value}
@@ -242,8 +255,9 @@ export default function ContactPage() {
                   ayuda a ordenar la información antes del contacto.
                 </p>
                 <p>
-                  WhatsApp se mantiene disponible como acceso rápido usando el
-                  helper central del sitio.
+                  {hasWhatsApp
+                    ? 'WhatsApp queda disponible como acceso rápido solo cuando el número oficial ya está configurado.'
+                    : 'Mientras no exista un número oficial configurado, el acceso directo de WhatsApp permanece oculto para evitar enlaces falsos.'}
                 </p>
               </div>
 
@@ -252,13 +266,11 @@ export default function ContactPage() {
                 <SiteAction href={siteConfig.routes.diagnostics} variant="secondary">
                   SOLICITAR DIAGNÓSTICO
                 </SiteAction>
-                <SiteAction
-                  href={buildWhatsAppUrl()}
-                  external={hasConfiguredWhatsApp()}
-                  variant="secondary"
-                >
-                  HABLAR POR WHATSAPP
-                </SiteAction>
+                {whatsappHref ? (
+                  <SiteAction href={whatsappHref} external variant="secondary">
+                    HABLAR POR WHATSAPP
+                  </SiteAction>
+                ) : null}
               </div>
             </Reveal>
           </div>

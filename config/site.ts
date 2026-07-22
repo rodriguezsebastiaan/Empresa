@@ -16,6 +16,21 @@ function normalizeSiteUrl(value?: string) {
   return trimmed || 'https://pendiente-dominio-konamysystems.invalid'
 }
 
+function normalizeExternalUrl(value?: string) {
+  const trimmed = trimText(value)
+
+  if (!trimmed) {
+    return ''
+  }
+
+  try {
+    const url = new URL(trimmed)
+    return url.toString()
+  } catch {
+    return ''
+  }
+}
+
 function isPlaceholderSiteUrl(value?: string) {
   const trimmed = trimText(value)
 
@@ -53,6 +68,10 @@ const routes = {
 const rawSiteUrl = trimText(process.env.NEXT_PUBLIC_SITE_URL)
 const siteUrl = normalizeSiteUrl(rawSiteUrl)
 const domainIsPlaceholder = isPlaceholderSiteUrl(rawSiteUrl)
+const rawWhatsAppNumber = trimText(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)
+const whatsappDigits = rawWhatsAppNumber.replace(/\D/g, '')
+const whatsappConfigured = whatsappDigits.length >= 8
+const instagramUrl = normalizeExternalUrl(process.env.NEXT_PUBLIC_INSTAGRAM_URL)
 
 const pages = {
   home: {
@@ -160,14 +179,17 @@ export const siteConfig = {
     phoneDisplay: 'PENDIENTE · número telefónico principal',
     phoneE164: '',
     phoneIsProvisional: true,
-    whatsappDisplay: 'PENDIENTE · número de WhatsApp',
-    whatsappNumber: '',
-    whatsappIsProvisional: true,
+    whatsappDisplay: whatsappConfigured
+      ? rawWhatsAppNumber
+      : 'PENDIENTE · numero de WhatsApp',
+    whatsappNumber: rawWhatsAppNumber,
+    whatsappIsProvisional: !whatsappConfigured,
     whatsappMessage:
       'Hola, quiero conocer más sobre las soluciones de Konamy Systems y recibir una asesoría.',
     city: 'Manizales, Caldas',
     country: 'Colombia',
-    coverage: 'Atención remota para empresas en Manizales y en toda Colombia.',
+    coverage:
+      'Una base local en Manizales. Soluciones digitales preparadas para operar en Colombia y el mundo.',
     schedule: 'Lunes a viernes · 8:30 a. m. a 5:30 p. m.',
   },
   legal: {
@@ -242,6 +264,9 @@ export const siteConfig = {
   },
   social: {
     whatsappLabel: 'WhatsApp',
+    instagramLabel: 'Instagram',
+    instagramUrl,
+    instagramIsProvisional: !instagramUrl,
     emailLabel: 'Correo',
     phoneLabel: 'Teléfono',
   },

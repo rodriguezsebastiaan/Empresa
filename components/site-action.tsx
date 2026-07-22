@@ -42,7 +42,7 @@ export function SiteAction({
       <a
         href={href}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
         className={classes}
       >
         {content}

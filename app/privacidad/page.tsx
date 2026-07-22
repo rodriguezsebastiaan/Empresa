@@ -34,11 +34,27 @@ export default function PrivacyPage() {
     <SiteShell>
       <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
         <Reveal className="rounded-[2rem] border border-border/70 bg-background/45 px-6 py-10 backdrop-blur-sm lg:px-10">
-          <SectionHeading
-            eyebrow="PRIVACIDAD"
-            title="Versión provisional de la política de privacidad para la salida 1.0."
-            description={siteConfig.legal.privacyPolicyNotice}
-          />
+          <Reveal
+            as="p"
+            variant="fade"
+            className="text-xs font-semibold tracking-[0.3em] text-primary"
+          >
+            PRIVACIDAD
+          </Reveal>
+          <Reveal
+            as="h1"
+            delay={80}
+            className="mt-5 max-w-3xl text-balance text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl"
+          >
+            Versión provisional de la política de privacidad para la salida 1.0.
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={160}
+            className="mt-5 max-w-3xl leading-relaxed text-muted-foreground"
+          >
+            {siteConfig.legal.privacyPolicyNotice}
+          </Reveal>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
             <div className="rounded-2xl border border-border/70 bg-background/45 px-5 py-5 text-sm text-muted-foreground">

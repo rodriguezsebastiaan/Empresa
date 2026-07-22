@@ -6,7 +6,7 @@ import { SiteAction } from '@/components/site-action'
 import { SiteShell } from '@/components/site-shell'
 import { siteConfig } from '@/config/site'
 import { buildPageMetadata } from '@/lib/metadata'
-import { buildWhatsAppUrl, hasConfiguredWhatsApp } from '@/lib/site'
+import { buildWhatsAppUrl } from '@/lib/site'
 
 const serviceGroups = [
   {
@@ -125,6 +125,8 @@ const serviceGroups = [
 export const metadata = buildPageMetadata('services')
 
 export default function ServicesPage() {
+  const whatsappHref = buildWhatsAppUrl()
+
   return (
     <SiteShell>
       <PageHero
@@ -137,14 +139,16 @@ export default function ServicesPage() {
             <SiteAction href={siteConfig.routes.advisory} variant="secondary">
               AGENDAR ASESORÍA
             </SiteAction>
-            <SiteAction
-              href={buildWhatsAppUrl()}
-              external={hasConfiguredWhatsApp()}
-              variant="secondary"
-              icon={MessageCircle}
-            >
-              HABLAR POR WHATSAPP
-            </SiteAction>
+            {whatsappHref ? (
+              <SiteAction
+                href={whatsappHref}
+                external
+                variant="secondary"
+                icon={MessageCircle}
+              >
+                HABLAR POR WHATSAPP
+              </SiteAction>
+            ) : null}
           </>
         }
         aside={
@@ -248,14 +252,16 @@ export default function ServicesPage() {
                   <SiteAction href={siteConfig.routes.advisory} variant="secondary">
                     AGENDAR ASESORÍA
                   </SiteAction>
-                  <SiteAction
-                    href={buildWhatsAppUrl()}
-                    external={hasConfiguredWhatsApp()}
-                    variant="secondary"
-                    icon={MessageCircle}
-                  >
-                    HABLAR POR WHATSAPP
-                  </SiteAction>
+                  {whatsappHref ? (
+                    <SiteAction
+                      href={whatsappHref}
+                      external
+                      variant="secondary"
+                      icon={MessageCircle}
+                    >
+                      HABLAR POR WHATSAPP
+                    </SiteAction>
+                  ) : null}
                 </>
               }
             />
