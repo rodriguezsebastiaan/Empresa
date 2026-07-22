@@ -1,0 +1,370 @@
+import crypto from 'node:crypto'
+import { AdminRole } from '@prisma/client'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { NextResponse } from 'next/server'
+import { getDb } from '@/lib/db'
+import { getRequestMetadata } from '@/lib/request-metadata'
+import { createSessionToken, normalizeEmail, verifyPassword } from '@/lib/security'
+
+const ADMIN_SESSION_COOKIE_NAME = 'konamy_admin_session'
+const ADMIN_SESSION_PATH = '/admin'
+const ADMIN_SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7
+const ADMIN_LOGIN_LOCKOUT_ATTEMPTS = 5
+const ADMIN_LOGIN_LOCKOUT_MINUTES = 15
+
+export const ADMIN_ROLE_PERMISSIONS: Record<AdminRole, string[]> = {
+  OWNER: [
+    'dashboard:view',
+    'contacts:view',
+    'contacts:edit',
+    'diagnostics:view',
+    'diagnostics:edit',
+    'exports:download',
+  ],
+  ADMIN: [
+    'dashboard:view',
+    'contacts:view',
+    'contacts:edit',
+    'diagnostics:view',
+    'diagnostics:edit',
+    'exports:download',
+  ],
+}
+
+export type AuthenticatedAdmin = {
+  id: string
+  name: string
+  email: string
+  role: AdminRole
+  sessionId: string
+  expiresAt: Date
+}
+
+type LoginFailureCode = 'config' | 'invalid' | 'locked'
+
+type LoginResult =
+  | {
+      success: true
+      token: string
+      expiresAt: Date
+      admin: Omit<AuthenticatedAdmin, 'sessionId' | 'expiresAt'>
+    }
+  | {
+      success: false
+      code: LoginFailureCode
+    }
+
+function getAuthSecret() {
+  const value = process.env.AUTH_SECRET?.trim()
+
+  if (!value || value.includes('CAMBIAR') || value.length < 32) {
+    throw new Error('AUTH_SECRET_NOT_CONFIGURED')
+  }
+
+  return value
+}
+
+function hashSessionToken(token: string) {
+  return crypto.createHmac('sha256', getAuthSecret()).update(token).digest('hex')
+}
+
+function getSessionExpiryDate() {
+  return new Date(Date.now() + ADMIN_SESSION_MAX_AGE_SECONDS * 1000)
+}
+
+function getSessionCookieOptions(expires: Date) {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    expires,
+    maxAge: ADMIN_SESSION_MAX_AGE_SECONDS,
+    path: ADMIN_SESSION_PATH,
+  }
+}
+
+export function getAdminRuntimeConfigError() {
+  if (!process.env.DATABASE_URL?.trim()) {
+    return 'DATABASE_URL'
+  }
+
+  try {
+    getAuthSecret()
+    return null
+  } catch {
+    return 'AUTH_SECRET'
+  }
+}
+
+export function getSafeAdminReturnTo(value?: string | null) {
+  if (!value) {
+    return '/admin'
+  }
+
+  if (!value.startsWith('/admin') || value.startsWith('//')) {
+    return '/admin'
+  }
+
+  return value
+}
+
+export function buildAdminLoginUrl(returnTo = '/admin', error?: string) {
+  const safeReturnTo = getSafeAdminReturnTo(returnTo)
+  const params = new URLSearchParams()
+
+  if (safeReturnTo !== '/admin') {
+    params.set('next', safeReturnTo)
+  }
+
+  if (error) {
+    params.set('error', error)
+  }
+
+  const query = params.toString()
+  return `/admin/login${query ? `?${query}` : ''}`
+}
+
+export function getAdminLoginErrorMessage(code?: string | null) {
+  switch (code) {
+    case 'config':
+      return 'Falta configurar AUTH_SECRET o DATABASE_URL antes de usar el panel.'
+    case 'locked':
+      return 'El acceso quedo bloqueado temporalmente despues de varios intentos fallidos.'
+    case 'signed-out':
+      return 'La sesion administrativa se cerro correctamente.'
+    case 'invalid':
+      return 'No fue posible iniciar sesion con esas credenciales.'
+    default:
+      return ''
+  }
+}
+
+export function isAdminActionOriginValid(request: Request) {
+  const origin = request.headers.get('origin')
+
+  if (!origin) {
+    return true
+  }
+
+  try {
+    return new URL(origin).origin === new URL(request.url).origin
+  } catch {
+    return false
+  }
+}
+
+async function findAuthenticatedAdminByToken(token: string) {
+  let db
+
+  try {
+    db = getDb()
+  } catch {
+    return null
+  }
+
+  const tokenHash = hashSessionToken(token)
+  const session = await db.adminSession.findFirst({
+    where: {
+      tokenHash,
+      expiresAt: {
+        gt: new Date(),
+      },
+      adminUser: {
+        isActive: true,
+      },
+    },
+    include: {
+      adminUser: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      },
+    },
+  })
+
+  if (!session) {
+    return null
+  }
+
+  return {
+    id: session.adminUser.id,
+    name: session.adminUser.name,
+    email: session.adminUser.email,
+    role: session.adminUser.role,
+    sessionId: session.id,
+    expiresAt: session.expiresAt,
+  } satisfies AuthenticatedAdmin
+}
+
+export async function getCurrentAdmin() {
+  if (getAdminRuntimeConfigError()) {
+    return null
+  }
+
+  const cookieStore = await cookies()
+  const token = cookieStore.get(ADMIN_SESSION_COOKIE_NAME)?.value
+
+  if (!token) {
+    return null
+  }
+
+  return findAuthenticatedAdminByToken(token)
+}
+
+export async function requireAdminUser(returnTo = '/admin') {
+  const admin = await getCurrentAdmin()
+
+  if (!admin) {
+    redirect(buildAdminLoginUrl(returnTo))
+  }
+
+  return admin
+}
+
+export async function authenticateAdmin(
+  email: string,
+  password: string,
+  request: Request,
+): Promise<LoginResult> {
+  if (getAdminRuntimeConfigError()) {
+    return {
+      success: false,
+      code: 'config',
+    }
+  }
+
+  const db = getDb()
+  const emailNormalized = normalizeEmail(email)
+  const adminUser = await db.adminUser.findUnique({
+    where: {
+      emailNormalized,
+    },
+  })
+  const now = new Date()
+
+  if (adminUser?.lockedUntil && adminUser.lockedUntil > now) {
+    return {
+      success: false,
+      code: 'locked',
+    }
+  }
+
+  const passwordValid =
+    Boolean(adminUser?.isActive) && (await verifyPassword(password, adminUser?.passwordHash ?? ''))
+
+  if (!adminUser || !passwordValid) {
+    if (adminUser) {
+      const nextFailedCount = adminUser.failedLoginCount + 1
+      const shouldLock = nextFailedCount >= ADMIN_LOGIN_LOCKOUT_ATTEMPTS
+
+      await db.adminUser.update({
+        where: {
+          id: adminUser.id,
+        },
+        data: {
+          failedLoginCount: shouldLock ? 0 : nextFailedCount,
+          lockedUntil: shouldLock
+            ? new Date(now.getTime() + ADMIN_LOGIN_LOCKOUT_MINUTES * 60 * 1000)
+            : null,
+        },
+      })
+
+      if (shouldLock) {
+        return {
+          success: false,
+          code: 'locked',
+        }
+      }
+    }
+
+    return {
+      success: false,
+      code: 'invalid',
+    }
+  }
+
+  const token = createSessionToken()
+  const tokenHash = hashSessionToken(token)
+  const expiresAt = getSessionExpiryDate()
+  const metadata = getRequestMetadata(request)
+
+  await db.adminUser.update({
+    where: {
+      id: adminUser.id,
+    },
+    data: {
+      failedLoginCount: 0,
+      lockedUntil: null,
+      lastLoginAt: now,
+      sessions: {
+        deleteMany: {
+          expiresAt: {
+            lte: now,
+          },
+        },
+      },
+    },
+  })
+
+  await db.adminSession.create({
+    data: {
+      adminUserId: adminUser.id,
+      tokenHash,
+      expiresAt,
+      lastSeenAt: now,
+      userAgent: metadata.userAgent,
+      ipHash: metadata.ipHash,
+    },
+  })
+
+  return {
+    success: true,
+    token,
+    expiresAt,
+    admin: {
+      id: adminUser.id,
+      name: adminUser.name,
+      email: adminUser.email,
+      role: adminUser.role,
+    },
+  }
+}
+
+export function applyAdminSessionCookie(response: NextResponse, token: string, expiresAt: Date) {
+  response.cookies.set(
+    ADMIN_SESSION_COOKIE_NAME,
+    token,
+    getSessionCookieOptions(expiresAt),
+  )
+}
+
+export function clearAdminSessionCookie(response: NextResponse) {
+  response.cookies.set(ADMIN_SESSION_COOKIE_NAME, '', {
+    ...getSessionCookieOptions(new Date(0)),
+    maxAge: 0,
+  })
+}
+
+export async function invalidateCurrentAdminSession() {
+  if (getAdminRuntimeConfigError()) {
+    return
+  }
+
+  const cookieStore = await cookies()
+  const token = cookieStore.get(ADMIN_SESSION_COOKIE_NAME)?.value
+
+  if (!token) {
+    return
+  }
+
+  const db = getDb()
+  await db.adminSession.deleteMany({
+    where: {
+      tokenHash: hashSessionToken(token),
+    },
+  })
+}
