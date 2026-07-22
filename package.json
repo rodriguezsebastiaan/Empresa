@@ -6,16 +6,26 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "db:local:start": "node scripts/local-postgres-server.mjs",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
+    "@prisma/adapter-pg": "^7.9.0",
+    "@prisma/client": "^7.9.0",
     "@vercel/analytics": "1.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.1",
+    "embedded-postgres": "^18.4.0-beta.17",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "nodemailer": "^9.0.3",
+    "pg": "^8.16.3",
     "react": "^19",
     "react-dom": "^19",
     "shadcn": "^4.8.0",
@@ -32,8 +42,13 @@
     "eslint": "^9.31.0",
     "eslint-config-next": "16.2.6",
     "postcss": "^8.5",
+    "prisma": "^7.9.0",
     "tailwindcss": "^4.2.0",
+    "tsx": "^4.20.3",
     "typescript": "5.7.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "pnpm": {
     "overrides": {
