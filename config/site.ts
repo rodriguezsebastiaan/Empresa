@@ -245,6 +245,16 @@ export const siteConfig = {
       webhookEnv: ['N8N_DIAGNOSTIC_WEBHOOK_URL', 'N8N_DIAGNOSTIC_WEBHOOK_SECRET'],
     },
     advisory: {
+      destinationEmailEnv: 'BOOKING_DESTINATION_EMAIL',
+      smtpEnv: [
+        'SMTP_HOST',
+        'SMTP_PORT',
+        'SMTP_USER',
+        'SMTP_PASS',
+        'SMTP_FROM_EMAIL',
+        'SMTP_FROM_NAME',
+        'SMTP_SECURE',
+      ],
       calendarEnv: [
         'GOOGLE_CLIENT_ID',
         'GOOGLE_CLIENT_SECRET',

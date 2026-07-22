@@ -3,7 +3,10 @@ import { buildAdvisoryDateTime } from '@/lib/advisory-time'
 import { getGoogleAccessToken, getGoogleCalendarCredentials } from '@/lib/google-calendar/auth'
 import { listAvailableSlots } from '@/lib/google-calendar/availability'
 import type { AdvisoryBookingFormData } from '@/lib/validation'
-import type { AdvisoryBookingConfirmation } from '@/lib/google-calendar/types'
+import type {
+  AdvisoryBookingConfirmation,
+  GoogleCalendarBookingRecord,
+} from '@/lib/google-calendar/types'
 
 function buildDateLabel(date: string) {
   return new Intl.DateTimeFormat('es-CO', {
@@ -21,6 +24,42 @@ function buildTimeLabel(date: string, time: string) {
     minute: '2-digit',
     timeZone: siteConfig.advisory.timezone,
   }).format(buildAdvisoryDateTime(date, time))
+}
+
+type GoogleCalendarEventPayload = {
+  id?: string
+  htmlLink?: string
+  hangoutLink?: string
+  conferenceData?: { entryPoints?: Array<{ uri?: string }> }
+}
+
+function resolveMeetUrl(event: GoogleCalendarEventPayload) {
+  return (
+    event.hangoutLink ??
+    event.conferenceData?.entryPoints?.find((entry) => entry.uri)?.uri ??
+    null
+  )
+}
+
+function toBookingRecord(
+  event: GoogleCalendarEventPayload,
+  payload: AdvisoryBookingFormData,
+): GoogleCalendarBookingRecord {
+  if (!event.id) {
+    throw new Error('GOOGLE_EVENT_ID_MISSING')
+  }
+
+  return {
+    eventId: event.id,
+    htmlLink: event.htmlLink ?? null,
+    dateLabel: buildDateLabel(payload.date),
+    timeLabel: buildTimeLabel(payload.date, payload.time),
+    timezone: siteConfig.advisory.timezoneLabel,
+    durationMinutes: siteConfig.advisory.durationMinutes,
+    meetUrl: resolveMeetUrl(event),
+    guestEmail: payload.email,
+    guestName: payload.fullName,
+  }
 }
 
 async function findExistingBookingByRequestId(
@@ -49,18 +88,15 @@ async function findExistingBookingByRequestId(
   }
 
   const payload = (await response.json()) as {
-    items?: Array<{
-      hangoutLink?: string
-      conferenceData?: { entryPoints?: Array<{ uri?: string }> }
-    }>
+    items?: GoogleCalendarEventPayload[]
   }
 
   return payload.items?.[0] ?? null
 }
 
-export async function createAdvisoryBooking(
+export async function createGoogleCalendarBookingRecord(
   payload: AdvisoryBookingFormData,
-): Promise<AdvisoryBookingConfirmation> {
+): Promise<GoogleCalendarBookingRecord> {
   const credentials = getGoogleCalendarCredentials()
 
   if (!credentials) {
@@ -82,18 +118,7 @@ export async function createAdvisoryBooking(
   )
 
   if (existingBooking) {
-    return {
-      dateLabel: buildDateLabel(payload.date),
-      timeLabel: buildTimeLabel(payload.date, payload.time),
-      timezone: siteConfig.advisory.timezoneLabel,
-      durationMinutes: siteConfig.advisory.durationMinutes,
-      meetUrl:
-        existingBooking.hangoutLink ??
-        existingBooking.conferenceData?.entryPoints?.find((entry) => entry.uri)?.uri ??
-        null,
-      guestEmail: payload.email,
-      guestName: payload.fullName,
-    }
+    return toBookingRecord(existingBooking, payload)
   }
 
   const startDateTime = buildAdvisoryDateTime(payload.date, payload.time)
@@ -165,21 +190,47 @@ export async function createAdvisoryBooking(
     throw new Error('GOOGLE_EVENT_CREATE_FAILED')
   }
 
-  const data = (await response.json()) as {
-    hangoutLink?: string
-    conferenceData?: { entryPoints?: Array<{ uri?: string }> }
+  const data = (await response.json()) as GoogleCalendarEventPayload
+
+  return toBookingRecord(data, payload)
+}
+
+export async function deleteGoogleCalendarEvent(eventId: string) {
+  const credentials = getGoogleCalendarCredentials()
+
+  if (!credentials) {
+    throw new Error('GOOGLE_CALENDAR_NOT_CONFIGURED')
   }
 
+  const accessToken = await getGoogleAccessToken()
+  const response = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(credentials.calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all`,
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      cache: 'no-store',
+    },
+  )
+
+  if (!response.ok && response.status !== 404) {
+    throw new Error('GOOGLE_EVENT_DELETE_FAILED')
+  }
+}
+
+export async function createAdvisoryBooking(
+  payload: AdvisoryBookingFormData,
+): Promise<AdvisoryBookingConfirmation> {
+  const record = await createGoogleCalendarBookingRecord(payload)
+
   return {
-    dateLabel: buildDateLabel(payload.date),
-    timeLabel: buildTimeLabel(payload.date, payload.time),
-    timezone: siteConfig.advisory.timezoneLabel,
-    durationMinutes: siteConfig.advisory.durationMinutes,
-    meetUrl:
-      data.hangoutLink ??
-      data.conferenceData?.entryPoints?.find((entry) => entry.uri)?.uri ??
-      null,
-    guestEmail: payload.email,
-    guestName: payload.fullName,
+    dateLabel: record.dateLabel,
+    timeLabel: record.timeLabel,
+    timezone: record.timezone,
+    durationMinutes: record.durationMinutes,
+    meetUrl: record.meetUrl,
+    guestEmail: record.guestEmail,
+    guestName: record.guestName,
   }
 }

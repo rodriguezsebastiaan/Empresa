@@ -26,3 +26,8 @@ export type AdvisoryBookingConfirmation = {
   guestEmail: string
   guestName: string
 }
+
+export type GoogleCalendarBookingRecord = AdvisoryBookingConfirmation & {
+  eventId: string
+  htmlLink: string | null
+}

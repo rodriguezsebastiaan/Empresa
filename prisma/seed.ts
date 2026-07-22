@@ -1,5 +1,16 @@
+import { existsSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { config as loadDotenv } from 'dotenv'
 import { disconnectDb, getDb } from '../lib/db'
 import { hashPassword, normalizeEmail, sanitizeInline } from '../lib/security'
+
+for (const fileName of ['.env', '.env.local']) {
+  const filePath = resolve(process.cwd(), fileName)
+
+  if (existsSync(filePath)) {
+    loadDotenv({ path: filePath, override: true })
+  }
+}
 
 async function main() {
   const prisma = getDb()

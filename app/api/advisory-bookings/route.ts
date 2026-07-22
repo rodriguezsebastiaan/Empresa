@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createAdvisoryBooking } from '@/lib/google-calendar/events'
+import { submitAdvisoryBooking } from '@/lib/advisory-booking-service'
 import {
   applyRateLimitHeaders,
   buildRateLimitResponse,
@@ -64,15 +64,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const confirmation = await createAdvisoryBooking(result.data)
-
-    return respond(
-      {
-        success: true,
-        confirmation,
-      },
-      200,
-    )
+    const submission = await submitAdvisoryBooking(result.data, request)
+    return respond(submission.body, submission.status)
   } catch (error) {
     const message =
       error instanceof Error && error.message === 'SLOT_NOT_AVAILABLE'
