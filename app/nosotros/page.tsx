@@ -57,9 +57,9 @@ export default function AboutPage() {
               necesitan soluciones digitales útiles.
             </p>
             <p>
-              Desde {siteConfig.contact.city} diseÃ±amos sistemas, plataformas y
-              automatizaciones que ayudan a las empresas a organizar sus
-              procesos, mejorar su operaciÃ³n y crecer sin lÃ­mites geogrÃ¡ficos.
+              Desde Manizales diseñamos sistemas, plataformas y automatizaciones
+              que ayudan a las empresas a organizar sus procesos, mejorar su
+              operación y crecer sin límites geográficos.
             </p>
           </div>
         }
@@ -188,7 +188,7 @@ export default function AboutPage() {
           <SectionHeading
             eyebrow="DIFERENCIA KONAMY"
             title="Una base local en Manizales. Soluciones digitales preparadas para operar en Colombia y el mundo."
-            description="Konamy Systems inicia su presencia desde Manizales y trabaja de forma remota con empresas colombianas que necesitan orden, trazabilidad y automatización."
+            description="Konamy Systems trabaja desde Manizales con soluciones digitales pensadas para empresas que necesitan orden, trazabilidad y automatización, dentro y fuera de Colombia."
           />
 
           <div className="mt-12 grid gap-5 lg:grid-cols-3">

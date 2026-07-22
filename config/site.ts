@@ -91,7 +91,7 @@ const pages = {
     path: routes.about,
     title: 'Nosotros | Konamy Systems',
     description:
-      'Conozca qué es Konamy Systems, su propósito, filosofía de trabajo, valores y forma de acompañar empresas en Manizales y toda Colombia.',
+      'Conozca qué es Konamy Systems, su propósito, filosofía de trabajo, valores y enfoque para construir soluciones digitales empresariales preparadas para operar en Colombia y el mundo.',
     changeFrequency: 'monthly' as SitemapChangeFrequency,
     priority: 0.8,
   },

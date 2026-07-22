@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { submitDiagnosticForm } from '@/lib/diagnostic-service'
+import { deliverDiagnosticSubmission } from '@/lib/form-delivery'
 import {
   applyRateLimitHeaders,
   buildRateLimitResponse,
@@ -50,6 +50,6 @@ export async function POST(request: Request) {
     )
   }
 
-  const submission = await submitDiagnosticForm(result.data, request)
-  return respond(submission.body, submission.status)
+  const delivery = await deliverDiagnosticSubmission(result.data)
+  return respond(delivery.body, delivery.status)
 }
