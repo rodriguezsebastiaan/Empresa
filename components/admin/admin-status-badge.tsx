@@ -1,3 +1,4 @@
+import { getStatusLabel } from '@/lib/admin-data'
 import { cn } from '@/lib/utils'
 
 const badgeClasses: Record<string, string> = {
@@ -20,10 +21,6 @@ const badgeClasses: Record<string, string> = {
   SKIPPED: 'border-muted-foreground/30 bg-muted/25 text-muted-foreground',
 }
 
-function toLabel(status: string) {
-  return status.replaceAll('_', ' ')
-}
-
 export function AdminStatusBadge({
   status,
   compact = false,
@@ -39,7 +36,7 @@ export function AdminStatusBadge({
         badgeClasses[status] ?? 'border-border/70 bg-background/40 text-foreground/80',
       )}
     >
-      {toLabel(status)}
+      {getStatusLabel(status)}
     </span>
   )
 }

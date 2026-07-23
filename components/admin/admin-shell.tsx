@@ -52,11 +52,14 @@ export function AdminShell({ children, admin }: AdminShellProps) {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] text-foreground">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-4 lg:flex-row lg:px-6 lg:py-6">
-        <aside className="w-full shrink-0 rounded-[1.75rem] border border-border/70 bg-background/55 p-5 backdrop-blur-sm lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:w-[18rem]">
+        <aside className="w-full shrink-0 rounded-[1.75rem] border border-border/70 bg-background/55 p-5 backdrop-blur-sm lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:w-[19rem]">
           <div className="flex items-center justify-between gap-4 lg:block">
-            <Link href="/admin" className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
-              <Logo />
-            </Link>
+            <div>
+              <p className="text-[0.62rem] font-semibold tracking-[0.26em] text-primary">PANEL ADMINISTRATIVO</p>
+              <Link href="/admin" className="mt-3 inline-flex rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
+                <Logo />
+              </Link>
+            </div>
             <Link
               href="/"
               className="inline-flex items-center rounded-full border border-border/70 px-3 py-1.5 text-xs font-semibold tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary lg:hidden"
@@ -65,7 +68,11 @@ export function AdminShell({ children, admin }: AdminShellProps) {
             </Link>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-primary/15 bg-primary/8 p-4">
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            Acceso interno para seguimiento de contactos, diagnosticos y reuniones reales.
+          </p>
+
+          <div className="mt-6 rounded-2xl border border-primary/18 bg-primary/8 p-4">
             <div className="flex items-start gap-3">
               <div className="flex size-10 items-center justify-center rounded-2xl border border-primary/30 bg-background/60 text-primary">
                 <UserRound className="size-4" />
@@ -104,6 +111,14 @@ export function AdminShell({ children, admin }: AdminShellProps) {
               )
             })}
           </nav>
+
+          <div className="mt-6 rounded-2xl border border-border/70 bg-background/30 p-4">
+            <p className="text-[0.62rem] font-semibold tracking-[0.22em] text-primary">ALCANCE</p>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Este panel prioriza operacion y seguimiento. El sitio publico no se altera desde
+              aqui.
+            </p>
+          </div>
 
           <div className="mt-6 hidden lg:block">
             <Link

@@ -1,11 +1,28 @@
 import Link from 'next/link'
+import { Download, Mail, MessageSquare, Phone } from 'lucide-react'
+import {
+  addDaysToDateValue,
+  getTodayInAdvisoryZone,
+} from '@/lib/advisory-time'
 import { AdminPagination } from '@/components/admin/admin-pagination'
 import { AdminStatusBadge } from '@/components/admin/admin-status-badge'
+import {
+  AdminEmptyState,
+  AdminHistorySection,
+  AdminInfoCard,
+  AdminNotesSection,
+  AdminQuickFilterLink,
+  AdminRelatedActivity,
+  AdminSummaryTile,
+  AdminTechnicalDetails,
+} from '@/components/admin/admin-ui'
 import { fieldClassName, panelClassName } from '@/components/form-controls'
 import {
   contactStatusOptions,
   formatAdminDateTime,
   getContactSubmissionDetail,
+  getRelatedActivityForRecord,
+  getStatusLabel,
   listContactSubmissions,
   parseAdminListFilters,
 } from '@/lib/admin-data'
@@ -17,7 +34,21 @@ type ContactosPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-function buildPageHref(filters: ReturnType<typeof parseAdminListFilters>, overrides: Partial<ReturnType<typeof parseAdminListFilters>> = {}) {
+function buildMonthRange(dateValue: string) {
+  const [year, month] = dateValue.split('-')
+  const monthIndex = Number(month)
+  const lastDay = new Date(Date.UTC(Number(year), monthIndex, 0)).getUTCDate()
+
+  return {
+    from: `${year}-${month}-01`,
+    to: `${year}-${month}-${lastDay.toString().padStart(2, '0')}`,
+  }
+}
+
+function buildPageHref(
+  filters: ReturnType<typeof parseAdminListFilters>,
+  overrides: Partial<ReturnType<typeof parseAdminListFilters>> = {},
+) {
   const params = new URLSearchParams()
   const nextFilters = {
     ...filters,
@@ -28,6 +59,7 @@ function buildPageHref(filters: ReturnType<typeof parseAdminListFilters>, overri
   if (nextFilters.status) params.set('status', nextFilters.status)
   if (nextFilters.from) params.set('from', nextFilters.from)
   if (nextFilters.to) params.set('to', nextFilters.to)
+  if (nextFilters.preset) params.set('preset', nextFilters.preset)
   if (nextFilters.page > 1) params.set('page', String(nextFilters.page))
   if (nextFilters.id) params.set('id', nextFilters.id)
 
@@ -40,8 +72,22 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
   const list = await listContactSubmissions(filters)
   const selectedId = filters.id || list.items[0]?.id || ''
   const detail = await getContactSubmissionDetail(selectedId)
+  const relatedActivity = detail
+    ? await getRelatedActivityForRecord({
+        entity: 'contactos',
+        id: detail.id,
+        emailNormalized: detail.emailNormalized,
+        phone: detail.phone,
+        company: detail.company,
+      })
+    : []
   const exportHref = `/admin/api/contactos/export${buildPageHref(filters).replace('/admin/contactos', '')}`
   const returnTo = detail ? buildPageHref(filters, { id: detail.id }) : buildPageHref(filters)
+
+  const today = getTodayInAdvisoryZone()
+  const yesterday = addDaysToDateValue(today, -1)
+  const lastSevenDays = addDaysToDateValue(today, -6)
+  const thisMonth = buildMonthRange(today)
 
   return (
     <div className="space-y-6">
@@ -49,32 +95,107 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold tracking-[0.32em] text-primary">CONTACTOS</p>
-            <h1 className="mt-4 text-3xl font-semibold text-foreground">Prospectos del formulario breve</h1>
+            <h1 className="mt-4 text-3xl font-semibold text-foreground">Pipeline del formulario breve</h1>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Busque por nombre, empresa, correo, asunto o mensaje. Puede filtrar por estado y
-              rango de fechas, revisar el detalle y mantener seguimiento interno.
+              Priorice por fecha, busque por empresa o correo y revise el contexto completo del
+              prospecto antes de mover el estado. La vista lateral concentra acciones, notas,
+              historial y actividad relacionada.
             </p>
           </div>
           <Link
             href={exportHref}
-            className="rounded-full border border-border/70 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
           >
+            <Download className="size-4" />
             EXPORTAR CSV
           </Link>
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)]">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+        <AdminSummaryTile
+          label="EN RANGO"
+          value={list.stats.total}
+          hint="Total dentro del rango y busqueda actual."
+          tone="default"
+        />
+        <AdminSummaryTile
+          label="PENDIENTES"
+          value={list.stats.pending}
+          hint="Nuevos ingresos sin gestion."
+          tone="primary"
+        />
+        <AdminSummaryTile
+          label="EN REVISION"
+          value={list.stats.inReview}
+          hint="Prospectos que aun requieren analisis."
+          tone="accent"
+        />
+        <AdminSummaryTile
+          label="CONTACTADOS"
+          value={list.stats.contacted}
+          hint="Seguimientos con primer contacto hecho."
+          tone="success"
+        />
+        <AdminSummaryTile
+          label="CERRADOS"
+          value={list.stats.closed}
+          hint="Entradas archivadas o concluidas."
+          tone="warning"
+        />
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(24rem,0.85fr)]">
         <div className={panelClassName}>
-          <form className="grid gap-4 lg:grid-cols-5" method="get">
-            <div className="lg:col-span-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, { preset: 'today', from: today, to: today, page: 1, id: '' })}
+              label="HOY"
+              active={filters.preset === 'today'}
+            />
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, { preset: 'yesterday', from: yesterday, to: yesterday, page: 1, id: '' })}
+              label="AYER"
+              active={filters.preset === 'yesterday'}
+            />
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, {
+                preset: 'last-7-days',
+                from: lastSevenDays,
+                to: today,
+                page: 1,
+                id: '',
+              })}
+              label="ULTIMOS 7 DIAS"
+              active={filters.preset === 'last-7-days'}
+            />
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, {
+                preset: 'this-month',
+                from: thisMonth.from,
+                to: thisMonth.to,
+                page: 1,
+                id: '',
+              })}
+              label="ESTE MES"
+              active={filters.preset === 'this-month'}
+            />
+            <AdminQuickFilterLink
+              href="/admin/contactos"
+              label="TODOS"
+              active={!filters.preset && !filters.from && !filters.to && !filters.q && !filters.status}
+            />
+          </div>
+
+          <form className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]" method="get">
+            <div>
               <label className="block">
                 <span className="text-xs font-semibold tracking-[0.16em] text-primary">BUSQUEDA</span>
                 <input
                   name="q"
                   defaultValue={filters.q}
                   className={fieldClassName}
-                  placeholder="Nombre, empresa, correo, asunto..."
+                  placeholder="Empresa, contacto, correo, asunto..."
                 />
               </label>
             </div>
@@ -85,7 +206,7 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                 <option value="">Todos</option>
                 {contactStatusOptions.map((status) => (
                   <option key={status} value={status}>
-                    {status.replaceAll('_', ' ')}
+                    {getStatusLabel(status)}
                   </option>
                 ))}
               </select>
@@ -101,7 +222,7 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
               <input name="to" type="date" defaultValue={filters.to} className={fieldClassName} />
             </label>
 
-            <div className="flex flex-wrap items-end gap-3 lg:col-span-5">
+            <div className="flex flex-wrap items-end gap-3 lg:col-span-4">
               <button
                 type="submit"
                 className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
@@ -117,9 +238,12 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
             </div>
           </form>
 
-          <div className="mt-6 flex items-center justify-between gap-3">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">
-              {list.total} resultado{list.total === 1 ? '' : 's'}
+              {list.total} resultado{list.total === 1 ? '' : 's'} con los filtros aplicados.
+            </p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-muted-foreground">
+              Los contadores de arriba ignoran el estado para mostrar el volumen real del rango.
             </p>
           </div>
 
@@ -143,26 +267,25 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                     <AdminStatusBadge status={item.status} compact />
                   </div>
 
+                  <p className="mt-3 text-sm font-medium text-foreground/90">{item.subject}</p>
+
                   <div className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                    <p>{item.subject}</p>
                     <p>{item.email}</p>
                     <p>{item.phone}</p>
                     <p>{formatAdminDateTime(item.createdAt)}</p>
+                    <p>
+                      Notas {item._count.notes} / Historial {item._count.statusHistory}
+                    </p>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     <AdminStatusBadge status={item.internalEmailStatus} compact />
                     <AdminStatusBadge status={item.clientEmailStatus} compact />
-                    <span className="rounded-full border border-border/70 bg-background/30 px-2.5 py-1 text-[0.6rem] font-semibold tracking-[0.18em] text-muted-foreground">
-                      NOTAS {item._count.notes}
-                    </span>
                   </div>
                 </Link>
               ))
             ) : (
-              <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-5 text-sm text-muted-foreground">
-                No se encontraron contactos con esos filtros.
-              </div>
+              <AdminEmptyState>No se encontraron contactos con esos filtros.</AdminEmptyState>
             )}
           </div>
 
@@ -189,84 +312,85 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                 </div>
               </div>
 
-              <div className="grid gap-3 text-sm">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">ASUNTO</p>
-                  <p className="mt-2 text-foreground">{detail.subject}</p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">MENSAJE</p>
-                  <p className="mt-2 whitespace-pre-wrap text-foreground">{detail.message}</p>
-                </div>
+              <div className="grid gap-3">
+                <AdminInfoCard label="ASUNTO">{detail.subject}</AdminInfoCard>
+                <AdminInfoCard label="MENSAJE">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.message}</p>
+                </AdminInfoCard>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">CORREO</p>
-                  <a href={buildAdminMailto(detail.email, `Seguimiento de ${detail.company}`)} className="mt-2 block text-sm text-foreground hover:text-primary">
+                <AdminInfoCard label="CORREO">
+                  <a
+                    href={buildAdminMailto(detail.email, `Seguimiento de ${detail.company}`)}
+                    className="inline-flex items-center gap-2 hover:text-primary"
+                  >
+                    <Mail className="size-4" />
                     {detail.email}
                   </a>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">TELEFONO</p>
-                  <a href={buildAdminPhone(detail.phone)} className="mt-2 block text-sm text-foreground hover:text-primary">
+                </AdminInfoCard>
+                <AdminInfoCard label="TELEFONO">
+                  <a href={buildAdminPhone(detail.phone)} className="inline-flex items-center gap-2 hover:text-primary">
+                    <Phone className="size-4" />
                     {detail.phone}
                   </a>
-                </div>
+                </AdminInfoCard>
               </div>
 
-              <div className="grid gap-3">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">WHATSAPP</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <AdminInfoCard label="WHATSAPP">
                   <a
                     href={buildAdminWhatsApp(detail.phone, `Hola ${detail.name}, gracias por escribir a Konamy Systems.`)}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex text-sm text-foreground hover:text-primary"
+                    className="inline-flex items-center gap-2 hover:text-primary"
                   >
+                    <MessageSquare className="size-4" />
                     Abrir conversacion
                   </a>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">FECHA DE INGRESO</p>
-                  <p className="mt-2 text-sm text-foreground">{formatAdminDateTime(detail.createdAt)}</p>
-                </div>
+                </AdminInfoCard>
+                <AdminInfoCard label="FECHA DE INGRESO">
+                  <p>{formatAdminDateTime(detail.createdAt)}</p>
+                </AdminInfoCard>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">PRIVACIDAD</p>
-                  <p className="mt-2 text-sm text-foreground">{detail.privacyPolicyVersion}</p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Aceptada el {formatAdminDateTime(detail.privacyAcceptedAt)}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">ENTREGA</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                <AdminInfoCard
+                  label="PRIVACIDAD"
+                  hint={`Aceptada el ${formatAdminDateTime(detail.privacyAcceptedAt)}`}
+                >
+                  <p>{detail.privacyPolicyVersion}</p>
+                </AdminInfoCard>
+                <AdminInfoCard label="ENTREGA">
+                  <div className="flex flex-wrap gap-2">
                     <AdminStatusBadge status={detail.internalEmailStatus} compact />
                     <AdminStatusBadge status={detail.clientEmailStatus} compact />
                   </div>
                   {detail.lastDeliveryError ? (
-                    <p className="mt-3 text-xs text-muted-foreground">{detail.lastDeliveryError}</p>
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                      {detail.lastDeliveryError}
+                    </p>
                   ) : null}
-                </div>
+                </AdminInfoCard>
               </div>
 
-              <div className="grid gap-3">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">METADATOS TECNICOS</p>
-                  <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                    <p>Origen: {detail.requestOrigin ?? 'Sin dato'}</p>
-                    <p>Ruta: {detail.requestPath ?? 'Sin dato'}</p>
-                    <p>Referer: {detail.referer ?? 'Sin dato'}</p>
-                    <p>User-Agent: {detail.userAgent ?? 'Sin dato'}</p>
-                    <p>IP Hash: {detail.ipHash ?? 'Sin dato'}</p>
-                  </div>
-                </div>
-              </div>
+              <AdminRelatedActivity items={relatedActivity} />
 
-              <form action={`/admin/api/contactos/${detail.id}/status`} method="post" className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4">
+              <AdminTechnicalDetails
+                items={[
+                  { label: 'Origen', value: detail.requestOrigin ?? 'Sin dato' },
+                  { label: 'Ruta', value: detail.requestPath ?? 'Sin dato' },
+                  { label: 'Referer', value: detail.referer ?? 'Sin dato' },
+                  { label: 'User-Agent', value: detail.userAgent ?? 'Sin dato' },
+                  { label: 'IP Hash', value: detail.ipHash ?? 'Sin dato' },
+                ]}
+              />
+
+              <form
+                action={`/admin/api/contactos/${detail.id}/status`}
+                method="post"
+                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
+              >
                 <input type="hidden" name="returnTo" value={returnTo} />
                 <div>
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
@@ -276,7 +400,7 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                   <select name="status" defaultValue={detail.status} className={fieldClassName}>
                     {contactStatusOptions.map((status) => (
                       <option key={status} value={status}>
-                        {status.replaceAll('_', ' ')}
+                        {getStatusLabel(status)}
                       </option>
                     ))}
                   </select>
@@ -293,7 +417,11 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                 </button>
               </form>
 
-              <form action={`/admin/api/contactos/${detail.id}/notes`} method="post" className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4">
+              <form
+                action={`/admin/api/contactos/${detail.id}/notes`}
+                method="post"
+                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
+              >
                 <input type="hidden" name="returnTo" value={returnTo} />
                 <div>
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
@@ -310,53 +438,18 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                 </button>
               </form>
 
-              <section className="space-y-3">
-                <p className="text-xs font-semibold tracking-[0.18em] text-primary">NOTAS INTERNAS</p>
-                {detail.notes.length > 0 ? (
-                  detail.notes.map((note) => (
-                    <article key={note.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                      <p className="whitespace-pre-wrap text-sm text-foreground">{note.body}</p>
-                      <p className="mt-3 text-xs text-muted-foreground">
-                        {note.adminUser.name} · {formatAdminDateTime(note.createdAt)}
-                      </p>
-                    </article>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-4 text-sm text-muted-foreground">
-                    Todavia no hay notas internas para este contacto.
-                  </div>
-                )}
-              </section>
+              <AdminNotesSection
+                items={detail.notes}
+                emptyLabel="Todavia no hay notas internas para este contacto."
+              />
 
-              <section className="space-y-3">
-                <p className="text-xs font-semibold tracking-[0.18em] text-primary">HISTORIAL</p>
-                {detail.statusHistory.length > 0 ? (
-                  detail.statusHistory.map((entry) => (
-                    <article key={entry.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {entry.fromStatus ? <AdminStatusBadge status={entry.fromStatus} compact /> : null}
-                        <span className="text-xs text-muted-foreground">→</span>
-                        <AdminStatusBadge status={entry.toStatus} compact />
-                      </div>
-                      {entry.note ? (
-                        <p className="mt-3 whitespace-pre-wrap text-sm text-foreground">{entry.note}</p>
-                      ) : null}
-                      <p className="mt-3 text-xs text-muted-foreground">
-                        {entry.adminUser?.name ?? 'Sistema'} · {formatAdminDateTime(entry.createdAt)}
-                      </p>
-                    </article>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-4 text-sm text-muted-foreground">
-                    Todavia no hay cambios de estado registrados.
-                  </div>
-                )}
-              </section>
+              <AdminHistorySection
+                items={detail.statusHistory}
+                emptyLabel="Todavia no hay cambios de estado registrados."
+              />
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-5 text-sm text-muted-foreground">
-              Seleccione un contacto para ver el detalle completo.
-            </div>
+            <AdminEmptyState>Seleccione un contacto para ver el detalle completo.</AdminEmptyState>
           )}
         </aside>
       </section>

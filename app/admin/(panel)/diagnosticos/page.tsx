@@ -1,11 +1,28 @@
 import Link from 'next/link'
+import { Download, Mail, MessageSquare, Phone } from 'lucide-react'
+import {
+  addDaysToDateValue,
+  getTodayInAdvisoryZone,
+} from '@/lib/advisory-time'
 import { AdminPagination } from '@/components/admin/admin-pagination'
 import { AdminStatusBadge } from '@/components/admin/admin-status-badge'
+import {
+  AdminEmptyState,
+  AdminHistorySection,
+  AdminInfoCard,
+  AdminNotesSection,
+  AdminQuickFilterLink,
+  AdminRelatedActivity,
+  AdminSummaryTile,
+  AdminTechnicalDetails,
+} from '@/components/admin/admin-ui'
 import { fieldClassName, panelClassName } from '@/components/form-controls'
 import {
   diagnosticStatusOptions,
   formatAdminDateTime,
   getDiagnosticSubmissionDetail,
+  getRelatedActivityForRecord,
+  getStatusLabel,
   listDiagnosticSubmissions,
   parseAdminListFilters,
 } from '@/lib/admin-data'
@@ -17,7 +34,21 @@ type DiagnosticosPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-function buildPageHref(filters: ReturnType<typeof parseAdminListFilters>, overrides: Partial<ReturnType<typeof parseAdminListFilters>> = {}) {
+function buildMonthRange(dateValue: string) {
+  const [year, month] = dateValue.split('-')
+  const monthIndex = Number(month)
+  const lastDay = new Date(Date.UTC(Number(year), monthIndex, 0)).getUTCDate()
+
+  return {
+    from: `${year}-${month}-01`,
+    to: `${year}-${month}-${lastDay.toString().padStart(2, '0')}`,
+  }
+}
+
+function buildPageHref(
+  filters: ReturnType<typeof parseAdminListFilters>,
+  overrides: Partial<ReturnType<typeof parseAdminListFilters>> = {},
+) {
   const params = new URLSearchParams()
   const nextFilters = {
     ...filters,
@@ -28,6 +59,7 @@ function buildPageHref(filters: ReturnType<typeof parseAdminListFilters>, overri
   if (nextFilters.status) params.set('status', nextFilters.status)
   if (nextFilters.from) params.set('from', nextFilters.from)
   if (nextFilters.to) params.set('to', nextFilters.to)
+  if (nextFilters.preset) params.set('preset', nextFilters.preset)
   if (nextFilters.page > 1) params.set('page', String(nextFilters.page))
   if (nextFilters.id) params.set('id', nextFilters.id)
 
@@ -40,8 +72,22 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
   const list = await listDiagnosticSubmissions(filters)
   const selectedId = filters.id || list.items[0]?.id || ''
   const detail = await getDiagnosticSubmissionDetail(selectedId)
+  const relatedActivity = detail
+    ? await getRelatedActivityForRecord({
+        entity: 'diagnosticos',
+        id: detail.id,
+        emailNormalized: detail.emailNormalized,
+        phone: detail.phone,
+        company: detail.company,
+      })
+    : []
   const exportHref = `/admin/api/diagnosticos/export${buildPageHref(filters).replace('/admin/diagnosticos', '')}`
   const returnTo = detail ? buildPageHref(filters, { id: detail.id }) : buildPageHref(filters)
+
+  const today = getTodayInAdvisoryZone()
+  const yesterday = addDaysToDateValue(today, -1)
+  const lastSevenDays = addDaysToDateValue(today, -6)
+  const thisMonth = buildMonthRange(today)
 
   return (
     <div className="space-y-6">
@@ -51,30 +97,105 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
             <p className="text-xs font-semibold tracking-[0.32em] text-primary">DIAGNOSTICOS</p>
             <h1 className="mt-4 text-3xl font-semibold text-foreground">Seguimiento del diagnostico empresarial</h1>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Consulte respuestas completas, cambie estado comercial, agregue notas internas y
-              mantenga visibilidad del correo y del webhook administrativo.
+              Esta vista organiza las respuestas por contexto, operacion y objetivo comercial.
+              Permite filtrar primero por fecha, cambiar estado con criterio y revisar la actividad
+              relacionada sin perder el hilo del caso.
             </p>
           </div>
           <Link
             href={exportHref}
-            className="rounded-full border border-border/70 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
           >
+            <Download className="size-4" />
             EXPORTAR CSV
           </Link>
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)]">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+        <AdminSummaryTile
+          label="EN RANGO"
+          value={list.stats.total}
+          hint="Volumen real dentro del rango activo."
+          tone="default"
+        />
+        <AdminSummaryTile
+          label="PENDIENTES"
+          value={list.stats.pending}
+          hint="Nuevos diagnosticos por revisar."
+          tone="primary"
+        />
+        <AdminSummaryTile
+          label="EN ANALISIS"
+          value={list.stats.inAnalysis}
+          hint="Casos que siguen en evaluacion interna."
+          tone="accent"
+        />
+        <AdminSummaryTile
+          label="GESTION COMERCIAL"
+          value={list.stats.commercial}
+          hint="Contactados o con propuesta enviada."
+          tone="success"
+        />
+        <AdminSummaryTile
+          label="CERRADOS"
+          value={list.stats.closed}
+          hint="Ganados o descartados."
+          tone="warning"
+        />
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(24rem,0.85fr)]">
         <div className={panelClassName}>
-          <form className="grid gap-4 lg:grid-cols-5" method="get">
-            <div className="lg:col-span-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, { preset: 'today', from: today, to: today, page: 1, id: '' })}
+              label="HOY"
+              active={filters.preset === 'today'}
+            />
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, { preset: 'yesterday', from: yesterday, to: yesterday, page: 1, id: '' })}
+              label="AYER"
+              active={filters.preset === 'yesterday'}
+            />
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, {
+                preset: 'last-7-days',
+                from: lastSevenDays,
+                to: today,
+                page: 1,
+                id: '',
+              })}
+              label="ULTIMOS 7 DIAS"
+              active={filters.preset === 'last-7-days'}
+            />
+            <AdminQuickFilterLink
+              href={buildPageHref(filters, {
+                preset: 'this-month',
+                from: thisMonth.from,
+                to: thisMonth.to,
+                page: 1,
+                id: '',
+              })}
+              label="ESTE MES"
+              active={filters.preset === 'this-month'}
+            />
+            <AdminQuickFilterLink
+              href="/admin/diagnosticos"
+              label="TODOS"
+              active={!filters.preset && !filters.from && !filters.to && !filters.q && !filters.status}
+            />
+          </div>
+
+          <form className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]" method="get">
+            <div>
               <label className="block">
                 <span className="text-xs font-semibold tracking-[0.16em] text-primary">BUSQUEDA</span>
                 <input
                   name="q"
                   defaultValue={filters.q}
                   className={fieldClassName}
-                  placeholder="Nombre, empresa, correo, sector..."
+                  placeholder="Empresa, contacto, sector, correo..."
                 />
               </label>
             </div>
@@ -85,7 +206,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 <option value="">Todos</option>
                 {diagnosticStatusOptions.map((status) => (
                   <option key={status} value={status}>
-                    {status.replaceAll('_', ' ')}
+                    {getStatusLabel(status)}
                   </option>
                 ))}
               </select>
@@ -101,7 +222,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
               <input name="to" type="date" defaultValue={filters.to} className={fieldClassName} />
             </label>
 
-            <div className="flex flex-wrap items-end gap-3 lg:col-span-5">
+            <div className="flex flex-wrap items-end gap-3 lg:col-span-4">
               <button
                 type="submit"
                 className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
@@ -117,9 +238,12 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
             </div>
           </form>
 
-          <div className="mt-6 flex items-center justify-between gap-3">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">
-              {list.total} resultado{list.total === 1 ? '' : 's'}
+              {list.total} resultado{list.total === 1 ? '' : 's'} con los filtros aplicados.
+            </p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-muted-foreground">
+              Los contadores superiores ignoran el estado para mostrar la carga del rango.
             </p>
           </div>
 
@@ -143,6 +267,8 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                     <AdminStatusBadge status={item.status} compact />
                   </div>
 
+                  <p className="mt-3 text-sm text-muted-foreground">{item.summary}</p>
+
                   <div className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
                     <p>{item.sector}</p>
                     <p>{item.city}</p>
@@ -150,14 +276,12 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                     <p>{formatAdminDateTime(item.createdAt)}</p>
                   </div>
 
-                  <p className="mt-4 text-sm text-muted-foreground">{item.summary}</p>
-
                   <div className="mt-4 flex flex-wrap gap-2">
                     <AdminStatusBadge status={item.internalEmailStatus} compact />
                     <AdminStatusBadge status={item.clientEmailStatus} compact />
                     <AdminStatusBadge status={item.webhookStatus} compact />
                     {item.wantsMeeting ? (
-                      <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[0.6rem] font-semibold tracking-[0.18em] text-primary">
+                      <span className="rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[0.62rem] font-semibold tracking-[0.16em] text-primary">
                         QUIERE REUNION
                       </span>
                     ) : null}
@@ -165,9 +289,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 </Link>
               ))
             ) : (
-              <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-5 text-sm text-muted-foreground">
-                No se encontraron diagnosticos con esos filtros.
-              </div>
+              <AdminEmptyState>No se encontraron diagnosticos con esos filtros.</AdminEmptyState>
             )}
           </div>
 
@@ -186,7 +308,9 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
               <div>
                 <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE</p>
                 <h2 className="mt-4 text-2xl font-semibold text-foreground">{detail.company}</h2>
-                <p className="mt-2 text-sm text-muted-foreground">{detail.name} · {detail.role}</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {detail.name} - {detail.role}
+                </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <AdminStatusBadge status={detail.status} />
                   <AdminStatusBadge status={detail.internalEmailStatus} compact />
@@ -196,115 +320,120 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
               </div>
 
               <div className="grid gap-3">
-                {[
-                  ['Resumen', detail.summary],
-                  ['Procesos', detail.processes],
-                  ['Operacion actual', detail.currentProcess],
-                  ['Herramientas', detail.tools],
-                  ['Tareas repetitivas', detail.repetitiveTasks],
-                  ['Problema principal', detail.mainProblem],
-                  ['Resultado esperado', detail.expectedResult],
-                ].map(([label, value]) => (
-                  <div key={label} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                    <p className="text-xs tracking-[0.16em] text-primary">{label}</p>
-                    <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">{value}</p>
-                  </div>
-                ))}
+                <AdminInfoCard label="RESUMEN EJECUTIVO">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.summary}</p>
+                </AdminInfoCard>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">CORREO</p>
-                  <a href={buildAdminMailto(detail.email, `Seguimiento de diagnostico ${detail.company}`)} className="mt-2 block text-sm text-foreground hover:text-primary">
+                <AdminInfoCard label="SECTOR">{detail.sector}</AdminInfoCard>
+                <AdminInfoCard label="CIUDAD">{detail.city}</AdminInfoCard>
+                <AdminInfoCard label="EQUIPO">{detail.teamSize}</AdminInfoCard>
+                <AdminInfoCard
+                  label="PREFERENCIA DE CONTACTO"
+                  hint={detail.wantsMeeting ? 'Solicito avanzar a una reunion.' : 'No pidio reunion por ahora.'}
+                >
+                  {detail.contactPreference}
+                </AdminInfoCard>
+              </div>
+
+              <div className="grid gap-3">
+                <AdminInfoCard label="PROCESOS ACTUALES">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.processes}</p>
+                </AdminInfoCard>
+                <AdminInfoCard label="OPERACION ACTUAL">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.currentProcess}</p>
+                </AdminInfoCard>
+                <AdminInfoCard label="HERRAMIENTAS Y SISTEMAS">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.tools}</p>
+                </AdminInfoCard>
+                <AdminInfoCard label="TAREAS REPETITIVAS">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.repetitiveTasks}</p>
+                </AdminInfoCard>
+              </div>
+
+              <div className="grid gap-3">
+                <AdminInfoCard label="PROBLEMA PRINCIPAL">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.mainProblem}</p>
+                </AdminInfoCard>
+                <AdminInfoCard label="RESULTADO ESPERADO">
+                  <p className="whitespace-pre-wrap leading-relaxed text-foreground">{detail.expectedResult}</p>
+                </AdminInfoCard>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <AdminInfoCard label="CORREO">
+                  <a
+                    href={buildAdminMailto(detail.email, `Seguimiento de diagnostico ${detail.company}`)}
+                    className="inline-flex items-center gap-2 hover:text-primary"
+                  >
+                    <Mail className="size-4" />
                     {detail.email}
                   </a>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">TELEFONO</p>
-                  <a href={buildAdminPhone(detail.phone)} className="mt-2 block text-sm text-foreground hover:text-primary">
+                </AdminInfoCard>
+                <AdminInfoCard label="TELEFONO">
+                  <a href={buildAdminPhone(detail.phone)} className="inline-flex items-center gap-2 hover:text-primary">
+                    <Phone className="size-4" />
                     {detail.phone}
                   </a>
-                </div>
+                </AdminInfoCard>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">WHATSAPP</p>
+                <AdminInfoCard label="WHATSAPP">
                   <a
                     href={buildAdminWhatsApp(detail.phone, `Hola ${detail.name}, gracias por completar el diagnostico de Konamy Systems.`)}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex text-sm text-foreground hover:text-primary"
+                    className="inline-flex items-center gap-2 hover:text-primary"
                   >
+                    <MessageSquare className="size-4" />
                     Abrir conversacion
                   </a>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">FECHA DE INGRESO</p>
-                  <p className="mt-2 text-sm text-foreground">{formatAdminDateTime(detail.createdAt)}</p>
-                </div>
+                </AdminInfoCard>
+                <AdminInfoCard label="FECHA DE INGRESO">
+                  <p>{formatAdminDateTime(detail.createdAt)}</p>
+                </AdminInfoCard>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">CIUDAD</p>
-                  <p className="mt-2 text-sm text-foreground">{detail.city}</p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">SECTOR</p>
-                  <p className="mt-2 text-sm text-foreground">{detail.sector}</p>
-                </div>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">TEAM SIZE</p>
-                  <p className="mt-2 text-sm text-foreground">{detail.teamSize}</p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">CONTACTO PREFERIDO</p>
-                  <p className="mt-2 text-sm text-foreground">{detail.contactPreference}</p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {detail.wantsMeeting ? 'Quiere avanzar a reunion.' : 'No pidio reunion por ahora.'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">PRIVACIDAD</p>
-                  <p className="mt-2 text-sm text-foreground">{detail.privacyPolicyVersion}</p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Aceptada el {formatAdminDateTime(detail.privacyAcceptedAt)}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">ENTREGA</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                <AdminInfoCard
+                  label="PRIVACIDAD"
+                  hint={`Aceptada el ${formatAdminDateTime(detail.privacyAcceptedAt)}`}
+                >
+                  {detail.privacyPolicyVersion}
+                </AdminInfoCard>
+                <AdminInfoCard label="ENTREGA">
+                  <div className="flex flex-wrap gap-2">
                     <AdminStatusBadge status={detail.internalEmailStatus} compact />
                     <AdminStatusBadge status={detail.clientEmailStatus} compact />
                     <AdminStatusBadge status={detail.webhookStatus} compact />
                   </div>
                   {detail.lastDeliveryError ? (
-                    <p className="mt-3 text-xs text-muted-foreground">{detail.lastDeliveryError}</p>
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                      {detail.lastDeliveryError}
+                    </p>
                   ) : null}
-                </div>
+                </AdminInfoCard>
               </div>
 
-              <div className="grid gap-3">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="text-xs tracking-[0.16em] text-primary">METADATOS TECNICOS</p>
-                  <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                    <p>Origen: {detail.requestOrigin ?? 'Sin dato'}</p>
-                    <p>Ruta: {detail.requestPath ?? 'Sin dato'}</p>
-                    <p>Referer: {detail.referer ?? 'Sin dato'}</p>
-                    <p>User-Agent: {detail.userAgent ?? 'Sin dato'}</p>
-                    <p>IP Hash: {detail.ipHash ?? 'Sin dato'}</p>
-                  </div>
-                </div>
-              </div>
+              <AdminRelatedActivity items={relatedActivity} />
 
-              <form action={`/admin/api/diagnosticos/${detail.id}/status`} method="post" className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4">
+              <AdminTechnicalDetails
+                items={[
+                  { label: 'Origen', value: detail.requestOrigin ?? 'Sin dato' },
+                  { label: 'Ruta', value: detail.requestPath ?? 'Sin dato' },
+                  { label: 'Referer', value: detail.referer ?? 'Sin dato' },
+                  { label: 'User-Agent', value: detail.userAgent ?? 'Sin dato' },
+                  { label: 'IP Hash', value: detail.ipHash ?? 'Sin dato' },
+                ]}
+              />
+
+              <form
+                action={`/admin/api/diagnosticos/${detail.id}/status`}
+                method="post"
+                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
+              >
                 <input type="hidden" name="returnTo" value={returnTo} />
                 <div>
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
@@ -314,7 +443,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                   <select name="status" defaultValue={detail.status} className={fieldClassName}>
                     {diagnosticStatusOptions.map((status) => (
                       <option key={status} value={status}>
-                        {status.replaceAll('_', ' ')}
+                        {getStatusLabel(status)}
                       </option>
                     ))}
                   </select>
@@ -331,7 +460,11 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 </button>
               </form>
 
-              <form action={`/admin/api/diagnosticos/${detail.id}/notes`} method="post" className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4">
+              <form
+                action={`/admin/api/diagnosticos/${detail.id}/notes`}
+                method="post"
+                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
+              >
                 <input type="hidden" name="returnTo" value={returnTo} />
                 <div>
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
@@ -348,53 +481,18 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 </button>
               </form>
 
-              <section className="space-y-3">
-                <p className="text-xs font-semibold tracking-[0.18em] text-primary">NOTAS INTERNAS</p>
-                {detail.notes.length > 0 ? (
-                  detail.notes.map((note) => (
-                    <article key={note.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                      <p className="whitespace-pre-wrap text-sm text-foreground">{note.body}</p>
-                      <p className="mt-3 text-xs text-muted-foreground">
-                        {note.adminUser.name} · {formatAdminDateTime(note.createdAt)}
-                      </p>
-                    </article>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-4 text-sm text-muted-foreground">
-                    Todavia no hay notas internas para este diagnostico.
-                  </div>
-                )}
-              </section>
+              <AdminNotesSection
+                items={detail.notes}
+                emptyLabel="Todavia no hay notas internas para este diagnostico."
+              />
 
-              <section className="space-y-3">
-                <p className="text-xs font-semibold tracking-[0.18em] text-primary">HISTORIAL</p>
-                {detail.statusHistory.length > 0 ? (
-                  detail.statusHistory.map((entry) => (
-                    <article key={entry.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {entry.fromStatus ? <AdminStatusBadge status={entry.fromStatus} compact /> : null}
-                        <span className="text-xs text-muted-foreground">→</span>
-                        <AdminStatusBadge status={entry.toStatus} compact />
-                      </div>
-                      {entry.note ? (
-                        <p className="mt-3 whitespace-pre-wrap text-sm text-foreground">{entry.note}</p>
-                      ) : null}
-                      <p className="mt-3 text-xs text-muted-foreground">
-                        {entry.adminUser?.name ?? 'Sistema'} · {formatAdminDateTime(entry.createdAt)}
-                      </p>
-                    </article>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-4 text-sm text-muted-foreground">
-                    Todavia no hay cambios de estado registrados.
-                  </div>
-                )}
-              </section>
+              <AdminHistorySection
+                items={detail.statusHistory}
+                emptyLabel="Todavia no hay cambios de estado registrados."
+              />
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-border/70 bg-background/20 p-5 text-sm text-muted-foreground">
-              Seleccione un diagnostico para ver el detalle completo.
-            </div>
+            <AdminEmptyState>Seleccione un diagnostico para ver el detalle completo.</AdminEmptyState>
           )}
         </aside>
       </section>
