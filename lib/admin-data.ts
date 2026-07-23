@@ -374,8 +374,6 @@ export function getStatusLabel(status: string) {
 
 export async function getAdminDashboardSnapshot() {
   const db = getDb()
-  const now = new Date()
-  const todayValue = getTodayInAdvisoryZone(now)
 
   const [
     totalContacts,
@@ -387,9 +385,9 @@ export async function getAdminDashboardSnapshot() {
     inProgressDiagnostics,
     finalizedDiagnostics,
     totalBookings,
-    todaysBookings,
-    upcomingBookings,
-    activeBookings,
+    pendingBookings,
+    confirmedBookings,
+    completedBookings,
   ] = await Promise.all([
     db.contactSubmission.count(),
     db.contactSubmission.count({
@@ -438,24 +436,17 @@ export async function getAdminDashboardSnapshot() {
     db.advisoryBooking.count(),
     db.advisoryBooking.count({
       where: {
-        scheduledDate: todayValue,
+        status: 'PENDING',
       },
     }),
     db.advisoryBooking.count({
       where: {
-        startAt: {
-          gte: now,
-        },
-        status: {
-          in: bookingActiveStatuses,
-        },
+        status: 'CONFIRMED',
       },
     }),
     db.advisoryBooking.count({
       where: {
-        status: {
-          in: bookingActiveStatuses,
-        },
+        status: 'COMPLETED',
       },
     }),
   ])
@@ -476,9 +467,9 @@ export async function getAdminDashboardSnapshot() {
       },
       bookings: {
         total: totalBookings,
-        today: todaysBookings,
-        upcoming: upcomingBookings,
-        active: activeBookings,
+        pending: pendingBookings,
+        confirmed: confirmedBookings,
+        completed: completedBookings,
       },
     },
   }

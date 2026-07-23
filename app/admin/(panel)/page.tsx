@@ -11,22 +11,19 @@ export default async function AdminDashboardPage() {
     <div className="space-y-6">
       <section className="rounded-[1.75rem] border border-border/70 bg-background/50 p-6 backdrop-blur-sm lg:p-8">
         <p className="text-xs font-semibold tracking-[0.32em] text-primary">DASHBOARD</p>
-        <h1 className="mt-4 text-3xl font-semibold text-foreground">
-          Panel ejecutivo de seguimiento comercial
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Este tablero resume solamente lo que el equipo necesita atender primero: formularios
-          breves, diagnosticos empresariales y reuniones activas. Cada modulo concentra cifras
-          reales de la base de datos y lleva directo al flujo operativo correspondiente.
+        <h1 className="mt-4 text-3xl font-semibold text-foreground">Operacion comercial en curso</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Tres modulos, una sola lectura: que entro, que sigue pendiente y que ya avanzo lo
+          suficiente como para no perder tiempo buscando contexto.
         </p>
       </section>
 
-      <section className="grid gap-5 xl:grid-cols-3">
+      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <AdminExecutiveModuleCard
           href="/admin/contactos"
           label="CONTACTOS"
           title="Formularios breves"
-          description="Entradas rapidas para responder, mover de estado y dar seguimiento sin perder el contexto comercial."
+          description="Entradas rapidas para responder, mover de estado y sostener el seguimiento sin abrir vistas secundarias."
           total={snapshot.modules.contacts.total}
           totalLabel="TOTAL RECIBIDO"
           tone="primary"
@@ -51,7 +48,7 @@ export default async function AdminDashboardPage() {
           href="/admin/diagnosticos"
           label="DIAGNOSTICOS"
           title="Evaluaciones empresariales"
-          description="Casos para revisar por fecha, entender su contexto operativo y avanzar el seguimiento con criterio."
+          description="Lectura ejecutiva de cada empresa para revisar dolor, operacion actual y siguiente paso comercial."
           total={snapshot.modules.diagnostics.total}
           totalLabel="TOTAL RECIBIDO"
           tone="accent"
@@ -72,30 +69,32 @@ export default async function AdminDashboardPage() {
           ]}
         />
 
-        <AdminExecutiveModuleCard
-          href="/admin/reuniones"
-          label="REUNIONES"
-          title="Agenda de asesorias"
-          description="Vista diaria para confirmar reuniones, detectar proximas sesiones y abrir rapido Meet o Calendar cuando ya existan."
-          total={snapshot.modules.bookings.total}
-          totalLabel="TOTAL REGISTRADO"
-          tone="success"
-          icon={CalendarCheck2}
-          metrics={[
-            {
-              label: 'HOY',
-              value: snapshot.modules.bookings.today,
-            },
-            {
-              label: 'PROXIMAS',
-              value: snapshot.modules.bookings.upcoming,
-            },
-            {
-              label: 'ACTIVAS',
-              value: snapshot.modules.bookings.active,
-            },
-          ]}
-        />
+        <div className="md:col-span-2 xl:col-span-1">
+          <AdminExecutiveModuleCard
+            href="/admin/reuniones"
+            label="REUNIONES"
+            title="Agenda de asesorias"
+            description="Reservas listas para confirmar, ejecutar y cerrar con trazabilidad completa sobre Meet, Calendar y seguimiento."
+            total={snapshot.modules.bookings.total}
+            totalLabel="TOTAL REGISTRADO"
+            tone="success"
+            icon={CalendarCheck2}
+            metrics={[
+              {
+                label: 'PENDIENTES',
+                value: snapshot.modules.bookings.pending,
+              },
+              {
+                label: 'CONFIRMADAS',
+                value: snapshot.modules.bookings.confirmed,
+              },
+              {
+                label: 'REALIZADAS',
+                value: snapshot.modules.bookings.completed,
+              },
+            ]}
+          />
+        </div>
       </section>
     </div>
   )
