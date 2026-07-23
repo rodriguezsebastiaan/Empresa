@@ -102,9 +102,8 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
             <p className="text-xs font-semibold tracking-[0.32em] text-primary">REUNIONES</p>
             <h1 className="mt-4 text-3xl font-semibold text-foreground">Agenda operativa de asesorias</h1>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Revise rapidamente la agenda del dia, confirme reuniones proximas, detecte
-              incidencias y consulte el contexto completo de cada reserva sin perder el acceso a
-              Meet, Calendar, correo y WhatsApp.
+              Revise la agenda del dia, filtre por manana o por semana y consulte cada reserva con
+              acceso directo a Meet, Calendar, correo y WhatsApp cuando esos datos ya existan.
             </p>
           </div>
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-muted-foreground">
@@ -114,11 +113,11 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <AdminSummaryTile
-          label="EN RANGO"
+          label="TOTAL EN RANGO"
           value={list.stats.total}
-          hint="Total de reservas dentro del rango activo."
+          hint="Reservas dentro del rango y la busqueda actual."
           tone="default"
         />
         <AdminSummaryTile
@@ -128,21 +127,15 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
           tone="primary"
         />
         <AdminSummaryTile
-          label="PENDIENTES"
-          value={list.stats.pending}
-          hint="Reservas aun no confirmadas."
-          tone="warning"
-        />
-        <AdminSummaryTile
-          label="CONFIRMADAS"
-          value={list.stats.confirmed}
-          hint="Agenda activa lista para ejecutarse."
+          label="PROXIMAS"
+          value={list.stats.upcoming}
+          hint="Reuniones futuras pendientes o confirmadas."
           tone="accent"
         />
         <AdminSummaryTile
-          label="NOVEDADES"
-          value={list.stats.incidents}
-          hint="Canceladas, reprogramadas o no asistidas."
+          label="ACTIVAS"
+          value={list.stats.active}
+          hint="Reservas con estado pendiente o confirmado."
           tone="success"
         />
       </section>
@@ -265,7 +258,7 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
               list.items.map((item) => (
                 <Link
                   key={item.id}
-                  href={buildPageHref(filters, { id: item.id })}
+                  href={`${buildPageHref(filters, { id: item.id })}#detalle`}
                   className={`block rounded-2xl border p-4 transition-colors ${
                     selectedId === item.id
                       ? 'border-primary/35 bg-primary/8'
@@ -280,13 +273,31 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
                     <AdminStatusBadge status={item.status} compact />
                   </div>
 
-                  <div className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                    <p>{item.email}</p>
-                    <p>{item.phone}</p>
-                    <p>{formatAdminDateTime(item.startAt)}</p>
-                    <p>
-                      Notas {item._count.notes} / Historial {item._count.statusHistory}
-                    </p>
+                  <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        CORREO
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        TELEFONO
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.phone}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        FECHA
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.scheduledDate}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        HORA
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.scheduledTime}</p>
+                    </div>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -298,6 +309,9 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
                         MEET LISTO
                       </span>
                     ) : null}
+                    <span className="rounded-full border border-border/70 bg-background/35 px-2.5 py-1 text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                      Notas {item._count.notes} / Historial {item._count.statusHistory}
+                    </span>
                   </div>
                 </Link>
               ))
@@ -318,11 +332,11 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
           </div>
         </div>
 
-        <aside className={`${panelClassName} h-fit`}>
+        <aside id="detalle" className={`${panelClassName} h-fit xl:sticky xl:top-6`}>
           {detail ? (
             <div className="space-y-6">
               <div>
-                <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE</p>
+                <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE Y ACCIONES</p>
                 <h2 className="mt-4 text-2xl font-semibold text-foreground">{detail.company}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{detail.fullName}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -334,20 +348,21 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <AdminInfoCard label="FECHA Y HORA">
+                <AdminInfoCard label="FECHA">
                   <div className="inline-flex items-center gap-2">
                     <CalendarDays className="size-4" />
-                    {formatAdminDateTime(detail.startAt)}
+                    {detail.scheduledDate}
                   </div>
                 </AdminInfoCard>
-                <AdminInfoCard label="MODALIDAD" hint={`${detail.durationMinutes} minutos`}>
-                  {detail.modality}
+                <AdminInfoCard label="HORA DE INICIO" hint={`${detail.durationMinutes} minutos`}>
+                  {formatAdminDateTime(detail.startAt)}
                 </AdminInfoCard>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                <AdminInfoCard label="CIUDAD">{detail.city}</AdminInfoCard>
+                <AdminInfoCard label="HORA FINAL">
+                  {formatAdminDateTime(detail.endAt)}
+                </AdminInfoCard>
                 <AdminInfoCard label="ZONA HORARIA">{detail.timezone}</AdminInfoCard>
+                <AdminInfoCard label="MODALIDAD">{detail.modality}</AdminInfoCard>
+                <AdminInfoCard label="CIUDAD">{detail.city}</AdminInfoCard>
               </div>
 
               <AdminInfoCard label="MOTIVO O PROCESO">
@@ -454,67 +469,71 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
                 ]}
               />
 
-              <form
-                action={`/admin/api/reuniones/${detail.id}/status`}
-                method="post"
-                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
-              >
-                <input type="hidden" name="returnTo" value={returnTo} />
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
-                </div>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nuevo estado</span>
-                  <select name="status" defaultValue={detail.status} className={fieldClassName}>
-                    {advisoryBookingStatusOptions.map((status) => (
-                      <option key={status} value={status}>
-                        {getStatusLabel(status)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nota del cambio</span>
-                  <textarea name="note" className={`${fieldClassName} min-h-[7rem] resize-y`} />
-                </label>
-                <button
-                  type="submit"
-                  className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+                <form
+                  action={`/admin/api/reuniones/${detail.id}/status`}
+                  method="post"
+                  className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
                 >
-                  GUARDAR ESTADO
-                </button>
-              </form>
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
+                  </div>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nuevo estado</span>
+                    <select name="status" defaultValue={detail.status} className={fieldClassName}>
+                      {advisoryBookingStatusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {getStatusLabel(status)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nota del cambio</span>
+                    <textarea name="note" className={`${fieldClassName} min-h-[7rem] resize-y`} />
+                  </label>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+                  >
+                    GUARDAR ESTADO
+                  </button>
+                </form>
 
-              <form
-                action={`/admin/api/reuniones/${detail.id}/notes`}
-                method="post"
-                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
-              >
-                <input type="hidden" name="returnTo" value={returnTo} />
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
-                </div>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nota</span>
-                  <textarea name="note" required className={`${fieldClassName} min-h-[8rem] resize-y`} />
-                </label>
-                <button
-                  type="submit"
-                  className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                <form
+                  action={`/admin/api/reuniones/${detail.id}/notes`}
+                  method="post"
+                  className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
                 >
-                  GUARDAR NOTA
-                </button>
-              </form>
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
+                  </div>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nota</span>
+                    <textarea name="note" required className={`${fieldClassName} min-h-[8rem] resize-y`} />
+                  </label>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                  >
+                    GUARDAR NOTA
+                  </button>
+                </form>
+              </div>
 
-              <AdminNotesSection
-                items={detail.notes}
-                emptyLabel="Todavia no hay notas internas para esta reunion."
-              />
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-1">
+                <AdminNotesSection
+                  items={detail.notes}
+                  emptyLabel="Todavia no hay notas internas para esta reunion."
+                />
 
-              <AdminHistorySection
-                items={detail.statusHistory}
-                emptyLabel="Todavia no hay cambios de estado registrados."
-              />
+                <AdminHistorySection
+                  items={detail.statusHistory}
+                  emptyLabel="Todavia no hay cambios de estado registrados."
+                />
+              </div>
             </div>
           ) : (
             <AdminEmptyState>

@@ -51,8 +51,8 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] text-foreground">
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-4 lg:flex-row lg:px-6 lg:py-6">
-        <aside className="w-full shrink-0 rounded-[1.75rem] border border-border/70 bg-background/55 p-5 backdrop-blur-sm lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:w-[19rem]">
+      <div className="mx-auto flex min-h-screen max-w-[1500px] flex-col gap-6 px-4 py-4 lg:flex-row lg:px-6 lg:py-6">
+        <aside className="w-full shrink-0 rounded-[1.75rem] border border-border/70 bg-background/55 p-5 backdrop-blur-sm lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:w-[18.5rem]">
           <div className="flex items-center justify-between gap-4 lg:block">
             <div>
               <p className="text-[0.62rem] font-semibold tracking-[0.26em] text-primary">PANEL ADMINISTRATIVO</p>
@@ -87,7 +87,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
             </div>
           </div>
 
-          <nav className="mt-6 grid gap-2" aria-label="Navegacion administrativa">
+          <nav className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-1" aria-label="Navegacion administrativa">
             {navigationItems.map((item) => {
               const Icon = item.icon
               const active =

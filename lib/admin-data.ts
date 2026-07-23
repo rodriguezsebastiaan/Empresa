@@ -41,9 +41,23 @@ export const advisoryBookingStatusOptions: AdvisoryBookingStatus[] = [
   'NO_SHOW',
 ]
 
+const contactPendingStatuses: ContactSubmissionStatus[] = ['NEW']
+const contactInProgressStatuses: ContactSubmissionStatus[] = ['IN_REVIEW']
+const contactAttendedStatuses: ContactSubmissionStatus[] = ['CONTACTED', 'CLOSED']
+
+const diagnosticPendingStatuses: DiagnosticSubmissionStatus[] = ['NEW']
+const diagnosticInProgressStatuses: DiagnosticSubmissionStatus[] = [
+  'IN_ANALYSIS',
+  'CONTACTED',
+  'PROPOSAL_SENT',
+]
+const diagnosticFinalStatuses: DiagnosticSubmissionStatus[] = ['WON', 'LOST']
+
+const bookingActiveStatuses: AdvisoryBookingStatus[] = ['PENDING', 'CONFIRMED']
+
 export const statusLabels: Record<string, string> = {
   NEW: 'Pendiente',
-  IN_REVIEW: 'En revision',
+  IN_REVIEW: 'En proceso',
   CONTACTED: 'Contactado',
   CLOSED: 'Cerrado',
   IN_ANALYSIS: 'En analisis',
@@ -225,6 +239,10 @@ function getMatchScore(reasons: string[]) {
   }, 0)
 }
 
+function hasStrongRelatedMatch(reasons: string[]) {
+  return reasons.includes('Mismo correo') || reasons.includes('Mismo telefono')
+}
+
 export function parseAdminListFilters(input: SearchParamsInput): AdminListFilters {
   return {
     page: clampPage(readSearchValue(input, 'page')),
@@ -356,151 +374,113 @@ export function getStatusLabel(status: string) {
 
 export async function getAdminDashboardSnapshot() {
   const db = getDb()
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   const now = new Date()
   const todayValue = getTodayInAdvisoryZone(now)
 
   const [
     totalContacts,
-    newContacts,
-    recentContacts,
+    pendingContacts,
+    inProgressContacts,
+    attendedContacts,
     totalDiagnostics,
-    newDiagnostics,
-    recentDiagnostics,
+    pendingDiagnostics,
+    inProgressDiagnostics,
+    finalizedDiagnostics,
     totalBookings,
-    recentBookings,
-    pendingBookings,
-    upcomingBookings,
     todaysBookings,
+    upcomingBookings,
+    activeBookings,
   ] = await Promise.all([
     db.contactSubmission.count(),
     db.contactSubmission.count({
       where: {
-        status: 'NEW',
+        status: {
+          in: contactPendingStatuses,
+        },
       },
     }),
     db.contactSubmission.count({
       where: {
-        createdAt: {
-          gte: sevenDaysAgo,
+        status: {
+          in: contactInProgressStatuses,
+        },
+      },
+    }),
+    db.contactSubmission.count({
+      where: {
+        status: {
+          in: contactAttendedStatuses,
         },
       },
     }),
     db.diagnosticSubmission.count(),
     db.diagnosticSubmission.count({
       where: {
-        status: 'NEW',
+        status: {
+          in: diagnosticPendingStatuses,
+        },
       },
     }),
     db.diagnosticSubmission.count({
       where: {
-        createdAt: {
-          gte: sevenDaysAgo,
+        status: {
+          in: diagnosticInProgressStatuses,
+        },
+      },
+    }),
+    db.diagnosticSubmission.count({
+      where: {
+        status: {
+          in: diagnosticFinalStatuses,
         },
       },
     }),
     db.advisoryBooking.count(),
     db.advisoryBooking.count({
       where: {
-        createdAt: {
-          gte: sevenDaysAgo,
-        },
-      },
-    }),
-    db.advisoryBooking.count({
-      where: {
-        status: 'PENDING',
-      },
-    }),
-    db.advisoryBooking.count({
-      where: {
-        startAt: {
-          gte: now,
-        },
-        status: {
-          in: ['PENDING', 'CONFIRMED'],
-        },
-      },
-    }),
-    db.advisoryBooking.count({
-      where: {
         scheduledDate: todayValue,
       },
     }),
-  ])
-
-  const [recentContactItems, recentDiagnosticItems, upcomingBookingItems] = await Promise.all([
-    db.contactSubmission.findMany({
-      take: 5,
-      orderBy: {
-        createdAt: 'desc',
-      },
-      select: {
-        id: true,
-        status: true,
-        name: true,
-        company: true,
-        subject: true,
-        createdAt: true,
-      },
-    }),
-    db.diagnosticSubmission.findMany({
-      take: 5,
-      orderBy: {
-        createdAt: 'desc',
-      },
-      select: {
-        id: true,
-        status: true,
-        name: true,
-        company: true,
-        summary: true,
-        createdAt: true,
-      },
-    }),
-    db.advisoryBooking.findMany({
-      take: 5,
+    db.advisoryBooking.count({
       where: {
         startAt: {
           gte: now,
         },
         status: {
-          in: ['PENDING', 'CONFIRMED'],
+          in: bookingActiveStatuses,
         },
       },
-      orderBy: {
-        startAt: 'asc',
-      },
-      select: {
-        id: true,
-        status: true,
-        fullName: true,
-        company: true,
-        scheduledDate: true,
-        scheduledTime: true,
-        startAt: true,
-        googleMeetUrl: true,
+    }),
+    db.advisoryBooking.count({
+      where: {
+        status: {
+          in: bookingActiveStatuses,
+        },
       },
     }),
   ])
 
   return {
-    totals: {
-      totalContacts,
-      newContacts,
-      recentContacts,
-      totalDiagnostics,
-      newDiagnostics,
-      recentDiagnostics,
-      totalBookings,
-      recentBookings,
-      pendingBookings,
-      upcomingBookings,
-      todaysBookings,
+    modules: {
+      contacts: {
+        total: totalContacts,
+        pending: pendingContacts,
+        inProgress: inProgressContacts,
+        attended: attendedContacts,
+      },
+      diagnostics: {
+        total: totalDiagnostics,
+        pending: pendingDiagnostics,
+        inProgress: inProgressDiagnostics,
+        finalized: finalizedDiagnostics,
+      },
+      bookings: {
+        total: totalBookings,
+        today: todaysBookings,
+        upcoming: upcomingBookings,
+        active: activeBookings,
+      },
     },
-    recentContactItems,
-    recentDiagnosticItems,
-    upcomingBookingItems,
   }
 }
 
@@ -512,7 +492,7 @@ export async function listContactSubmissions(filters: AdminListFilters) {
   const pageCount = Math.max(1, Math.ceil(total / CONTACT_PAGE_SIZE))
   const page = Math.min(filters.page, pageCount)
 
-  const [items, pendingCount, inReviewCount, contactedCount, closedCount] = await Promise.all([
+  const [items, pendingCount, inProgressCount, attendedCount] = await Promise.all([
     db.contactSubmission.findMany({
       where,
       orderBy: {
@@ -541,22 +521,17 @@ export async function listContactSubmissions(filters: AdminListFilters) {
     }),
     db.contactSubmission.count({
       where: {
-        AND: [scopeWhere, { status: 'NEW' }],
+        AND: [scopeWhere, { status: { in: contactPendingStatuses } }],
       },
     }),
     db.contactSubmission.count({
       where: {
-        AND: [scopeWhere, { status: 'IN_REVIEW' }],
+        AND: [scopeWhere, { status: { in: contactInProgressStatuses } }],
       },
     }),
     db.contactSubmission.count({
       where: {
-        AND: [scopeWhere, { status: 'CONTACTED' }],
-      },
-    }),
-    db.contactSubmission.count({
-      where: {
-        AND: [scopeWhere, { status: 'CLOSED' }],
+        AND: [scopeWhere, { status: { in: contactAttendedStatuses } }],
       },
     }),
   ])
@@ -568,11 +543,10 @@ export async function listContactSubmissions(filters: AdminListFilters) {
     total,
     pageSize: CONTACT_PAGE_SIZE,
     stats: {
-      total: pendingCount + inReviewCount + contactedCount + closedCount,
+      total: pendingCount + inProgressCount + attendedCount,
       pending: pendingCount,
-      inReview: inReviewCount,
-      contacted: contactedCount,
-      closed: closedCount,
+      inProgress: inProgressCount,
+      attended: attendedCount,
     },
   }
 }
@@ -628,7 +602,7 @@ export async function listDiagnosticSubmissions(filters: AdminListFilters) {
   const pageCount = Math.max(1, Math.ceil(total / DIAGNOSTIC_PAGE_SIZE))
   const page = Math.min(filters.page, pageCount)
 
-  const [items, pendingCount, analysisCount, commercialCount, closedCount] = await Promise.all([
+  const [items, pendingCount, inProcessCount, finalizedCount] = await Promise.all([
     db.diagnosticSubmission.findMany({
       where,
       orderBy: {
@@ -661,22 +635,17 @@ export async function listDiagnosticSubmissions(filters: AdminListFilters) {
     }),
     db.diagnosticSubmission.count({
       where: {
-        AND: [scopeWhere, { status: 'NEW' }],
+        AND: [scopeWhere, { status: { in: diagnosticPendingStatuses } }],
       },
     }),
     db.diagnosticSubmission.count({
       where: {
-        AND: [scopeWhere, { status: 'IN_ANALYSIS' }],
+        AND: [scopeWhere, { status: { in: diagnosticInProgressStatuses } }],
       },
     }),
     db.diagnosticSubmission.count({
       where: {
-        AND: [scopeWhere, { status: { in: ['CONTACTED', 'PROPOSAL_SENT'] } }],
-      },
-    }),
-    db.diagnosticSubmission.count({
-      where: {
-        AND: [scopeWhere, { status: { in: ['WON', 'LOST'] } }],
+        AND: [scopeWhere, { status: { in: diagnosticFinalStatuses } }],
       },
     }),
   ])
@@ -688,11 +657,10 @@ export async function listDiagnosticSubmissions(filters: AdminListFilters) {
     total,
     pageSize: DIAGNOSTIC_PAGE_SIZE,
     stats: {
-      total: pendingCount + analysisCount + commercialCount + closedCount,
+      total: pendingCount + inProcessCount + finalizedCount,
       pending: pendingCount,
-      inAnalysis: analysisCount,
-      commercial: commercialCount,
-      closed: closedCount,
+      inProcess: inProcessCount,
+      finalized: finalizedCount,
     },
   }
 }
@@ -749,7 +717,7 @@ export async function listAdvisoryBookings(filters: AdminListFilters) {
   const page = Math.min(filters.page, pageCount)
   const todayValue = getTodayInAdvisoryZone()
 
-  const [items, scopeTotal, todayCount, pendingCount, confirmedCount, completedCount, incidentCount] =
+  const [items, scopeTotal, todayCount, upcomingCount, activeCount] =
     await Promise.all([
       db.advisoryBooking.findMany({
         where,
@@ -790,22 +758,20 @@ export async function listAdvisoryBookings(filters: AdminListFilters) {
       }),
       db.advisoryBooking.count({
         where: {
-          AND: [scopeWhere, { status: 'PENDING' }],
+          AND: [
+            scopeWhere,
+            {
+              startAt: {
+                gte: new Date(),
+              },
+            },
+            { status: { in: bookingActiveStatuses } },
+          ],
         },
       }),
       db.advisoryBooking.count({
         where: {
-          AND: [scopeWhere, { status: 'CONFIRMED' }],
-        },
-      }),
-      db.advisoryBooking.count({
-        where: {
-          AND: [scopeWhere, { status: 'COMPLETED' }],
-        },
-      }),
-      db.advisoryBooking.count({
-        where: {
-          AND: [scopeWhere, { status: { in: ['CANCELLED', 'RESCHEDULED', 'NO_SHOW'] } }],
+          AND: [scopeWhere, { status: { in: bookingActiveStatuses } }],
         },
       }),
     ])
@@ -819,10 +785,8 @@ export async function listAdvisoryBookings(filters: AdminListFilters) {
     stats: {
       total: scopeTotal,
       today: todayCount,
-      pending: pendingCount,
-      confirmed: confirmedCount,
-      completed: completedCount,
-      incidents: incidentCount,
+      upcoming: upcomingCount,
+      active: activeCount,
     },
   }
 }
@@ -991,7 +955,7 @@ export async function getRelatedActivityForRecord(input: {
 
     const matchReasons = collectMatchReasons(matchKey, item)
 
-    if (matchReasons.length === 0) {
+    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
       continue
     }
 
@@ -1015,7 +979,7 @@ export async function getRelatedActivityForRecord(input: {
 
     const matchReasons = collectMatchReasons(matchKey, item)
 
-    if (matchReasons.length === 0) {
+    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
       continue
     }
 
@@ -1039,7 +1003,7 @@ export async function getRelatedActivityForRecord(input: {
 
     const matchReasons = collectMatchReasons(matchKey, item)
 
-    if (matchReasons.length === 0) {
+    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
       continue
     }
 

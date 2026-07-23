@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { ChevronRight, ExternalLink, Link2 } from 'lucide-react'
+import { ArrowRight, ChevronRight, ExternalLink, Link2, type LucideIcon } from 'lucide-react'
 import type { RelatedActivityItem } from '@/lib/admin-data'
 import { formatAdminDateTime } from '@/lib/admin-data'
 import { AdminStatusBadge } from '@/components/admin/admin-status-badge'
@@ -18,6 +18,82 @@ const relatedEntityLabels: Record<RelatedActivityItem['entity'], string> = {
   contactos: 'Contacto',
   diagnosticos: 'Diagnostico',
   reuniones: 'Reunion',
+}
+
+const moduleToneClasses = {
+  primary: 'border-primary/25 bg-primary/8 text-primary',
+  accent: 'border-sky-400/25 bg-sky-400/8 text-sky-200',
+  success: 'border-emerald-400/25 bg-emerald-400/8 text-emerald-200',
+} as const
+
+export function AdminExecutiveModuleCard({
+  href,
+  label,
+  title,
+  description,
+  total,
+  totalLabel,
+  icon: Icon,
+  tone,
+  metrics,
+}: {
+  href: string
+  label: string
+  title: string
+  description: string
+  total: number
+  totalLabel: string
+  icon: LucideIcon
+  tone: keyof typeof moduleToneClasses
+  metrics: Array<{
+    label: string
+    value: number
+  }>
+}) {
+  return (
+    <Link
+      href={href}
+      className="group block rounded-[1.9rem] border border-border/70 bg-background/45 p-6 backdrop-blur-sm transition-colors hover:border-primary/30 lg:p-7"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold tracking-[0.28em] text-primary">{label}</p>
+          <h2 className="mt-4 text-[1.8rem] font-semibold leading-tight text-foreground">{title}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        </div>
+        <div
+          className={cn(
+            'flex size-12 shrink-0 items-center justify-center rounded-2xl border',
+            moduleToneClasses[tone],
+          )}
+        >
+          <Icon className="size-5" />
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-3 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
+        <article className="rounded-2xl border border-border/70 bg-background/38 p-4">
+          <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-primary">{totalLabel}</p>
+          <p className="mt-3 text-4xl font-semibold text-foreground">{total}</p>
+        </article>
+        {metrics.map((metric) => (
+          <article key={metric.label} className="rounded-2xl border border-border/70 bg-background/30 p-4">
+            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-muted-foreground">
+              {metric.label}
+            </p>
+            <p className="mt-3 text-3xl font-semibold text-foreground">{metric.value}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+        Abrir modulo
+        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+      </div>
+    </Link>
+  )
 }
 
 export function AdminSummaryTile({
@@ -161,14 +237,16 @@ export function AdminNotesSection({
     <section className="space-y-3">
       <p className="text-xs font-semibold tracking-[0.18em] text-primary">NOTAS INTERNAS</p>
       {items.length > 0 ? (
-        items.map((note) => (
-          <article key={note.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{note.body}</p>
-            <p className="mt-3 text-xs text-muted-foreground">
-              {note.adminUser.name} - {formatAdminDateTime(note.createdAt)}
-            </p>
-          </article>
-        ))
+        <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+          {items.map((note) => (
+            <article key={note.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{note.body}</p>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {note.adminUser.name} - {formatAdminDateTime(note.createdAt)}
+              </p>
+            </article>
+          ))}
+        </div>
       ) : (
         <AdminEmptyState>{emptyLabel}</AdminEmptyState>
       )}
@@ -196,23 +274,25 @@ export function AdminHistorySection({
     <section className="space-y-3">
       <p className="text-xs font-semibold tracking-[0.18em] text-primary">HISTORIAL</p>
       {items.length > 0 ? (
-        items.map((entry) => (
-          <article key={entry.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
-            <div className="flex flex-wrap items-center gap-2">
-              {entry.fromStatus ? <AdminStatusBadge status={entry.fromStatus} compact /> : null}
-              <span className="text-xs text-muted-foreground">-&gt;</span>
-              <AdminStatusBadge status={entry.toStatus} compact />
-            </div>
-            {entry.note ? (
-              <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-                {entry.note}
+        <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+          {items.map((entry) => (
+            <article key={entry.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {entry.fromStatus ? <AdminStatusBadge status={entry.fromStatus} compact /> : null}
+                <span className="text-xs text-muted-foreground">-&gt;</span>
+                <AdminStatusBadge status={entry.toStatus} compact />
+              </div>
+              {entry.note ? (
+                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                  {entry.note}
+                </p>
+              ) : null}
+              <p className="mt-3 text-xs text-muted-foreground">
+                {entry.adminUser?.name ?? 'Sistema'} - {formatAdminDateTime(entry.createdAt)}
               </p>
-            ) : null}
-            <p className="mt-3 text-xs text-muted-foreground">
-              {entry.adminUser?.name ?? 'Sistema'} - {formatAdminDateTime(entry.createdAt)}
-            </p>
-          </article>
-        ))
+            </article>
+          ))}
+        </div>
       ) : (
         <AdminEmptyState>{emptyLabel}</AdminEmptyState>
       )}
@@ -233,41 +313,43 @@ export function AdminRelatedActivity({
       </div>
 
       {items.length > 0 ? (
-        items.map((item) => (
-          <Link
-            key={`${item.entity}-${item.id}`}
-            href={item.href}
-            className="block rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors hover:border-primary/30"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold tracking-[0.18em] text-primary">
-                  {relatedEntityLabels[item.entity]}
-                </p>
-                <p className="mt-2 text-sm font-semibold text-foreground">{item.title}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{item.subtitle}</p>
+        <div className="max-h-80 space-y-3 overflow-y-auto pr-1">
+          {items.map((item) => (
+            <Link
+              key={`${item.entity}-${item.id}`}
+              href={`${item.href}#detalle`}
+              className="block rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors hover:border-primary/30"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">
+                    {relatedEntityLabels[item.entity]}
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-foreground">{item.title}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{item.subtitle}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AdminStatusBadge status={item.status} compact />
+                  <ExternalLink className="size-4 text-muted-foreground" />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <AdminStatusBadge status={item.status} compact />
-                <ExternalLink className="size-4 text-muted-foreground" />
+
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                {item.matchReasons.map((reason) => (
+                  <span
+                    key={reason}
+                    className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[0.62rem] font-semibold tracking-[0.16em] text-primary"
+                  >
+                    {reason}
+                  </span>
+                ))}
+                <span className="text-xs text-muted-foreground">{formatAdminDateTime(item.happenedAt)}</span>
               </div>
-            </div>
-
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              {item.matchReasons.map((reason) => (
-                <span
-                  key={reason}
-                  className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[0.62rem] font-semibold tracking-[0.16em] text-primary"
-                >
-                  {reason}
-                </span>
-              ))}
-              <span className="text-xs text-muted-foreground">{formatAdminDateTime(item.happenedAt)}</span>
-            </div>
-          </Link>
-        ))
+            </Link>
+          ))}
+        </div>
       ) : (
         <AdminEmptyState>
           Aun no encontramos actividad relacionada por correo, telefono o empresa dentro de los

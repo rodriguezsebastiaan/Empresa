@@ -95,11 +95,11 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold tracking-[0.32em] text-primary">CONTACTOS</p>
-            <h1 className="mt-4 text-3xl font-semibold text-foreground">Pipeline del formulario breve</h1>
+            <h1 className="mt-4 text-3xl font-semibold text-foreground">Formularios breves</h1>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Priorice por fecha, busque por empresa o correo y revise el contexto completo del
-              prospecto antes de mover el estado. La vista lateral concentra acciones, notas,
-              historial y actividad relacionada.
+              Priorice por fecha, abra el detalle del prospecto sin perder el listado y mantenga
+              el seguimiento comercial con estados, notas internas, historial y actividad
+              relacionada en un solo lugar.
             </p>
           </div>
           <Link
@@ -112,36 +112,30 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <AdminSummaryTile
-          label="EN RANGO"
+          label="TOTAL EN RANGO"
           value={list.stats.total}
-          hint="Total dentro del rango y busqueda actual."
+          hint="Formularios dentro del rango y la busqueda actual."
           tone="default"
         />
         <AdminSummaryTile
           label="PENDIENTES"
           value={list.stats.pending}
-          hint="Nuevos ingresos sin gestion."
+          hint="Ingresos nuevos pendientes por atender."
           tone="primary"
         />
         <AdminSummaryTile
-          label="EN REVISION"
-          value={list.stats.inReview}
-          hint="Prospectos que aun requieren analisis."
+          label="EN PROCESO"
+          value={list.stats.inProgress}
+          hint="Casos abiertos que ya entraron en seguimiento."
           tone="accent"
         />
         <AdminSummaryTile
-          label="CONTACTADOS"
-          value={list.stats.contacted}
-          hint="Seguimientos con primer contacto hecho."
+          label="ATENDIDOS"
+          value={list.stats.attended}
+          hint="Contactados o cerrados dentro del rango actual."
           tone="success"
-        />
-        <AdminSummaryTile
-          label="CERRADOS"
-          value={list.stats.closed}
-          hint="Entradas archivadas o concluidas."
-          tone="warning"
         />
       </section>
 
@@ -252,7 +246,7 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
               list.items.map((item) => (
                 <Link
                   key={item.id}
-                  href={buildPageHref(filters, { id: item.id })}
+                  href={`${buildPageHref(filters, { id: item.id })}#detalle`}
                   className={`block rounded-2xl border p-4 transition-colors ${
                     selectedId === item.id
                       ? 'border-primary/35 bg-primary/8'
@@ -269,13 +263,33 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
 
                   <p className="mt-3 text-sm font-medium text-foreground/90">{item.subject}</p>
 
-                  <div className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                    <p>{item.email}</p>
-                    <p>{item.phone}</p>
-                    <p>{formatAdminDateTime(item.createdAt)}</p>
-                    <p>
-                      Notas {item._count.notes} / Historial {item._count.statusHistory}
-                    </p>
+                  <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        CORREO
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        TELEFONO
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.phone}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        FECHA
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{formatAdminDateTime(item.createdAt)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        SEGUIMIENTO
+                      </p>
+                      <p className="mt-1 text-muted-foreground">
+                        Notas {item._count.notes} / Historial {item._count.statusHistory}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -298,11 +312,11 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
           </div>
         </div>
 
-        <aside className={`${panelClassName} h-fit`}>
+        <aside id="detalle" className={`${panelClassName} h-fit xl:sticky xl:top-6`}>
           {detail ? (
             <div className="space-y-6">
               <div>
-                <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE</p>
+                <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE Y ACCIONES</p>
                 <h2 className="mt-4 text-2xl font-semibold text-foreground">{detail.company}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{detail.name}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -386,67 +400,71 @@ export default async function AdminContactosPage({ searchParams }: ContactosPage
                 ]}
               />
 
-              <form
-                action={`/admin/api/contactos/${detail.id}/status`}
-                method="post"
-                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
-              >
-                <input type="hidden" name="returnTo" value={returnTo} />
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
-                </div>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nuevo estado</span>
-                  <select name="status" defaultValue={detail.status} className={fieldClassName}>
-                    {contactStatusOptions.map((status) => (
-                      <option key={status} value={status}>
-                        {getStatusLabel(status)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nota del cambio</span>
-                  <textarea name="note" className={`${fieldClassName} min-h-[7rem] resize-y`} />
-                </label>
-                <button
-                  type="submit"
-                  className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+                <form
+                  action={`/admin/api/contactos/${detail.id}/status`}
+                  method="post"
+                  className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
                 >
-                  GUARDAR ESTADO
-                </button>
-              </form>
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
+                  </div>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nuevo estado</span>
+                    <select name="status" defaultValue={detail.status} className={fieldClassName}>
+                      {contactStatusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {getStatusLabel(status)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nota del cambio</span>
+                    <textarea name="note" className={`${fieldClassName} min-h-[7rem] resize-y`} />
+                  </label>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+                  >
+                    GUARDAR ESTADO
+                  </button>
+                </form>
 
-              <form
-                action={`/admin/api/contactos/${detail.id}/notes`}
-                method="post"
-                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
-              >
-                <input type="hidden" name="returnTo" value={returnTo} />
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
-                </div>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nota</span>
-                  <textarea name="note" required className={`${fieldClassName} min-h-[8rem] resize-y`} />
-                </label>
-                <button
-                  type="submit"
-                  className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                <form
+                  action={`/admin/api/contactos/${detail.id}/notes`}
+                  method="post"
+                  className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
                 >
-                  GUARDAR NOTA
-                </button>
-              </form>
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
+                  </div>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nota</span>
+                    <textarea name="note" required className={`${fieldClassName} min-h-[8rem] resize-y`} />
+                  </label>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                  >
+                    GUARDAR NOTA
+                  </button>
+                </form>
+              </div>
 
-              <AdminNotesSection
-                items={detail.notes}
-                emptyLabel="Todavia no hay notas internas para este contacto."
-              />
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-1">
+                <AdminNotesSection
+                  items={detail.notes}
+                  emptyLabel="Todavia no hay notas internas para este contacto."
+                />
 
-              <AdminHistorySection
-                items={detail.statusHistory}
-                emptyLabel="Todavia no hay cambios de estado registrados."
-              />
+                <AdminHistorySection
+                  items={detail.statusHistory}
+                  emptyLabel="Todavia no hay cambios de estado registrados."
+                />
+              </div>
             </div>
           ) : (
             <AdminEmptyState>Seleccione un contacto para ver el detalle completo.</AdminEmptyState>

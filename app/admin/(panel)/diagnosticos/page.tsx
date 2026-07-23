@@ -95,11 +95,11 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold tracking-[0.32em] text-primary">DIAGNOSTICOS</p>
-            <h1 className="mt-4 text-3xl font-semibold text-foreground">Seguimiento del diagnostico empresarial</h1>
+            <h1 className="mt-4 text-3xl font-semibold text-foreground">Diagnosticos empresariales</h1>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              Esta vista organiza las respuestas por contexto, operacion y objetivo comercial.
-              Permite filtrar primero por fecha, cambiar estado con criterio y revisar la actividad
-              relacionada sin perder el hilo del caso.
+              Revise primero por fecha, lea las respuestas ordenadas por bloques y mantenga el caso
+              conectado con notas internas, cambios de estado y actividad relacionada del mismo
+              prospecto.
             </p>
           </div>
           <Link
@@ -112,11 +112,11 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <AdminSummaryTile
-          label="EN RANGO"
+          label="TOTAL EN RANGO"
           value={list.stats.total}
-          hint="Volumen real dentro del rango activo."
+          hint="Diagnosticos dentro del rango y la busqueda actual."
           tone="default"
         />
         <AdminSummaryTile
@@ -126,22 +126,16 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
           tone="primary"
         />
         <AdminSummaryTile
-          label="EN ANALISIS"
-          value={list.stats.inAnalysis}
-          hint="Casos que siguen en evaluacion interna."
+          label="EN PROCESO"
+          value={list.stats.inProcess}
+          hint="Casos en analisis, contacto o propuesta."
           tone="accent"
         />
         <AdminSummaryTile
-          label="GESTION COMERCIAL"
-          value={list.stats.commercial}
-          hint="Contactados o con propuesta enviada."
+          label="FINALIZADOS"
+          value={list.stats.finalized}
+          hint="Casos ganados o descartados."
           tone="success"
-        />
-        <AdminSummaryTile
-          label="CERRADOS"
-          value={list.stats.closed}
-          hint="Ganados o descartados."
-          tone="warning"
         />
       </section>
 
@@ -252,7 +246,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
               list.items.map((item) => (
                 <Link
                   key={item.id}
-                  href={buildPageHref(filters, { id: item.id })}
+                  href={`${buildPageHref(filters, { id: item.id })}#detalle`}
                   className={`block rounded-2xl border p-4 transition-colors ${
                     selectedId === item.id
                       ? 'border-primary/35 bg-primary/8'
@@ -269,11 +263,31 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
 
                   <p className="mt-3 text-sm text-muted-foreground">{item.summary}</p>
 
-                  <div className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                    <p>{item.sector}</p>
-                    <p>{item.city}</p>
-                    <p>{item.email}</p>
-                    <p>{formatAdminDateTime(item.createdAt)}</p>
+                  <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        SECTOR
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.sector}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        CIUDAD
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.city}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        CORREO
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{item.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+                        FECHA
+                      </p>
+                      <p className="mt-1 text-muted-foreground">{formatAdminDateTime(item.createdAt)}</p>
+                    </div>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -302,11 +316,11 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
           </div>
         </div>
 
-        <aside className={`${panelClassName} h-fit`}>
+        <aside id="detalle" className={`${panelClassName} h-fit xl:sticky xl:top-6`}>
           {detail ? (
             <div className="space-y-6">
               <div>
-                <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE</p>
+                <p className="text-xs font-semibold tracking-[0.32em] text-primary">DETALLE Y ACCIONES</p>
                 <h2 className="mt-4 text-2xl font-semibold text-foreground">{detail.company}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {detail.name} - {detail.role}
@@ -429,67 +443,71 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 ]}
               />
 
-              <form
-                action={`/admin/api/diagnosticos/${detail.id}/status`}
-                method="post"
-                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
-              >
-                <input type="hidden" name="returnTo" value={returnTo} />
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
-                </div>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nuevo estado</span>
-                  <select name="status" defaultValue={detail.status} className={fieldClassName}>
-                    {diagnosticStatusOptions.map((status) => (
-                      <option key={status} value={status}>
-                        {getStatusLabel(status)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nota del cambio</span>
-                  <textarea name="note" className={`${fieldClassName} min-h-[7rem] resize-y`} />
-                </label>
-                <button
-                  type="submit"
-                  className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+                <form
+                  action={`/admin/api/diagnosticos/${detail.id}/status`}
+                  method="post"
+                  className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
                 >
-                  GUARDAR ESTADO
-                </button>
-              </form>
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary">CAMBIAR ESTADO</p>
+                  </div>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nuevo estado</span>
+                    <select name="status" defaultValue={detail.status} className={fieldClassName}>
+                      {diagnosticStatusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {getStatusLabel(status)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nota del cambio</span>
+                    <textarea name="note" className={`${fieldClassName} min-h-[7rem] resize-y`} />
+                  </label>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center rounded-xl bg-primary px-4 py-3 text-xs font-semibold tracking-[0.18em] text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+                  >
+                    GUARDAR ESTADO
+                  </button>
+                </form>
 
-              <form
-                action={`/admin/api/diagnosticos/${detail.id}/notes`}
-                method="post"
-                className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
-              >
-                <input type="hidden" name="returnTo" value={returnTo} />
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
-                </div>
-                <label className="block">
-                  <span className="text-sm font-medium text-foreground">Nota</span>
-                  <textarea name="note" required className={`${fieldClassName} min-h-[8rem] resize-y`} />
-                </label>
-                <button
-                  type="submit"
-                  className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                <form
+                  action={`/admin/api/diagnosticos/${detail.id}/notes`}
+                  method="post"
+                  className="space-y-4 rounded-2xl border border-border/70 bg-background/35 p-4"
                 >
-                  GUARDAR NOTA
-                </button>
-              </form>
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary">AGREGAR NOTA INTERNA</p>
+                  </div>
+                  <label className="block">
+                    <span className="text-sm font-medium text-foreground">Nota</span>
+                    <textarea name="note" required className={`${fieldClassName} min-h-[8rem] resize-y`} />
+                  </label>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                  >
+                    GUARDAR NOTA
+                  </button>
+                </form>
+              </div>
 
-              <AdminNotesSection
-                items={detail.notes}
-                emptyLabel="Todavia no hay notas internas para este diagnostico."
-              />
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-1">
+                <AdminNotesSection
+                  items={detail.notes}
+                  emptyLabel="Todavia no hay notas internas para este diagnostico."
+                />
 
-              <AdminHistorySection
-                items={detail.statusHistory}
-                emptyLabel="Todavia no hay cambios de estado registrados."
-              />
+                <AdminHistorySection
+                  items={detail.statusHistory}
+                  emptyLabel="Todavia no hay cambios de estado registrados."
+                />
+              </div>
             </div>
           ) : (
             <AdminEmptyState>Seleccione un diagnostico para ver el detalle completo.</AdminEmptyState>
