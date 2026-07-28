@@ -134,11 +134,11 @@ export function getAdminLoginErrorMessage(code?: string | null) {
     case 'config':
       return 'Falta configurar AUTH_SECRET o DATABASE_URL antes de usar el panel.'
     case 'locked':
-      return 'El acceso quedo bloqueado temporalmente despues de varios intentos fallidos.'
+      return 'El acceso quedó bloqueado temporalmente después de varios intentos fallidos.'
     case 'signed-out':
-      return 'La sesion administrativa se cerro correctamente.'
+      return 'La sesión administrativa se cerró correctamente.'
     case 'invalid':
-      return 'No fue posible iniciar sesion con esas credenciales.'
+      return 'No fue posible iniciar sesión con esas credenciales.'
     default:
       return ''
   }

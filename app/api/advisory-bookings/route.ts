@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   if (!rateLimit.allowed) {
     return buildRateLimitResponse(
       rateLimit,
-      'Demasiados intentos de reserva. Espere unos minutos antes de intentar de nuevo.',
+      'Demasiados intentos de agendamiento. Espere unos minutos antes de intentar de nuevo.',
     )
   }
 

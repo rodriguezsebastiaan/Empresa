@@ -49,6 +49,16 @@ const initialState: DiagnosticFormData = {
   website: '',
 }
 
+function formatSummaryValue(value: string) {
+  const trimmed = value.trim()
+
+  if (!trimmed) {
+    return 'Pendiente'
+  }
+
+  return trimmed
+}
+
 export function DiagnosticWizard() {
   const [step, setStep] = useState(0)
   const [form, setForm] = useState<DiagnosticFormData>(initialState)
@@ -78,7 +88,7 @@ export function DiagnosticWizard() {
       ['Problema principal', form.mainProblem],
       ['Resultado esperado', form.expectedResult],
       ['Preferencia de contacto', form.contactPreference],
-      ['Interés en reunión', form.wantsMeeting],
+      ['Interés en asesoría', form.wantsMeeting],
     ],
     [form],
   )
@@ -282,7 +292,7 @@ export function DiagnosticWizard() {
                 value={form.processes}
                 onChange={(event) => updateField('processes', event.target.value)}
                 error={errors.processes}
-                placeholder="Pedidos, atención comercial, administración, reportes, reservas..."
+                placeholder="Pedidos, atención comercial, administración, reportes, agenda..."
               />
               <TextareaField
                 label="Cómo lo realiza actualmente"
@@ -354,7 +364,7 @@ export function DiagnosticWizard() {
                 ]}
               />
               <SelectField
-                label="¿Le interesa agendar una reunión?"
+                label="¿Le interesa agendar una asesoría?"
                 name="wantsMeeting"
                 value={form.wantsMeeting}
                 onChange={(event) => updateField('wantsMeeting', event.target.value)}
@@ -379,8 +389,8 @@ export function DiagnosticWizard() {
                     <p className="text-xs tracking-[0.18em] text-muted-foreground">
                       {label}
                     </p>
-                    <p className="mt-1 text-sm text-foreground">
-                      {value || 'Pendiente'}
+                    <p className="mt-1 break-words text-sm leading-relaxed text-foreground">
+                      {formatSummaryValue(value)}
                     </p>
                   </div>
                 ))}

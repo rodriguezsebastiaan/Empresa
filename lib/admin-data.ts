@@ -60,7 +60,7 @@ export const statusLabels: Record<string, string> = {
   IN_REVIEW: 'En proceso',
   CONTACTED: 'Contactado',
   CLOSED: 'Cerrado',
-  IN_ANALYSIS: 'En analisis',
+  IN_ANALYSIS: 'En análisis',
   PROPOSAL_SENT: 'Propuesta enviada',
   WON: 'Ganado',
   LOST: 'Descartado',
@@ -69,14 +69,14 @@ export const statusLabels: Record<string, string> = {
   COMPLETED: 'Realizada',
   CANCELLED: 'Cancelada',
   RESCHEDULED: 'Reprogramada',
-  NO_SHOW: 'No asistio',
+  NO_SHOW: 'No asistió',
   SENT: 'Enviado',
   FAILED: 'Error',
   SKIPPED: 'Omitido',
 }
 
 export const adminRoleLabels: Record<AdminRole, string> = {
-  OWNER: 'Propietario',
+  OWNER: 'Administrador',
   ADMIN: 'Administrador',
 }
 
@@ -220,7 +220,7 @@ function collectMatchReasons(
   }
 
   if (matchKey.phoneDigits && normalizePhoneDigits(candidate.phone) === matchKey.phoneDigits) {
-    reasons.push('Mismo telefono')
+    reasons.push('Mismo teléfono')
   }
 
   if (matchKey.companyKey && normalizeCompanyKey(candidate.company) === matchKey.companyKey) {
@@ -233,14 +233,14 @@ function collectMatchReasons(
 function getMatchScore(reasons: string[]) {
   return reasons.reduce((score, reason) => {
     if (reason === 'Mismo correo') return score + 4
-    if (reason === 'Mismo telefono') return score + 3
+    if (reason === 'Mismo teléfono') return score + 3
     if (reason === 'Misma empresa') return score + 1
     return score
   }, 0)
 }
 
 function hasStrongRelatedMatch(reasons: string[]) {
-  return reasons.includes('Mismo correo') || reasons.includes('Mismo telefono')
+  return reasons.includes('Mismo correo') || reasons.includes('Mismo teléfono')
 }
 
 export function parseAdminListFilters(input: SearchParamsInput): AdminListFilters {
@@ -953,7 +953,7 @@ export async function getRelatedActivityForRecord(input: {
     relatedItems.push({
       id: item.id,
       entity: 'contactos',
-      href: `/admin/contactos?id=${item.id}`,
+      href: `/admin/contactos/${item.id}`,
       title: item.company,
       subtitle: item.name,
       description: item.subject,
@@ -977,7 +977,7 @@ export async function getRelatedActivityForRecord(input: {
     relatedItems.push({
       id: item.id,
       entity: 'diagnosticos',
-      href: `/admin/diagnosticos?id=${item.id}`,
+      href: `/admin/diagnosticos/${item.id}`,
       title: item.company,
       subtitle: `${item.name}${item.role ? ` - ${item.role}` : ''}`,
       description: item.summary,
@@ -1001,7 +1001,7 @@ export async function getRelatedActivityForRecord(input: {
     relatedItems.push({
       id: item.id,
       entity: 'reuniones',
-      href: `/admin/reuniones?id=${item.id}`,
+      href: `/admin/reuniones/${item.id}`,
       title: item.company,
       subtitle: item.fullName,
       description: `${item.scheduledDate} ${item.scheduledTime}`,

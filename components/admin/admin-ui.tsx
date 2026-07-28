@@ -21,8 +21,8 @@ const moduleToneClasses = {
 
 const relatedEntityLabels: Record<RelatedActivityItem['entity'], string> = {
   contactos: 'Contacto',
-  diagnosticos: 'Diagnostico',
-  reuniones: 'Reunion',
+  diagnosticos: 'Diagnóstico',
+  reuniones: 'Asesoría',
 }
 
 export function AdminExecutiveModuleCard({
@@ -49,16 +49,18 @@ export function AdminExecutiveModuleCard({
     value: number
   }>
 }) {
+  const totalMetrics = metrics.reduce((sum, metric) => sum + metric.value, 0)
+
   return (
     <Link
       href={href}
       scroll={false}
-      className="group block rounded-[1.9rem] border border-border/70 bg-background/45 p-6 backdrop-blur-sm transition-colors hover:border-primary/30 lg:p-7"
+      className="group block rounded-[2rem] border border-border/70 bg-background/45 p-6 backdrop-blur-sm transition-colors hover:border-primary/30 lg:p-7"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-xs font-semibold tracking-[0.28em] text-primary">{label}</p>
-          <h2 className="mt-4 text-[1.55rem] font-semibold leading-tight text-foreground sm:text-[1.8rem]">
+          <h2 className="mt-4 text-[1.7rem] font-semibold leading-tight text-foreground sm:text-[1.95rem]">
             {title}
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
@@ -75,27 +77,148 @@ export function AdminExecutiveModuleCard({
         </div>
       </div>
 
-      <div className="mt-6 rounded-[1.45rem] border border-border/70 bg-background/34 p-4">
-        <p className="text-[0.64rem] font-semibold tracking-[0.18em] text-primary">{totalLabel}</p>
-        <p className="mt-3 text-4xl font-semibold text-foreground sm:text-[2.8rem]">{total}</p>
+      <div className="mt-6 rounded-[1.55rem] border border-border/70 bg-background/34 p-5">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-[0.64rem] font-semibold tracking-[0.18em] text-primary">{totalLabel}</p>
+            <p className="mt-3 text-5xl font-semibold tracking-[-0.04em] text-foreground sm:text-[3.3rem]">
+              {total}
+            </p>
+          </div>
+          <p className="max-w-[14rem] text-right text-xs leading-relaxed text-muted-foreground">
+            Estados visibles para priorizar operación y seguimiento.
+          </p>
+        </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-background/80">
+          <div className="flex h-full">
+            {metrics.map((metric) => (
+              <span
+                key={metric.label}
+                className={cn(
+                  'h-full',
+                  metric.label.includes('PENDIENTE')
+                    ? 'bg-primary/80'
+                    : metric.label.includes('PROCESO') || metric.label.includes('CONFIRMADA')
+                      ? 'bg-sky-300/80'
+                      : 'bg-emerald-300/80',
+                )}
+                style={{
+                  width: `${totalMetrics > 0 ? (metric.value / totalMetrics) * 100 : 0}%`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-3 border-t border-border/60 pt-4 sm:grid-cols-3">
           {metrics.map((metric) => (
-            <div key={metric.label} className="min-w-0">
+            <div
+              key={metric.label}
+              className="min-w-0 border-border/50 sm:border-l sm:pl-4 first:sm:border-l-0 first:sm:pl-0"
+            >
               <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
                 {metric.label}
               </p>
-              <p className="mt-2 text-2xl font-semibold text-foreground">{metric.value}</p>
+              <p className="mt-2 text-[1.85rem] font-semibold leading-none text-foreground">
+                {metric.value}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
       <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-        Abrir modulo
+        Abrir módulo
         <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
       </div>
     </Link>
+  )
+}
+
+export function AdminModuleSummaryBoard({
+  totalLabel,
+  total,
+  totalHint,
+  metrics,
+  tone = 'primary',
+}: {
+  totalLabel: string
+  total: number
+  totalHint: string
+  metrics: Array<{
+    label: string
+    value: number
+    hint: string
+  }>
+  tone?: keyof typeof moduleToneClasses
+}) {
+  const totalMetrics = metrics.reduce((sum, metric) => sum + metric.value, 0)
+
+  return (
+    <section className="rounded-[1.7rem] border border-border/70 bg-background/40 p-5 backdrop-blur-sm lg:p-6">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+        <div
+          className={cn(
+            'rounded-[1.45rem] border p-5',
+            moduleToneClasses[tone],
+          )}
+        >
+          <p className="text-[0.65rem] font-semibold tracking-[0.2em] text-current/90">{totalLabel}</p>
+          <p className="mt-4 text-5xl font-semibold tracking-[-0.05em] text-foreground sm:text-[3.6rem]">
+            {total}
+          </p>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">{totalHint}</p>
+        </div>
+
+        <div className="rounded-[1.45rem] border border-border/70 bg-background/30 p-4 lg:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[0.65rem] font-semibold tracking-[0.2em] text-primary">
+              ESTADOS SECUNDARIOS
+            </p>
+            <p className="text-xs text-muted-foreground">Lectura ejecutiva del rango actual.</p>
+          </div>
+
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-background/80">
+            <div className="flex h-full">
+              {metrics.map((metric) => (
+                <span
+                  key={metric.label}
+                  className={cn(
+                    'h-full',
+                    metric.label.includes('PENDIENTE')
+                      ? 'bg-primary/80'
+                      : metric.label.includes('PROCESO') || metric.label.includes('CONFIRMADA')
+                        ? 'bg-sky-300/80'
+                        : 'bg-emerald-300/80',
+                  )}
+                  style={{
+                    width: `${totalMetrics > 0 ? (metric.value / totalMetrics) * 100 : 0}%`,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4 border-t border-border/60 pt-4 sm:grid-cols-3">
+            {metrics.map((metric) => (
+              <article
+                key={metric.label}
+                className="border-border/50 sm:border-l sm:pl-4 first:sm:border-l-0 first:sm:pl-0"
+              >
+                <p className="text-[0.62rem] font-semibold tracking-[0.18em] text-muted-foreground">
+                  {metric.label}
+                </p>
+                <p className="mt-2 text-[2rem] font-semibold leading-none text-foreground">
+                  {metric.value}
+                </p>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{metric.hint}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -172,6 +295,30 @@ export function AdminInfoCard({
   )
 }
 
+export function AdminSectionCard({
+  title,
+  description,
+  className,
+  children,
+}: {
+  title: string
+  description?: string
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <section className={cn('rounded-[1.55rem] border border-border/70 bg-background/40 p-5 lg:p-6', className)}>
+      <div className="max-w-3xl">
+        <p className="text-xs font-semibold tracking-[0.18em] text-primary">{title}</p>
+        {description ? (
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p>
+        ) : null}
+      </div>
+      <div className="mt-5">{children}</div>
+    </section>
+  )
+}
+
 export function AdminEmptyState({
   children,
   className,
@@ -225,7 +372,7 @@ export function AdminCollapsiblePanel({
 }
 
 export function AdminTechnicalDetails({
-  title = 'METADATOS TECNICOS',
+  title = 'METADATOS TÉCNICOS',
   items,
 }: {
   title?: string
@@ -237,7 +384,7 @@ export function AdminTechnicalDetails({
         <div>
           <p className="text-xs tracking-[0.16em] text-primary">{title}</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Ver datos tecnicos de origen, navegador y trazabilidad.
+            Ver datos técnicos de origen, navegador y trazabilidad.
           </p>
         </div>
         <span className="text-xs font-semibold tracking-[0.18em] text-primary transition-transform group-open:rotate-90">
@@ -355,7 +502,6 @@ export function AdminRelatedActivity({
             <Link
               key={`${item.entity}-${item.id}`}
               href={item.href}
-              scroll={false}
               className="block rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors hover:border-primary/30"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -390,7 +536,7 @@ export function AdminRelatedActivity({
         </div>
       ) : (
         <AdminEmptyState>
-          Aun no encontramos actividad relacionada por correo, telefono o empresa dentro de los
+          Aún no encontramos actividad relacionada por correo, teléfono o empresa dentro de los
           otros modulos.
         </AdminEmptyState>
       )}

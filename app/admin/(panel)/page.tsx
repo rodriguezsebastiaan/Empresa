@@ -1,8 +1,13 @@
 import { CalendarCheck2, ClipboardList, Mail } from 'lucide-react'
+import type { Metadata } from 'next'
 import { AdminExecutiveModuleCard } from '@/components/admin/admin-ui'
 import { getAdminDashboardSnapshot } from '@/lib/admin-data'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Panel administrativo | Konamy Systems',
+}
 
 export default async function AdminDashboardPage() {
   const snapshot = await getAdminDashboardSnapshot()
@@ -11,9 +16,9 @@ export default async function AdminDashboardPage() {
     <div className="space-y-6">
       <section className="rounded-[1.75rem] border border-border/70 bg-background/50 p-6 backdrop-blur-sm lg:p-8">
         <p className="text-xs font-semibold tracking-[0.32em] text-primary">DASHBOARD</p>
-        <h1 className="mt-4 text-3xl font-semibold text-foreground">Operacion comercial en curso</h1>
+        <h1 className="mt-4 text-3xl font-semibold text-foreground">Operación comercial en curso</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Tres modulos, una sola lectura: que entro, que sigue pendiente y que ya avanzo lo
+          Tres módulos, una sola lectura: qué ingresó, qué sigue pendiente y qué ya avanzó lo
           suficiente como para no perder tiempo buscando contexto.
         </p>
       </section>
@@ -23,7 +28,7 @@ export default async function AdminDashboardPage() {
           href="/admin/contactos"
           label="CONTACTOS"
           title="Formularios breves"
-          description="Entradas rapidas para responder, mover de estado y sostener el seguimiento sin abrir vistas secundarias."
+          description="Entradas rápidas para responder, actualizar estado y sostener el seguimiento sin abrir vistas secundarias."
           total={snapshot.modules.contacts.total}
           totalLabel="TOTAL RECIBIDO"
           tone="primary"
@@ -46,9 +51,9 @@ export default async function AdminDashboardPage() {
 
         <AdminExecutiveModuleCard
           href="/admin/diagnosticos"
-          label="DIAGNOSTICOS"
-          title="Evaluaciones empresariales"
-          description="Lectura ejecutiva de cada empresa para revisar dolor, operacion actual y siguiente paso comercial."
+          label="DIAGNÓSTICOS"
+          title="Diagnósticos empresariales"
+          description="Lectura ejecutiva de cada empresa para revisar necesidad, operación actual y siguiente paso comercial."
           total={snapshot.modules.diagnostics.total}
           totalLabel="TOTAL RECIBIDO"
           tone="accent"
@@ -72,9 +77,9 @@ export default async function AdminDashboardPage() {
         <div className="md:col-span-2 xl:col-span-1">
           <AdminExecutiveModuleCard
             href="/admin/reuniones"
-            label="REUNIONES"
-            title="Agenda de asesorias"
-            description="Reservas listas para confirmar, ejecutar y cerrar con trazabilidad completa sobre Meet, Calendar y seguimiento."
+            label="ASESORÍAS"
+            title="Asesorías agendadas"
+            description="Asesorías listas para confirmar, ejecutar y cerrar con trazabilidad completa sobre Meet, Calendar y seguimiento."
             total={snapshot.modules.bookings.total}
             totalLabel="TOTAL REGISTRADO"
             tone="success"

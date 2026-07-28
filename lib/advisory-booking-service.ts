@@ -109,18 +109,18 @@ function buildInternalEmail(
   return {
     subject: `[Asesoria] ${input.company} · ${input.fullName}`,
     text: [
-      'Nueva asesoria registrada desde Konamy Systems.',
+      'Nueva asesoría registrada desde Konamy Systems.',
       '',
       `Empresa: ${input.company}`,
       `Contacto: ${input.fullName}`,
       `Correo: ${input.email}`,
-      `Telefono: ${input.phone}`,
+      `Teléfono: ${input.phone}`,
       `Ciudad: ${input.city}`,
       `Fecha: ${confirmation.dateLabel}`,
       `Hora: ${confirmation.timeLabel}`,
       `Zona horaria: ${confirmation.timezone}`,
       `Modalidad: ${input.modality}`,
-      `Google Meet: ${confirmation.meetUrl ?? 'Pendiente en la invitacion del calendario'}`,
+      `Google Meet: ${confirmation.meetUrl ?? 'Pendiente en la invitación del calendario'}`,
       '',
       'Motivo o proceso a revisar:',
       input.processGoal,
@@ -129,14 +129,14 @@ function buildInternalEmail(
       eyebrow: 'NUEVA ASESORIA',
       title: `${input.company} · ${input.fullName}`,
       intro:
-        'Se confirmo una nueva reunion inicial desde el sitio corporativo de Konamy Systems.',
+        'Se confirmó una nueva asesoría inicial desde el sitio corporativo de Konamy Systems.',
       bodyHtml: renderDefinitionList([
         { label: 'Correo', value: input.email },
-        { label: 'Telefono', value: input.phone },
+        { label: 'Teléfono', value: input.phone },
         { label: 'Ciudad', value: input.city },
         { label: 'Fecha', value: confirmation.dateLabel },
         { label: 'Hora', value: confirmation.timeLabel },
-        { label: 'Google Meet', value: confirmation.meetUrl ?? 'Pendiente en la invitacion' },
+        { label: 'Google Meet', value: confirmation.meetUrl ?? 'Pendiente en la invitación' },
         { label: 'Motivo', value: input.processGoal },
       ]),
     }),
@@ -148,18 +148,18 @@ function buildClientEmail(
   confirmation: AdvisoryBookingConfirmation,
 ) {
   return {
-    subject: 'Su asesoria inicial fue confirmada · Konamy Systems',
+    subject: 'Su asesoría inicial fue confirmada · Konamy Systems',
     text: [
       `Hola ${input.fullName},`,
       '',
-      'Su reunion inicial con Konamy Systems quedo confirmada correctamente.',
+      'Su asesoría inicial con Konamy Systems quedó confirmada correctamente.',
       '',
       `Fecha: ${confirmation.dateLabel}`,
       `Hora: ${confirmation.timeLabel}`,
       `Zona horaria: ${confirmation.timezone}`,
       `Duracion: ${confirmation.durationMinutes} minutos`,
       `Modalidad: ${input.modality}`,
-      `Google Meet: ${confirmation.meetUrl ?? 'Lo recibira en la invitacion del calendario.'}`,
+      `Google Meet: ${confirmation.meetUrl ?? 'Lo recibirá en la invitación del calendario.'}`,
       '',
       'Motivo registrado:',
       input.processGoal,
@@ -170,13 +170,13 @@ function buildClientEmail(
       eyebrow: 'ASESORIA CONFIRMADA',
       title: `Gracias, ${input.fullName}`,
       intro:
-        'Su reunion inicial quedo confirmada. Le compartimos los datos principales para que tenga trazabilidad del agendamiento.',
+        'Su asesoría inicial quedó confirmada. Le compartimos los datos principales para que tenga trazabilidad del agendamiento.',
       bodyHtml: renderDefinitionList([
         { label: 'Empresa', value: input.company },
         { label: 'Fecha', value: confirmation.dateLabel },
         { label: 'Hora', value: confirmation.timeLabel },
         { label: 'Duracion', value: `${confirmation.durationMinutes} minutos` },
-        { label: 'Google Meet', value: confirmation.meetUrl ?? 'En la invitacion del calendario' },
+        { label: 'Google Meet', value: confirmation.meetUrl ?? 'En la invitación del calendario' },
       ]),
     }),
   }
@@ -197,7 +197,7 @@ async function deleteBookingReservation(id: string) {
         slotKey: null,
         calendarEventStatus: 'FAILED',
         lastDeliveryError:
-          'No se pudo completar la reserva. El sistema libero el horario y marco la solicitud como cancelada.',
+          'No se pudo completar la asesoría. El sistema liberó el horario y marcó la solicitud como cancelada.',
       },
     })
   }
@@ -237,7 +237,7 @@ export async function submitAdvisoryBooking(
           success: false,
           configured: false,
           message:
-            'El agendamiento esta listo, pero todavia no existe una base de datos configurada para guardar reservas reales.',
+            'El agendamiento está listo, pero todavía no existe una base de datos configurada para guardar asesorías reales.',
         },
       }
     }
@@ -266,8 +266,8 @@ export async function submitAdvisoryBooking(
           bookingId: existingBooking.id,
           confirmation: buildStoredConfirmation(existingBooking),
           message: existingBooking.lastDeliveryError
-            ? 'La asesoria ya estaba registrada. Algunas notificaciones quedaron pendientes o parciales.'
-            : 'La asesoria ya habia sido registrada anteriormente.',
+            ? 'La asesoría ya estaba registrada. Algunas notificaciones quedaron pendientes o parciales.'
+            : 'La asesoría ya había sido registrada anteriormente.',
         },
       }
     }
@@ -277,7 +277,7 @@ export async function submitAdvisoryBooking(
       body: {
         success: false,
         message:
-          'Esta solicitud ya se esta procesando. Recargue la pagina antes de intentar de nuevo.',
+          'Esta solicitud ya se está procesando. Recargue la página antes de intentar de nuevo.',
       },
     }
   }
@@ -314,7 +314,7 @@ export async function submitAdvisoryBooking(
         statusHistory: {
           create: {
             toStatus: 'PENDING',
-            note: 'Reserva creada desde el formulario publico de asesoria.',
+            note: 'Asesoría creada desde el formulario público de agenda.',
           },
         },
       },
@@ -335,7 +335,7 @@ export async function submitAdvisoryBooking(
             idempotent: true,
             bookingId: duplicatedBooking.id,
             confirmation: buildStoredConfirmation(duplicatedBooking),
-            message: 'La asesoria ya habia sido registrada anteriormente.',
+            message: 'La asesoría ya había sido registrada anteriormente.',
           },
         }
       }
@@ -387,7 +387,7 @@ export async function submitAdvisoryBooking(
       status: 502,
       body: {
         success: false,
-        message: 'No fue posible crear la asesoria en Google Calendar.',
+        message: 'No fue posible crear la asesoría en Google Calendar.',
       },
     }
   }
@@ -410,7 +410,7 @@ export async function submitAdvisoryBooking(
           advisoryBookingId: provisionalBooking.id,
           fromStatus: 'PENDING',
           toStatus: 'CONFIRMED',
-          note: 'Reserva confirmada despues de crear el evento en Google Calendar.',
+          note: 'Asesoría confirmada después de crear el evento en Google Calendar.',
         },
       })
     })
@@ -426,7 +426,7 @@ export async function submitAdvisoryBooking(
       body: {
         success: false,
         message:
-          'La reunion se alcanzo a crear en Google Calendar, pero no pudo guardarse de forma consistente en la base de datos.',
+          'La asesoría se alcanzó a crear en Google Calendar, pero no pudo guardarse de forma consistente en la base de datos.',
       },
     }
   }
@@ -472,7 +472,7 @@ export async function submitAdvisoryBooking(
       internalEmailStatus = 'SENT'
     } catch {
       internalEmailStatus = 'FAILED'
-      notificationIssues.push('No fue posible enviar la notificacion interna de la asesoria.')
+      notificationIssues.push('No fue posible enviar la notificación interna de la asesoría.')
     }
   }
 
@@ -511,8 +511,8 @@ export async function submitAdvisoryBooking(
       confirmation,
       message:
         notificationIssues.length > 0
-          ? 'La asesoria fue confirmada y guardada correctamente. Algunas notificaciones automaticas quedaron pendientes o fallaron.'
-          : 'La asesoria fue confirmada, guardada y notificada correctamente.',
+          ? 'La asesoría fue confirmada y guardada correctamente. Algunas notificaciones automáticas quedaron pendientes o fallaron.'
+          : 'La asesoría fue confirmada, guardada y notificada correctamente.',
     },
   }
 }

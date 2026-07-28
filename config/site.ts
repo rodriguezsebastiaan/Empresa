@@ -118,23 +118,23 @@ const pages = {
     path: routes.contact,
     title: 'Contacto | Konamy Systems',
     description:
-      'Organice el contacto con Konamy Systems mediante asesoría, diagnóstico, WhatsApp, correo, teléfono y formulario validado en cliente y servidor.',
+      'Contacte a Konamy Systems mediante asesoría, diagnóstico empresarial, WhatsApp, correo, teléfono y formulario breve validado en cliente y servidor.',
     changeFrequency: 'monthly' as SitemapChangeFrequency,
     priority: 0.8,
   },
   advisory: {
     path: routes.advisory,
-    title: 'Agendar Asesoría | Konamy Systems',
+    title: 'Agendar asesoría | Konamy Systems',
     description:
-      'Programe una asesoría inicial con Konamy Systems mediante disponibilidad, validación y arquitectura preparada para Google Calendar y Google Meet.',
+      'Programe una asesoría inicial con Konamy Systems mediante disponibilidad real, validación y arquitectura preparada para Google Calendar y Google Meet.',
     changeFrequency: 'weekly' as SitemapChangeFrequency,
     priority: 0.8,
   },
   diagnostics: {
     path: routes.diagnostics,
-    title: 'Diagnóstico | Konamy Systems',
+    title: 'Diagnóstico empresarial | Konamy Systems',
     description:
-      'Explique el problema de su empresa mediante un diagnóstico multipaso con validación, progreso, resumen y preparación para automatizaciones futuras.',
+      'Explique el proceso que su empresa desea mejorar mediante un diagnóstico empresarial guiado, con validación, progreso y resumen previo.',
     changeFrequency: 'weekly' as SitemapChangeFrequency,
     priority: 0.8,
   },
@@ -181,7 +181,7 @@ export const siteConfig = {
     phoneIsProvisional: true,
     whatsappDisplay: whatsappConfigured
       ? rawWhatsAppNumber
-      : 'PENDIENTE · numero de WhatsApp',
+      : 'PENDIENTE · número de WhatsApp',
     whatsappNumber: rawWhatsAppNumber,
     whatsappIsProvisional: !whatsappConfigured,
     whatsappMessage:
@@ -206,7 +206,7 @@ export const siteConfig = {
   },
   advisory: {
     durationMinutes: 30,
-    modality: 'Reunión virtual',
+    modality: 'Asesoría virtual',
     timezone: 'America/Bogota',
     timezoneLabel: 'America/Bogota (GMT-5)',
     utcOffset: '-05:00',

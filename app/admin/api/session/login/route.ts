@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   if (!rateLimit.allowed) {
     return buildRateLimitResponse(
       rateLimit,
-      'Demasiados intentos de inicio de sesion. Espere antes de intentar de nuevo.',
+      'Demasiados intentos de inicio de sesión. Espere antes de intentar de nuevo.',
     )
   }
 
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       NextResponse.json(
         {
           success: false,
-          message: 'Origen invalido para este formulario.',
+          message: 'Origen inválido para este formulario.',
         },
         { status: 403 },
       ),

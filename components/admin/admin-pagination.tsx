@@ -19,7 +19,7 @@ export function AdminPagination({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-4">
       <p className="text-sm text-muted-foreground">
-        Pagina {page} de {pageCount}
+        Página {page} de {pageCount}
       </p>
       <div className="flex items-center gap-2">
         <Link

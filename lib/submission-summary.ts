@@ -8,6 +8,6 @@ export function buildDiagnosticSummary(data: DiagnosticFormData) {
     `Problema principal: ${data.mainProblem}.`,
     `Resultado esperado: ${data.expectedResult}.`,
     `Preferencia de contacto: ${data.contactPreference}.`,
-    `Desea reunión: ${data.wantsMeeting}.`,
+    `Desea asesoría: ${data.wantsMeeting}.`,
   ].join(' ')
 }

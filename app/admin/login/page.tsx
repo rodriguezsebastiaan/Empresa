@@ -11,7 +11,7 @@ import {
 import { fieldClassName, panelClassName } from '@/components/form-controls'
 
 export const metadata: Metadata = {
-  title: 'Admin Login | Konamy Systems',
+  title: 'Acceso administrativo | Konamy Systems',
   robots: {
     index: false,
     follow: false,
@@ -58,25 +58,25 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
                 PANEL ADMINISTRATIVO
               </p>
               <h1 className="mt-4 text-4xl font-semibold leading-tight text-foreground">
-                Gestion interna de contactos, diagnosticos y reuniones de Konamy Systems.
+                Gestión interna de formularios breves, diagnósticos y asesorías de Konamy Systems.
               </h1>
               <p className="mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground">
                 Este acceso permite revisar prospectos, actualizar estados, agregar notas internas,
-                revisar asesorias reales y mantener trazabilidad operativa sin tocar la interfaz publica.
+                revisar asesorías reales y mantener trazabilidad operativa sin tocar la interfaz pública.
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">SEGURIDAD</p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Sesion en cookie httpOnly, contrasena con hash fuerte y bloqueo temporal
-                    despues de intentos fallidos.
+                    Sesión en cookie httpOnly, contraseña con hash fuerte y bloqueo temporal
+                    después de intentos fallidos.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">ALCANCE</p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Dashboard, contactos, diagnosticos, reuniones, estados, notas, historial y exportacion CSV.
+                    Dashboard, contactos, diagnósticos, asesorías, estados, notas, historial y exportación CSV.
                   </p>
                 </div>
               </div>
@@ -84,16 +84,16 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
           </section>
 
           <section className={panelClassName}>
-            <p className="text-xs font-semibold tracking-[0.32em] text-primary">INICIAR SESION</p>
+            <p className="text-xs font-semibold tracking-[0.32em] text-primary">INICIAR SESIÓN</p>
             <h2 className="mt-4 text-2xl font-semibold text-foreground">Acceso administrativo</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Use el administrador creado con el seed de Prisma. Si aun no existe, primero ejecute
-              `npm run db:seed` con `ADMIN_SEED_EMAIL` y `ADMIN_SEED_PASSWORD`.
+              Use el administrador configurado para esta instalación. Si todavía no existe,
+              primero debe crearse con las variables administrativas definidas para el entorno.
             </p>
 
             {runtimeError ? (
               <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-                Falta configuracion obligatoria para habilitar el panel: {runtimeError}.
+                Falta una configuración obligatoria para habilitar el panel: {runtimeError}.
               </div>
             ) : null}
 
@@ -119,7 +119,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
               </label>
 
               <label className="block">
-                <span className="text-sm font-medium text-foreground">Contrasena</span>
+                <span className="text-sm font-medium text-foreground">Contraseña</span>
                 <input
                   name="password"
                   type="password"

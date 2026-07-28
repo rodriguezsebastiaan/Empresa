@@ -184,7 +184,7 @@ function buildDiagnosticEmailText(data: SanitizedDiagnosticFormData) {
     data.expectedResult,
     '',
     `Preferencia de contacto: ${data.contactPreference}`,
-    `Interés en reunión: ${data.wantsMeeting}`,
+    `Interés en asesoría: ${data.wantsMeeting}`,
   ].join('\n')
 }
 
@@ -240,7 +240,7 @@ export async function deliverContactSubmission(
         success: false,
         configured: false,
         message:
-          'El formulario de contacto ya valida en cliente y servidor, pero todavía no tiene un destino real completamente configurado.',
+          'El formulario breve ya valida en cliente y servidor, pero todavía no tiene un destino real completamente configurado.',
       },
     }
   }
@@ -272,7 +272,7 @@ export async function deliverContactSubmission(
         success: false,
         configured: true,
         message:
-          'No fue posible entregar el formulario de contacto al destino configurado.',
+          'No fue posible entregar el formulario breve al destino configurado.',
       },
     }
   }

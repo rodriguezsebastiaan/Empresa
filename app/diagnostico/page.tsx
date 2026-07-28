@@ -11,7 +11,7 @@ import { buildPageMetadata } from '@/lib/metadata'
 const preparedFlow = [
   {
     title: 'Captura guiada del problema',
-    description: 'El formulario multipaso ayuda a explicar la operación sin hacer sentir al cliente que llena un bloque largo de campos.',
+    description: 'El diagnóstico empresarial guiado ayuda a explicar la operación sin hacer sentir al cliente que llena un bloque largo de campos.',
     icon: ClipboardList,
   },
   {
@@ -39,7 +39,7 @@ export default function DiagnosticPage() {
       <PageHero
         eyebrow="DIAGNÓSTICO"
         title="Explique su problema por etapas y convirtámoslo en un siguiente paso claro."
-        description="El diagnóstico está pensado para entender cómo opera hoy su empresa, qué proceso desea mejorar y qué resultado espera obtener, sin recurrir a un formulario pesado ni a promesas simuladas."
+        description="El diagnóstico empresarial está pensado para entender cómo opera hoy su empresa, qué proceso desea mejorar y qué resultado espera obtener, sin recurrir a un formulario pesado ni a promesas simuladas."
         actions={
           <>
             <SiteAction href={siteConfig.routes.advisory}>AGENDAR ASESORÍA</SiteAction>
@@ -112,7 +112,7 @@ export default function DiagnosticPage() {
           >
             <SectionHeading
               eyebrow="DESPUÉS DEL ENVÍO"
-              title="Puede continuar con asesoría o esperar la activación del canal definitivo."
+              title="Puede continuar con una asesoría o esperar la activación del canal definitivo."
               description="Cuando la integración real del diagnóstico se conecte, este flujo podrá disparar correo, CRM, seguimiento administrativo y confirmaciones al cliente sin rehacer la interfaz."
               actions={
                 <>

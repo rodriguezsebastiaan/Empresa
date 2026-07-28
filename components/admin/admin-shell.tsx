@@ -42,12 +42,12 @@ const navigationItems = [
   },
   {
     href: '/admin/diagnosticos',
-    label: 'Diagnosticos',
+    label: 'Diagnósticos',
     icon: ClipboardList,
   },
   {
     href: '/admin/reuniones',
-    label: 'Reuniones',
+    label: 'Asesorías',
     icon: CalendarCheck2,
   },
 ] as const
@@ -93,7 +93,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] text-foreground">
       <div className="sticky top-0 z-30 border-b border-border/60 bg-background/75 backdrop-blur-md lg:hidden">
-        <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-[1640px] items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <p className="text-[0.62rem] font-semibold tracking-[0.24em] text-primary">KONAMY ADMIN</p>
             <p className="truncate text-sm text-foreground">{currentSection}</p>
@@ -108,7 +108,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
             </Link>
             <button
               type="button"
-              aria-label={mobileOpen ? 'Cerrar menu administrativo' : 'Abrir menu administrativo'}
+              aria-label={mobileOpen ? 'Cerrar menú administrativo' : 'Abrir menú administrativo'}
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((current) => !current)}
               className="inline-flex size-10 items-center justify-center rounded-2xl border border-border/70 bg-background/55 text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
@@ -119,11 +119,11 @@ export function AdminShell({ children, admin }: AdminShellProps) {
         </div>
       </div>
 
-      <div className="mx-auto flex min-h-screen max-w-[1560px] gap-5 px-4 py-4 lg:px-6 lg:py-6">
+      <div className="mx-auto flex min-h-screen max-w-[1640px] gap-5 px-4 py-4 lg:px-6 lg:py-6">
         {mobileOpen ? (
           <button
             type="button"
-            aria-label="Cerrar menu administrativo"
+            aria-label="Cerrar menú administrativo"
             className="fixed inset-0 z-40 bg-background/72 backdrop-blur-[2px] lg:hidden"
             onClick={() => setMobileOpen(false)}
           />
@@ -131,8 +131,8 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-50 flex w-[18.25rem] flex-col border-r border-border/70 bg-background/92 p-4 backdrop-blur-md transition-transform duration-300 lg:sticky lg:top-6 lg:z-auto lg:h-[calc(100vh-3rem)] lg:rounded-[1.6rem] lg:border lg:bg-background/58 lg:p-4',
-            desktopCollapsed ? 'lg:w-[5.4rem]' : 'lg:w-[14.5rem]',
+            'fixed inset-y-0 left-0 z-50 flex w-[20rem] flex-col border-r border-border/70 bg-background/92 p-4 backdrop-blur-md transition-transform duration-300 lg:sticky lg:top-6 lg:z-auto lg:h-[calc(100vh-3rem)] lg:rounded-[1.7rem] lg:border lg:bg-background/58 lg:p-4',
+            desktopCollapsed ? 'lg:w-[5.8rem]' : 'lg:w-[15.8rem]',
             mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
           )}
         >
@@ -154,7 +154,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
             <button
               type="button"
-              aria-label={desktopCollapsed ? 'Expandir menu lateral' : 'Colapsar menu lateral'}
+              aria-label={desktopCollapsed ? 'Expandir menú lateral' : 'Colapsar menú lateral'}
               aria-expanded={!desktopCollapsed}
               onClick={() => setDesktopCollapsed((current) => !current)}
               className="hidden lg:inline-flex size-9 items-center justify-center rounded-2xl border border-border/70 bg-background/45 text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
@@ -165,25 +165,28 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
           <div
             className={cn(
-              'mt-4 rounded-2xl border border-primary/18 bg-primary/8 p-3',
-              desktopCollapsed && 'lg:px-2 lg:py-3',
+              'mt-4 rounded-[1.45rem] border border-primary/18 bg-primary/8 p-3.5',
+              desktopCollapsed && 'lg:px-2.5 lg:py-3',
             )}
           >
-            <div className={cn('flex items-start gap-3', desktopCollapsed && 'lg:justify-center lg:gap-0')}>
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-background/60 text-primary">
-                <UserRound className="size-4" />
+            <p className={cn('text-[0.62rem] font-semibold tracking-[0.2em] text-primary', desktopCollapsed && 'lg:text-center')}>
+              PERFIL
+            </p>
+            <div className={cn('mt-3 flex items-start gap-3', desktopCollapsed && 'lg:justify-center lg:gap-0')}>
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-background/60 text-primary">
+                <UserRound className="size-[1.05rem]" />
               </div>
               <div className={cn('min-w-0', desktopCollapsed && 'lg:hidden')}>
-                <p className="text-sm font-semibold text-foreground">{admin.name}</p>
-                <p className="truncate text-xs text-muted-foreground">{admin.email}</p>
-                <p className="mt-1.5 text-[0.68rem] font-semibold tracking-[0.18em] text-primary">
+                <p className="text-[0.98rem] font-semibold text-foreground">{admin.name}</p>
+                <p className="mt-1 text-[0.72rem] font-semibold tracking-[0.16em] text-primary">
                   {admin.role}
                 </p>
+                <p className="mt-1.5 truncate text-xs text-muted-foreground">{admin.email}</p>
               </div>
             </div>
           </div>
 
-          <nav className="mt-5 flex-1 space-y-2" aria-label="Navegacion administrativa">
+          <nav className="mt-5 flex-1 space-y-2" aria-label="Navegación administrativa">
             {navigationItems.map((item) => {
               const Icon = item.icon
               const active =
@@ -196,7 +199,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
                   onClick={() => setMobileOpen(false)}
                   title={desktopCollapsed ? item.label : undefined}
                   className={cn(
-                    'flex items-center gap-3 rounded-2xl border px-3 py-3 text-sm font-medium transition-colors',
+                    'flex items-center gap-3 rounded-2xl border px-3.5 py-3 text-sm font-medium transition-colors',
                     active
                       ? 'border-primary/35 bg-primary/10 text-primary shadow-[0_0_18px_-10px_var(--primary)]'
                       : 'border-border/70 bg-background/35 text-foreground/85 hover:border-primary/25 hover:text-primary',
@@ -212,7 +215,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
           {!desktopCollapsed ? (
             <div className="mt-4 hidden rounded-2xl border border-border/70 bg-background/28 p-3 text-xs leading-relaxed text-muted-foreground lg:block">
-              Operacion interna para seguimiento comercial y reuniones reales.
+              Seguimiento comercial, diagnósticos y asesorías en una sola operación interna.
             </div>
           ) : null}
 
@@ -233,14 +236,14 @@ export function AdminShell({ children, admin }: AdminShellProps) {
             <form action="/admin/api/session/logout" method="post">
               <button
                 type="submit"
-                title={desktopCollapsed ? 'Cerrar sesion' : undefined}
+                title={desktopCollapsed ? 'Cerrar sesión' : undefined}
                 className={cn(
                   'inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border/70 bg-background/40 px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/35 hover:text-primary',
                   desktopCollapsed && 'lg:px-0',
                 )}
               >
                 <LogOut className="size-4 shrink-0" />
-                <span className={cn(desktopCollapsed && 'lg:hidden')}>CERRAR SESION</span>
+                <span className={cn(desktopCollapsed && 'lg:hidden')}>CERRAR SESIÓN</span>
               </button>
             </form>
           </div>

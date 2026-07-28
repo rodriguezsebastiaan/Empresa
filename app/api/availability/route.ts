@@ -41,7 +41,7 @@ export async function GET(request: Request) {
         success: false,
         configured: false,
         message:
-          'La disponibilidad real de Google Calendar aún no está activada. Debe configurar las credenciales del calendario antes de publicar el agendamiento.',
+          'La agenda todavía no está disponible. Escríbanos por el formulario de contacto para coordinar la asesoría.',
       },
       503,
     )

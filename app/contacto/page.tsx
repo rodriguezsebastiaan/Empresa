@@ -45,7 +45,7 @@ export default function ContactPage() {
   const contactChannels: ContactChannel[] = [
     {
       title: 'Agendar una asesoría',
-      value: 'Programar reunión inicial de 30 minutos',
+      value: 'Programar asesoría inicial de 30 minutos',
       note: 'Ideal para comprender la necesidad y definir el mejor siguiente paso.',
       href: siteConfig.routes.advisory,
       icon: CalendarDays,
@@ -53,9 +53,9 @@ export default function ContactPage() {
       provisional: false,
     },
     {
-      title: 'Solicitar diagnóstico',
+      title: 'Solicitar diagnóstico empresarial',
       value: 'Formulario guiado por pasos',
-      note: 'Permite explicar el problema con más detalle antes de una reunión.',
+      note: 'Permite explicar el problema con más detalle antes de una asesoría.',
       href: siteConfig.routes.diagnostics,
       icon: CalendarDays,
       external: false,
@@ -121,7 +121,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="CONTACTO"
         title="Canales claros para iniciar la conversación con Konamy Systems."
-        description="Esta página reúne asesoría, diagnóstico, WhatsApp, correo, teléfono y formulario breve de contacto, todo conectado a una configuración central para evitar datos duplicados."
+        description="Esta página reúne asesoría, diagnóstico empresarial y formulario breve de contacto para iniciar la conversación por el canal más adecuado."
         actions={
           <>
             <SiteAction href={siteConfig.routes.advisory}>AGENDAR ASESORÍA</SiteAction>
@@ -138,13 +138,13 @@ export default function ContactPage() {
         aside={
           <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
             <p>
-              Los canales de contacto se administran desde una configuración central
-              para mantener consistencia entre header, footer, formularios y CTAs.
+              Centralizamos los canales de contacto para responder con orden,
+              claridad y continuidad desde el primer mensaje.
             </p>
             <p>{siteConfig.contact.coverage}</p>
             <p>
-              Mientras algunos datos sigan provisionales, esta interfaz los deja
-              claramente identificados.
+              Si algún canal aún no tiene datos oficiales, evitamos mostrar
+              enlaces incompletos o información no confirmada.
             </p>
           </div>
         }
@@ -229,7 +229,7 @@ export default function ContactPage() {
               <SectionHeading
                 eyebrow="FORMULARIO BREVE"
                 title="Comparta su necesidad y organizamos el siguiente paso."
-                description="El formulario ya valida en cliente y servidor. Si el destino final todavía no está activado, la plataforma lo informa con claridad en vez de fingir un envío."
+                description="El formulario revisa la información antes de enviarla. Si el canal de recepción aún no está disponible, la plataforma lo informará con claridad sin simular un envío."
               />
 
               <div className="mt-8">
@@ -247,7 +247,7 @@ export default function ContactPage() {
               </p>
               <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
                 <p>
-                  Si ya sabe que necesita una reunión, el camino más directo es
+                  Si ya sabe que necesita una asesoría, el camino más directo es
                   agendar una asesoría.
                 </p>
                 <p>

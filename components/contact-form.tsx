@@ -73,7 +73,7 @@ export function ContactForm() {
           tone: 'error',
           message:
             payload.message ??
-            'No fue posible procesar el formulario de contacto en este momento.',
+            'No fue posible procesar el formulario breve en este momento.',
         })
         return
       }

@@ -24,7 +24,7 @@ const serviceGroups = [
         problem: 'Evita que la presencia digital quede separada de la operación real.',
         includes: 'Sitios corporativos, formularios funcionales, secciones administrables y estructura clara.',
         benefit: 'La web deja de ser solo presencia y empieza a soportar procesos reales.',
-        useCases: 'Empresas que necesitan presencia profesional conectada con contacto, reservas o captación.',
+        useCases: 'Empresas que necesitan presencia profesional conectada con contacto, agenda o captación.',
       },
       {
         title: 'Plataformas web empresariales',
@@ -50,7 +50,7 @@ const serviceGroups = [
         problem: 'Da visibilidad a lo que ocurre en tiempo real.',
         includes: 'Dashboards, listas filtrables, métricas clave, acciones rápidas y seguimiento.',
         benefit: 'Reduce tiempos de respuesta y mejora la lectura operativa.',
-        useCases: 'Equipos que necesitan control diario sobre pedidos, clientes, reservas o procesos.',
+        useCases: 'Equipos que necesitan control diario sobre pedidos, clientes, agenda o procesos.',
       },
       {
         title: 'Bases de datos y reportes',
@@ -94,10 +94,10 @@ const serviceGroups = [
       },
       {
         title: 'Integración con Google Calendar',
-        problem: 'Automatiza reservas y evita choques de agenda.',
-        includes: 'Disponibilidad real, reserva de espacios, eventos y enlaces de reunión.',
+        problem: 'Automatiza asesorías y evita choques de agenda.',
+        includes: 'Disponibilidad real, espacios agendados, eventos y enlaces de asesoría.',
         benefit: 'El agendamiento se vuelve más claro para el cliente y más controlado para la empresa.',
-        useCases: 'Empresas que atienden por citas, asesorías, reservas o reuniones programadas.',
+        useCases: 'Empresas que atienden por citas, asesorías programadas o agendas operativas.',
       },
     ],
   },

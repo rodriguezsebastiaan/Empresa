@@ -9,14 +9,14 @@ import { buildPageMetadata } from '@/lib/metadata'
 const dataCategories = [
   'Datos de contacto que usted entregue en formularios: nombre, empresa, correo, teléfono y mensaje.',
   'Información operativa o diagnóstica que comparta para explicar procesos, dificultades, herramientas actuales o resultados esperados.',
-  'Datos necesarios para coordinar asesorías, disponibilidad, reservas e invitaciones de calendario cuando la integración esté activa.',
+  'Datos necesarios para coordinar asesorías, disponibilidad e invitaciones de calendario cuando la integración esté activa.',
 ] as const
 
 const intendedPurposes = [
   'Responder solicitudes comerciales o de contacto.',
   'Analizar el contexto del negocio antes de una asesoría o diagnóstico.',
-  'Coordinar reuniones, disponibilidad y seguimiento administrativo.',
-  'Preparar automatizaciones futuras relacionadas con formularios, correo y n8n cuando existan credenciales reales.',
+  'Coordinar asesorías, disponibilidad y seguimiento administrativo.',
+  'Preparar automatizaciones futuras relacionadas con formularios, correo y n8n cuando existan canales reales configurados.',
 ] as const
 
 const pendingItems = [
@@ -166,7 +166,7 @@ export default function PrivacyPage() {
             <SectionHeading
               eyebrow="PENDIENTES"
               title="Datos que no deben publicarse como definitivos todavía."
-              description="Los siguientes elementos siguen marcados como placeholder y deben reemplazarse con información real antes del despliegue final."
+              description="Los siguientes elementos siguen pendientes de confirmación y deben reemplazarse con información real antes del despliegue final."
             />
 
             <ul className="mt-8 space-y-4 text-sm leading-relaxed text-muted-foreground">
@@ -192,7 +192,7 @@ export default function PrivacyPage() {
             <SectionHeading
               eyebrow="SIGUIENTE PASO"
               title="Cuando llegue la información real, esta página ya está lista para cerrarse correctamente."
-              description="El proyecto ya tiene la ruta, los enlaces legales y la estructura base; falta reemplazar placeholders y validar el texto definitivo."
+              description="El proyecto ya tiene la ruta, los enlaces legales y la estructura base; falta reemplazar los datos pendientes y validar el texto definitivo."
               actions={
                 <>
                   <SiteAction href={siteConfig.routes.contact}>IR A CONTACTO</SiteAction>

@@ -211,7 +211,7 @@ export default function AboutPage() {
             <SectionHeading
               eyebrow="SIGUIENTE PASO"
               title="Si quiere conocer cómo trabajamos con su caso, podemos avanzar."
-              description="Puede revisar el proceso completo, solicitar un diagnóstico guiado o programar una asesoría inicial."
+              description="Puede revisar el proceso completo, solicitar un diagnóstico empresarial o programar una asesoría inicial."
               actions={
                 <>
                   <SiteAction href={siteConfig.routes.process}>CONOCER PROCESO</SiteAction>

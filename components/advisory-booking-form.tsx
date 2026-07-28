@@ -83,7 +83,7 @@ export function AdvisoryBookingForm() {
 
     async function loadAvailability() {
       setLoadingSlots(true)
-      setAvailabilityMessage('Consultando disponibilidad...')
+      setAvailabilityMessage('Consultando horarios disponibles...')
       setStatusMessage('')
       setSlots([])
       updateField('time', '')
@@ -148,7 +148,7 @@ export function AdvisoryBookingForm() {
     setStatusMessage('')
     setAvailabilityMessage(
       value
-        ? 'Consultando disponibilidad...'
+        ? 'Consultando horarios disponibles...'
         : 'Seleccione una fecha para consultar horarios disponibles.',
     )
   }
@@ -224,7 +224,7 @@ export function AdvisoryBookingForm() {
             ASESORÍA CONFIRMADA
           </p>
           <h2 className="mt-4 text-2xl font-medium text-foreground">
-            Su reunión inicial quedó registrada.
+            Su asesoría inicial quedó registrada.
           </h2>
           <dl className="mt-8 grid gap-4 text-sm">
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
@@ -259,7 +259,7 @@ export function AdvisoryBookingForm() {
                     rel="noreferrer"
                     className="text-primary transition-opacity hover:opacity-80"
                   >
-                    Abrir enlace de la reunión
+                    Abrir enlace de la asesoría
                   </a>
                 ) : (
                   'El enlace se enviará en la invitación del calendario.'
@@ -381,7 +381,7 @@ export function AdvisoryBookingForm() {
         </div>
 
         <div className="mt-5 rounded-2xl border border-border/70 bg-background/40 p-4">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4" aria-live="polite">
             <div>
               <p className="text-sm font-medium text-foreground">Horas disponibles</p>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -389,7 +389,7 @@ export function AdvisoryBookingForm() {
               </p>
             </div>
             {loadingSlots ? (
-              <span className="text-xs text-primary">Cargando...</span>
+              <span className="text-xs text-primary">Consultando...</span>
             ) : null}
           </div>
 
