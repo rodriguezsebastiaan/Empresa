@@ -3,6 +3,9 @@ import { siteConfig } from '@/config/site'
 import { getDb } from '@/lib/db'
 import {
   buildEmailLayout,
+  formatEmailDateTime,
+  getAdminNotificationDestination,
+  getAdminNotificationDestinationLabel,
   getMissingSmtpEnv,
   isSmtpConfigured,
   renderDefinitionList,
@@ -29,7 +32,9 @@ function sanitizeContactFormData(data: ContactFormData) {
   }
 }
 
-function buildInternalEmail(input: ReturnType<typeof sanitizeContactFormData>) {
+function buildInternalEmail(input: ReturnType<typeof sanitizeContactFormData>, receivedAt: Date) {
+  const receivedAtLabel = formatEmailDateTime(receivedAt)
+
   return {
     subject: `[Contacto] ${input.subject} · ${input.company}`,
     text: [
@@ -40,6 +45,7 @@ function buildInternalEmail(input: ReturnType<typeof sanitizeContactFormData>) {
       `Correo: ${input.email}`,
       `Teléfono: ${input.phone}`,
       `Asunto: ${input.subject}`,
+      `Fecha: ${receivedAtLabel}`,
       '',
       'Mensaje:',
       input.message,
@@ -54,13 +60,16 @@ function buildInternalEmail(input: ReturnType<typeof sanitizeContactFormData>) {
         { label: 'Correo', value: input.email },
         { label: 'Teléfono', value: input.phone },
         { label: 'Asunto', value: input.subject },
+        { label: 'Fecha', value: receivedAtLabel },
         { label: 'Mensaje', value: input.message },
       ]),
     }),
   }
 }
 
-function buildClientEmail(input: ReturnType<typeof sanitizeContactFormData>) {
+function buildClientEmail(input: ReturnType<typeof sanitizeContactFormData>, receivedAt: Date) {
+  const receivedAtLabel = formatEmailDateTime(receivedAt)
+
   return {
     subject: 'Recibimos su solicitud de contacto · Konamy Systems',
     text: [
@@ -71,6 +80,7 @@ function buildClientEmail(input: ReturnType<typeof sanitizeContactFormData>) {
       '',
       `Empresa: ${input.company}`,
       `Asunto: ${input.subject}`,
+      `Fecha: ${receivedAtLabel}`,
       '',
       'Mensaje recibido:',
       input.message,
@@ -85,10 +95,40 @@ function buildClientEmail(input: ReturnType<typeof sanitizeContactFormData>) {
       bodyHtml: renderDefinitionList([
         { label: 'Empresa', value: input.company },
         { label: 'Asunto', value: input.subject },
+        { label: 'Fecha', value: receivedAtLabel },
         { label: 'Canal siguiente', value: 'Correo, WhatsApp o asesoría según el caso.' },
+        { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Konamy Systems.' },
       ]),
     }),
   }
+}
+
+async function findRecentDuplicateContact(
+  input: ReturnType<typeof sanitizeContactFormData>,
+) {
+  const db = getDb()
+  const duplicateWindow = new Date(Date.now() - 10 * 60 * 1000)
+
+  return db.contactSubmission.findFirst({
+    where: {
+      emailNormalized: input.emailNormalized,
+      company: input.company,
+      subject: input.subject,
+      message: input.message,
+      createdAt: {
+        gte: duplicateWindow,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      internalEmailStatus: true,
+      clientEmailStatus: true,
+      lastDeliveryError: true,
+    },
+  })
 }
 
 export async function submitContactForm(
@@ -117,6 +157,27 @@ export async function submitContactForm(
 
   const payload = sanitizeContactFormData(data)
   const metadata = getRequestMetadata(request)
+  const receivedAt = new Date()
+  const duplicate = await findRecentDuplicateContact(payload)
+
+  if (duplicate) {
+    return {
+      status: 200,
+      body: {
+        success: true,
+        stored: true,
+        idempotent: true,
+        partial: Boolean(duplicate.lastDeliveryError),
+        contactId: duplicate.id,
+        message:
+          duplicate.lastDeliveryError ||
+          duplicate.internalEmailStatus === 'FAILED' ||
+          duplicate.clientEmailStatus === 'FAILED'
+            ? 'La solicitud ya estaba registrada. Algunas notificaciones quedaron pendientes o parciales.'
+            : 'La solicitud ya había sido registrada anteriormente.',
+      },
+    }
+  }
 
   const submission = await db.contactSubmission.create({
     data: {
@@ -128,7 +189,7 @@ export async function submitContactForm(
       phone: payload.phone,
       subject: payload.subject,
       message: payload.message,
-      privacyAcceptedAt: new Date(),
+      privacyAcceptedAt: receivedAt,
       privacyPolicyVersion: siteConfig.legal.privacyPolicyVersionLabel,
       requestOrigin: metadata.requestOrigin,
       requestPath: metadata.requestPath,
@@ -145,7 +206,7 @@ export async function submitContactForm(
   })
 
   const smtpReady = isSmtpConfigured()
-  const destinationEmail = process.env.CONTACT_DESTINATION_EMAIL?.trim()
+  const destinationEmail = getAdminNotificationDestination('CONTACT_DESTINATION_EMAIL')
 
   let internalEmailStatus: DeliveryStatus = smtpReady && destinationEmail ? 'PENDING' : 'SKIPPED'
   let clientEmailStatus: DeliveryStatus = smtpReady ? 'PENDING' : 'SKIPPED'
@@ -158,11 +219,11 @@ export async function submitContactForm(
   }
 
   if (!destinationEmail) {
-    notificationIssues.push(siteConfig.integrations.contact.destinationEmailEnv)
+    notificationIssues.push(getAdminNotificationDestinationLabel('CONTACT_DESTINATION_EMAIL'))
   }
 
-  const internalEmail = buildInternalEmail(payload)
-  const clientEmail = buildClientEmail(payload)
+  const internalEmail = buildInternalEmail(payload, receivedAt)
+  const clientEmail = buildClientEmail(payload, receivedAt)
 
   if (smtpReady && destinationEmail) {
     try {

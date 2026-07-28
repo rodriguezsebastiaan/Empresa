@@ -11,7 +11,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "smtp:check": "tsx scripts/check-smtp.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

@@ -221,11 +221,12 @@ export const siteConfig = {
   integrations: {
     contact: {
       destinationEmailEnv: 'CONTACT_DESTINATION_EMAIL',
+      fallbackDestinationEmailEnv: 'ADMIN_NOTIFICATION_EMAIL',
       smtpEnv: [
         'SMTP_HOST',
         'SMTP_PORT',
         'SMTP_USER',
-        'SMTP_PASS',
+        'SMTP_PASSWORD',
         'SMTP_FROM_EMAIL',
         'SMTP_FROM_NAME',
         'SMTP_SECURE',
@@ -233,11 +234,12 @@ export const siteConfig = {
     },
     diagnostics: {
       destinationEmailEnv: 'DIAGNOSTIC_DESTINATION_EMAIL',
+      fallbackDestinationEmailEnv: 'ADMIN_NOTIFICATION_EMAIL',
       smtpEnv: [
         'SMTP_HOST',
         'SMTP_PORT',
         'SMTP_USER',
-        'SMTP_PASS',
+        'SMTP_PASSWORD',
         'SMTP_FROM_EMAIL',
         'SMTP_FROM_NAME',
         'SMTP_SECURE',
@@ -246,11 +248,12 @@ export const siteConfig = {
     },
     advisory: {
       destinationEmailEnv: 'BOOKING_DESTINATION_EMAIL',
+      fallbackDestinationEmailEnv: 'ADMIN_NOTIFICATION_EMAIL',
       smtpEnv: [
         'SMTP_HOST',
         'SMTP_PORT',
         'SMTP_USER',
-        'SMTP_PASS',
+        'SMTP_PASSWORD',
         'SMTP_FROM_EMAIL',
         'SMTP_FROM_NAME',
         'SMTP_SECURE',

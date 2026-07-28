@@ -8,6 +8,8 @@ import {
 } from '@/lib/google-calendar/events'
 import {
   buildEmailLayout,
+  getAdminNotificationDestination,
+  getAdminNotificationDestinationLabel,
   getMissingSmtpEnv,
   isSmtpConfigured,
   renderDefinitionList,
@@ -106,8 +108,19 @@ function buildInternalEmail(
   input: ReturnType<typeof sanitizeAdvisoryBookingData>,
   confirmation: AdvisoryBookingConfirmation,
 ) {
+  const bookingItems = [
+    { label: 'Correo', value: input.email },
+    { label: 'Teléfono', value: input.phone },
+    { label: 'Ciudad', value: input.city },
+    { label: 'Fecha', value: confirmation.dateLabel },
+    { label: 'Hora', value: confirmation.timeLabel },
+    { label: 'Zona horaria', value: confirmation.timezone },
+    ...(confirmation.meetUrl ? [{ label: 'Google Meet', value: confirmation.meetUrl }] : []),
+    { label: 'Motivo', value: input.processGoal },
+  ]
+
   return {
-    subject: `[Asesoria] ${input.company} · ${input.fullName}`,
+    subject: `[Asesoría] ${input.company} · ${input.fullName}`,
     text: [
       'Nueva asesoría registrada desde Konamy Systems.',
       '',
@@ -126,19 +139,11 @@ function buildInternalEmail(
       input.processGoal,
     ].join('\n'),
     html: buildEmailLayout({
-      eyebrow: 'NUEVA ASESORIA',
+      eyebrow: 'NUEVA ASESORÍA',
       title: `${input.company} · ${input.fullName}`,
       intro:
         'Se confirmó una nueva asesoría inicial desde el sitio corporativo de Konamy Systems.',
-      bodyHtml: renderDefinitionList([
-        { label: 'Correo', value: input.email },
-        { label: 'Teléfono', value: input.phone },
-        { label: 'Ciudad', value: input.city },
-        { label: 'Fecha', value: confirmation.dateLabel },
-        { label: 'Hora', value: confirmation.timeLabel },
-        { label: 'Google Meet', value: confirmation.meetUrl ?? 'Pendiente en la invitación' },
-        { label: 'Motivo', value: input.processGoal },
-      ]),
+      bodyHtml: renderDefinitionList(bookingItems),
     }),
   }
 }
@@ -147,6 +152,16 @@ function buildClientEmail(
   input: ReturnType<typeof sanitizeAdvisoryBookingData>,
   confirmation: AdvisoryBookingConfirmation,
 ) {
+  const bookingItems = [
+    { label: 'Empresa', value: input.company },
+    { label: 'Fecha', value: confirmation.dateLabel },
+    { label: 'Hora', value: confirmation.timeLabel },
+    { label: 'Zona horaria', value: confirmation.timezone },
+    { label: 'Duración', value: `${confirmation.durationMinutes} minutos` },
+    ...(confirmation.meetUrl ? [{ label: 'Google Meet', value: confirmation.meetUrl }] : []),
+    { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Konamy Systems.' },
+  ]
+
   return {
     subject: 'Su asesoría inicial fue confirmada · Konamy Systems',
     text: [
@@ -157,7 +172,7 @@ function buildClientEmail(
       `Fecha: ${confirmation.dateLabel}`,
       `Hora: ${confirmation.timeLabel}`,
       `Zona horaria: ${confirmation.timezone}`,
-      `Duracion: ${confirmation.durationMinutes} minutos`,
+      `Duración: ${confirmation.durationMinutes} minutos`,
       `Modalidad: ${input.modality}`,
       `Google Meet: ${confirmation.meetUrl ?? 'Lo recibirá en la invitación del calendario.'}`,
       '',
@@ -167,17 +182,11 @@ function buildClientEmail(
       'Konamy Systems',
     ].join('\n'),
     html: buildEmailLayout({
-      eyebrow: 'ASESORIA CONFIRMADA',
+      eyebrow: 'ASESORÍA CONFIRMADA',
       title: `Gracias, ${input.fullName}`,
       intro:
         'Su asesoría inicial quedó confirmada. Le compartimos los datos principales para que tenga trazabilidad del agendamiento.',
-      bodyHtml: renderDefinitionList([
-        { label: 'Empresa', value: input.company },
-        { label: 'Fecha', value: confirmation.dateLabel },
-        { label: 'Hora', value: confirmation.timeLabel },
-        { label: 'Duracion', value: `${confirmation.durationMinutes} minutos` },
-        { label: 'Google Meet', value: confirmation.meetUrl ?? 'En la invitación del calendario' },
-      ]),
+      bodyHtml: renderDefinitionList(bookingItems),
     }),
   }
 }
@@ -432,7 +441,7 @@ export async function submitAdvisoryBooking(
   }
 
   const smtpReady = isSmtpConfigured()
-  const internalDestination = process.env.BOOKING_DESTINATION_EMAIL?.trim()
+  const internalDestination = getAdminNotificationDestination('BOOKING_DESTINATION_EMAIL')
   let internalEmailStatus: DeliveryStatus = smtpReady && internalDestination ? 'PENDING' : 'SKIPPED'
   let clientEmailStatus: DeliveryStatus = smtpReady ? 'PENDING' : 'SKIPPED'
   const notificationIssues: string[] = []
@@ -444,7 +453,7 @@ export async function submitAdvisoryBooking(
   }
 
   if (!internalDestination) {
-    notificationIssues.push(siteConfig.integrations.advisory.destinationEmailEnv)
+    notificationIssues.push(getAdminNotificationDestinationLabel('BOOKING_DESTINATION_EMAIL'))
   }
 
   const confirmation = {

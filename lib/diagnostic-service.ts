@@ -4,9 +4,12 @@ import { getDb } from '@/lib/db'
 import { isDiagnosticWebhookConfigured, sendDiagnosticWebhook } from '@/lib/diagnostic-webhook'
 import {
   buildEmailLayout,
+  formatEmailDateTime,
+  getAdminNotificationDestination,
+  getAdminNotificationDestinationLabel,
   getMissingSmtpEnv,
   isSmtpConfigured,
-  renderDefinitionList,
+  renderEmailSection,
   sendEmail,
 } from '@/lib/mailer'
 import { getRequestMetadata } from '@/lib/request-metadata'
@@ -45,7 +48,38 @@ function wantsMeetingToBoolean(value: string) {
   return value.toLowerCase().startsWith('s')
 }
 
-function buildInternalEmail(input: ReturnType<typeof sanitizeDiagnosticFormData>, summary: string) {
+function buildInternalEmail(
+  input: ReturnType<typeof sanitizeDiagnosticFormData>,
+  summary: string,
+  receivedAt: Date,
+) {
+  const receivedAtLabel = formatEmailDateTime(receivedAt)
+  const bodyHtml = [
+    renderEmailSection('Contacto', [
+      { label: 'Nombre', value: input.name },
+      { label: 'Empresa', value: input.company },
+      { label: 'Cargo', value: input.role },
+      { label: 'Correo', value: input.email },
+      { label: 'Teléfono', value: input.phone },
+      { label: 'Ciudad', value: input.city },
+      { label: 'Sector', value: input.sector },
+      { label: 'Equipo', value: input.teamSize },
+      { label: 'Fecha', value: receivedAtLabel },
+    ]),
+    renderEmailSection('Proceso y operación', [
+      { label: 'Procesos a mejorar', value: input.processes },
+      { label: 'Cómo opera hoy', value: input.currentProcess },
+      { label: 'Herramientas actuales', value: input.tools },
+      { label: 'Tareas repetitivas', value: input.repetitiveTasks },
+    ]),
+    renderEmailSection('Necesidad y siguiente paso', [
+      { label: 'Problema principal', value: input.mainProblem },
+      { label: 'Resultado esperado', value: input.expectedResult },
+      { label: 'Preferencia de contacto', value: input.contactPreference },
+      { label: 'Interés en asesoría', value: input.wantsMeeting },
+    ]),
+  ].join('')
+
   return {
     subject: `[Diagnóstico] ${input.company} · ${input.name}`,
     text: [
@@ -61,6 +95,7 @@ function buildInternalEmail(input: ReturnType<typeof sanitizeDiagnosticFormData>
       `Ciudad: ${input.city}`,
       `Sector: ${input.sector}`,
       `Tamaño aproximado: ${input.teamSize}`,
+      `Fecha: ${receivedAtLabel}`,
       '',
       `Procesos a mejorar: ${input.processes}`,
       `Cómo opera hoy: ${input.currentProcess}`,
@@ -75,21 +110,32 @@ function buildInternalEmail(input: ReturnType<typeof sanitizeDiagnosticFormData>
       eyebrow: 'NUEVO DIAGNÓSTICO',
       title: `${input.company} · ${input.name}`,
       intro: summary,
-      bodyHtml: renderDefinitionList([
-        { label: 'Cargo', value: input.role },
-        { label: 'Correo', value: input.email },
-        { label: 'Teléfono', value: input.phone },
-        { label: 'Ciudad', value: input.city },
-        { label: 'Sector', value: input.sector },
-        { label: 'Procesos', value: input.processes },
-        { label: 'Problema', value: input.mainProblem },
-        { label: 'Resultado', value: input.expectedResult },
-      ]),
+      bodyHtml,
     }),
   }
 }
 
-function buildClientEmail(input: ReturnType<typeof sanitizeDiagnosticFormData>, summary: string) {
+function buildClientEmail(
+  input: ReturnType<typeof sanitizeDiagnosticFormData>,
+  summary: string,
+  receivedAt: Date,
+) {
+  const receivedAtLabel = formatEmailDateTime(receivedAt)
+  const bodyHtml = [
+    renderEmailSection('Resumen recibido', [
+      { label: 'Empresa', value: input.company },
+      { label: 'Fecha', value: receivedAtLabel },
+      { label: 'Procesos a mejorar', value: input.processes },
+      { label: 'Problema principal', value: input.mainProblem },
+      { label: 'Resultado esperado', value: input.expectedResult },
+      { label: 'Contacto preferido', value: input.contactPreference },
+    ]),
+    renderEmailSection('Siguiente paso', [
+      { label: 'Interés en asesoría', value: input.wantsMeeting },
+      { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Konamy Systems.' },
+    ]),
+  ].join('')
+
   return {
     subject: 'Recibimos su diagnóstico empresarial · Konamy Systems',
     text: [
@@ -115,16 +161,39 @@ function buildClientEmail(input: ReturnType<typeof sanitizeDiagnosticFormData>, 
       title: `Gracias, ${input.name}`,
       intro:
         'Su diagnóstico empresarial ya quedó registrado correctamente. Este resumen le sirve como comprobante de lo que recibimos.',
-      bodyHtml: renderDefinitionList([
-        { label: 'Empresa', value: input.company },
-        { label: 'Procesos', value: input.processes },
-        { label: 'Problema', value: input.mainProblem },
-        { label: 'Resultado', value: input.expectedResult },
-        { label: 'Contacto preferido', value: input.contactPreference },
-      ]),
+      bodyHtml,
       footer: `${siteConfig.name}<br>Puede continuar con asesoría, WhatsApp o contacto cuando lo necesite.`,
     }),
   }
+}
+
+async function findRecentDuplicateDiagnostic(
+  input: ReturnType<typeof sanitizeDiagnosticFormData>,
+  summary: string,
+) {
+  const db = getDb()
+  const duplicateWindow = new Date(Date.now() - 15 * 60 * 1000)
+
+  return db.diagnosticSubmission.findFirst({
+    where: {
+      emailNormalized: input.emailNormalized,
+      company: input.company,
+      summary,
+      createdAt: {
+        gte: duplicateWindow,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      internalEmailStatus: true,
+      clientEmailStatus: true,
+      webhookStatus: true,
+      lastDeliveryError: true,
+    },
+  })
 }
 
 export async function submitDiagnosticForm(
@@ -154,6 +223,30 @@ export async function submitDiagnosticForm(
   const payload = sanitizeDiagnosticFormData(data)
   const summary = buildDiagnosticSummary(data)
   const metadata = getRequestMetadata(request)
+  const receivedAt = new Date()
+  const duplicate = await findRecentDuplicateDiagnostic(payload, summary)
+
+  if (duplicate) {
+    const hasFailedDelivery =
+      duplicate.internalEmailStatus === 'FAILED' ||
+      duplicate.clientEmailStatus === 'FAILED' ||
+      duplicate.webhookStatus === 'FAILED'
+
+    return {
+      status: 200,
+      body: {
+        success: true,
+        stored: true,
+        idempotent: true,
+        partial: Boolean(duplicate.lastDeliveryError) || hasFailedDelivery,
+        diagnosticId: duplicate.id,
+        message:
+          duplicate.lastDeliveryError || hasFailedDelivery
+            ? 'El diagnóstico ya estaba registrado. Algunas notificaciones o automatizaciones quedaron pendientes.'
+            : 'El diagnóstico ya había sido registrado anteriormente.',
+      },
+    }
+  }
 
   const submission = await db.diagnosticSubmission.create({
     data: {
@@ -176,7 +269,7 @@ export async function submitDiagnosticForm(
       contactPreference: payload.contactPreference,
       wantsMeeting: wantsMeetingToBoolean(payload.wantsMeeting),
       summary,
-      privacyAcceptedAt: new Date(),
+      privacyAcceptedAt: receivedAt,
       privacyPolicyVersion: siteConfig.legal.privacyPolicyVersionLabel,
       requestOrigin: metadata.requestOrigin,
       requestPath: metadata.requestPath,
@@ -194,7 +287,7 @@ export async function submitDiagnosticForm(
 
   const smtpReady = isSmtpConfigured()
   const webhookReady = isDiagnosticWebhookConfigured()
-  const destinationEmail = process.env.DIAGNOSTIC_DESTINATION_EMAIL?.trim()
+  const destinationEmail = getAdminNotificationDestination('DIAGNOSTIC_DESTINATION_EMAIL')
 
   let internalEmailStatus: DeliveryStatus = smtpReady && destinationEmail ? 'PENDING' : 'SKIPPED'
   let clientEmailStatus: DeliveryStatus = smtpReady ? 'PENDING' : 'SKIPPED'
@@ -208,15 +301,15 @@ export async function submitDiagnosticForm(
   }
 
   if (!destinationEmail) {
-    notificationIssues.push(siteConfig.integrations.diagnostics.destinationEmailEnv)
+    notificationIssues.push(getAdminNotificationDestinationLabel('DIAGNOSTIC_DESTINATION_EMAIL'))
   }
 
   if (!webhookReady) {
     notificationIssues.push(siteConfig.integrations.diagnostics.webhookEnv.join(', '))
   }
 
-  const internalEmail = buildInternalEmail(payload, summary)
-  const clientEmail = buildClientEmail(payload, summary)
+  const internalEmail = buildInternalEmail(payload, summary, receivedAt)
+  const clientEmail = buildClientEmail(payload, summary, receivedAt)
 
   if (smtpReady && destinationEmail) {
     try {

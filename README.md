@@ -11,30 +11,63 @@ Copie `.env.example` a `.env.local` y reemplace todos los placeholders antes del
 - `NEXT_PUBLIC_SITE_URL`
   Debe apuntar al dominio público final. Mientras no exista, el proyecto usa un placeholder `.invalid` para evitar referencias a `localhost`.
 
-### Contacto por correo
+### SMTP y correos transaccionales
 
-- `CONTACT_DESTINATION_EMAIL`
-  Buzón real que recibirá el formulario de contacto.
+Variables oficiales para Formulario breve, Diagnóstico empresarial y Asesorías:
+
 - `SMTP_HOST`
 - `SMTP_PORT`
 - `SMTP_USER`
-- `SMTP_PASS`
+- `SMTP_PASSWORD`
 - `SMTP_FROM_EMAIL`
 - `SMTP_FROM_NAME`
 - `SMTP_SECURE`
+- `ADMIN_NOTIFICATION_EMAIL`
 
-Sin estas variables, `/api/contact` responderá `503` y no fingirá éxito.
+`SMTP_PASSWORD` es la variable principal para la contraseña del proveedor SMTP. `SMTP_PASS` se mantiene temporalmente como alias heredado para entornos locales antiguos, pero no debe usarse en configuraciones nuevas.
+
+Los correos administrativos usan esta prioridad:
+
+1. Variable específica del módulo, si existe.
+2. `ADMIN_NOTIFICATION_EMAIL` como destino general.
+3. Si no existe ningún destino, no se intenta el envío administrativo.
+
+Variables específicas compatibles:
+
+- `CONTACT_DESTINATION_EMAIL`: destino específico del Formulario breve.
+- `DIAGNOSTIC_DESTINATION_EMAIL`: destino específico del Diagnóstico empresarial.
+- `BOOKING_DESTINATION_EMAIL`: destino específico de Asesorías.
+
+Los valores vacíos, `.invalid` o marcados como `pendiente` no se consideran destinos reales. Esto permite copiar `.env.example` y configurar primero solo `ADMIN_NOTIFICATION_EMAIL` sin que un placeholder heredado tome prioridad.
+
+Si SMTP no está configurado, los formularios guardan la información en base de datos, marcan la entrega de correo como omitida o pendiente y no fingen que el proveedor envió mensajes.
+
+Para verificar la conexión SMTP sin exponer credenciales:
+
+```bash
+npm run smtp:check
+```
+
+Para enviar un correo de prueba explícito:
+
+```bash
+npm run smtp:check -- --send --to=correo@dominio.com
+```
+
+El comando nunca imprime la contraseña. Si no se pasa `--to`, intentará usar el destino administrativo configurado.
+
+### Contacto por correo
+
+El Formulario breve guarda el registro en base de datos, envía notificación administrativa cuando hay destino configurado y envía confirmación al cliente cuando SMTP está activo. Si el correo falla, el registro no se pierde y el panel conserva el estado de entrega.
 
 ### Diagnóstico por correo y n8n
 
-- `DIAGNOSTIC_DESTINATION_EMAIL`
-  Buzón real que recibirá el diagnóstico por correo.
 - `N8N_DIAGNOSTIC_WEBHOOK_URL`
   URL real del webhook administrativo.
 - `N8N_DIAGNOSTIC_WEBHOOK_SECRET`
   Se usa para firmar el payload en `X-Konamy-Signature`.
 
-El diagnóstico puede entregar por correo, por webhook o por ambos. Si ninguno está configurado, `/api/diagnostico` responderá `503`. Si solo uno funciona, la API responde con éxito parcial y lo informa claramente.
+El Diagnóstico empresarial guarda todas las respuestas en base de datos, envía correos transaccionales con secciones legibles y puede entregar el evento al webhook de n8n si está configurado. Si una integración falla, la API responde con éxito parcial sin exponer detalles técnicos al cliente.
 
 ### Google Calendar y Google Meet
 
@@ -108,7 +141,8 @@ Los siguientes placeholders siguen centralizados en [config/site.ts](C:/xampp/ht
 
 - Reemplazar todos los placeholders legales, de contacto y dominio.
 - Confirmar que `NEXT_PUBLIC_SITE_URL` ya sea el dominio público final.
-- Cargar SMTP real para contacto y, si aplica, para diagnóstico.
+- Cargar SMTP real con `SMTP_PASSWORD` y `ADMIN_NOTIFICATION_EMAIL`.
+- Configurar destinos específicos por módulo solo si deben llegar a buzones distintos.
 - Cargar webhook real de n8n para diagnóstico si formará parte del flujo 1.0.
 - Cargar credenciales reales de Google Calendar/Meet y ejecutar la prueba manual completa.
 - Ejecutar `npm run lint`.
