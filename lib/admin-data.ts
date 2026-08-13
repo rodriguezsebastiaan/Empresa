@@ -267,13 +267,13 @@ function buildContactWhere(filters: AdminListFilters): Prisma.ContactSubmissionW
 
     andClauses.push({
       OR: [
-        { name: { contains: filters.q, mode: 'insensitive' } },
-        { company: { contains: filters.q, mode: 'insensitive' } },
-        { email: { contains: filters.q, mode: 'insensitive' } },
+        { name: { contains: filters.q } },
+        { company: { contains: filters.q } },
+        { email: { contains: filters.q } },
         { emailNormalized: { contains: emailNormalized } },
         { phone: { contains: filters.q } },
-        { subject: { contains: filters.q, mode: 'insensitive' } },
-        { message: { contains: filters.q, mode: 'insensitive' } },
+        { subject: { contains: filters.q } },
+        { message: { contains: filters.q } },
       ],
     })
   }
@@ -302,14 +302,14 @@ function buildDiagnosticWhere(filters: AdminListFilters): Prisma.DiagnosticSubmi
 
     andClauses.push({
       OR: [
-        { name: { contains: filters.q, mode: 'insensitive' } },
-        { company: { contains: filters.q, mode: 'insensitive' } },
-        { email: { contains: filters.q, mode: 'insensitive' } },
+        { name: { contains: filters.q } },
+        { company: { contains: filters.q } },
+        { email: { contains: filters.q } },
         { emailNormalized: { contains: emailNormalized } },
         { phone: { contains: filters.q } },
-        { city: { contains: filters.q, mode: 'insensitive' } },
-        { sector: { contains: filters.q, mode: 'insensitive' } },
-        { summary: { contains: filters.q, mode: 'insensitive' } },
+        { city: { contains: filters.q } },
+        { sector: { contains: filters.q } },
+        { summary: { contains: filters.q } },
       ],
     })
   }
@@ -338,13 +338,13 @@ function buildBookingWhere(filters: AdminListFilters): Prisma.AdvisoryBookingWhe
 
     andClauses.push({
       OR: [
-        { fullName: { contains: filters.q, mode: 'insensitive' } },
-        { company: { contains: filters.q, mode: 'insensitive' } },
-        { email: { contains: filters.q, mode: 'insensitive' } },
+        { fullName: { contains: filters.q } },
+        { company: { contains: filters.q } },
+        { email: { contains: filters.q } },
         { emailNormalized: { contains: emailNormalized } },
         { phone: { contains: filters.q } },
-        { city: { contains: filters.q, mode: 'insensitive' } },
-        { processGoal: { contains: filters.q, mode: 'insensitive' } },
+        { city: { contains: filters.q } },
+        { processGoal: { contains: filters.q } },
       ],
     })
   }
@@ -857,19 +857,16 @@ export async function getRelatedActivityForRecord(input: {
     contactOr.push({
       company: {
         equals: matchKey.company,
-        mode: 'insensitive',
       },
     })
     diagnosticOr.push({
       company: {
         equals: matchKey.company,
-        mode: 'insensitive',
       },
     })
     bookingOr.push({
       company: {
         equals: matchKey.company,
-        mode: 'insensitive',
       },
     })
   }

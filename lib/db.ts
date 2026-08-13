@@ -1,4 +1,4 @@
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as typeof globalThis & {
@@ -12,9 +12,7 @@ function createPrismaClient() {
     throw new Error('DATABASE_URL_NOT_CONFIGURED')
   }
 
-  const adapter = new PrismaPg({
-    connectionString,
-  })
+  const adapter = new PrismaMariaDb(connectionString)
 
   return new PrismaClient({
     adapter,

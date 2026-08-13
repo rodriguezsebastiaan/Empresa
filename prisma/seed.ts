@@ -27,7 +27,7 @@ async function main() {
   const emailNormalized = normalizeEmail(email)
   const passwordHash = await hashPassword(password)
 
-  await prisma.adminUser.upsert({
+  const owner = await prisma.adminUser.upsert({
     where: {
       emailNormalized,
     },
@@ -47,6 +47,76 @@ async function main() {
       role: 'OWNER',
     },
   })
+
+  const permissions = [
+    ['dashboard:view', 'Ver indicadores ejecutivos del panel.'],
+    ['contacts:view', 'Ver formularios breves.'],
+    ['contacts:edit', 'Actualizar estados y notas de formularios breves.'],
+    ['diagnostics:view', 'Ver diagnósticos empresariales.'],
+    ['diagnostics:edit', 'Actualizar estados y notas de diagnósticos empresariales.'],
+    ['bookings:view', 'Ver asesorías agendadas.'],
+    ['bookings:edit', 'Administrar estados, notas y reagendamientos de asesorías.'],
+    ['exports:download', 'Exportar información operativa en CSV.'],
+  ] as const
+
+  for (const [key, description] of permissions) {
+    const permission = await prisma.adminPermission.upsert({
+      where: { key },
+      update: { description },
+      create: { key, description },
+    })
+
+    for (const role of ['OWNER', 'ADMIN'] as const) {
+      await prisma.adminRolePermission.upsert({
+        where: {
+          role_permissionId: {
+            role,
+            permissionId: permission.id,
+          },
+        },
+        update: {},
+        create: {
+          role,
+          permissionId: permission.id,
+        },
+      })
+    }
+  }
+
+  const settings = await prisma.availabilitySettings.findFirst({
+    orderBy: { createdAt: 'asc' },
+  })
+
+  if (!settings) {
+    await prisma.availabilitySettings.create({
+      data: {
+        isEnabled: true,
+        timezone: 'America/Bogota',
+        timezoneLabel: 'America/Bogota',
+        durationMinutes: 45,
+        bufferMinutes: 15,
+        minNoticeHours: 12,
+        maxDaysAhead: 30,
+        defaultModality: 'Virtual',
+        calendarMockMode: 'none',
+        updatedByAdminId: owner.id,
+        rules: {
+          create: [
+            { weekday: 1, startTime: '09:00', endTime: '12:00', sortOrder: 10 },
+            { weekday: 1, startTime: '14:00', endTime: '17:00', sortOrder: 20 },
+            { weekday: 2, startTime: '09:00', endTime: '12:00', sortOrder: 10 },
+            { weekday: 2, startTime: '14:00', endTime: '17:00', sortOrder: 20 },
+            { weekday: 3, startTime: '09:00', endTime: '12:00', sortOrder: 10 },
+            { weekday: 3, startTime: '14:00', endTime: '17:00', sortOrder: 20 },
+            { weekday: 4, startTime: '09:00', endTime: '12:00', sortOrder: 10 },
+            { weekday: 4, startTime: '14:00', endTime: '17:00', sortOrder: 20 },
+            { weekday: 5, startTime: '09:00', endTime: '12:00', sortOrder: 10 },
+            { weekday: 5, startTime: '14:00', endTime: '17:00', sortOrder: 20 },
+          ],
+        },
+      },
+    })
+  }
 }
 
 main()

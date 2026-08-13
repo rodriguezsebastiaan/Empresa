@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
-import test from 'node:test'
+import test, { after } from 'node:test'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { config as loadDotenv } from 'dotenv'
 import { rescheduleAdvisoryBooking } from '@/lib/admin-data'
-import { getDb } from '@/lib/db'
+import { disconnectDb, getDb } from '@/lib/db'
+import { addDaysToDateValue, getTodayInAdvisoryZone } from '@/lib/advisory-time'
 import {
   assertSlotAvailable,
   buildAvailabilityRangesFromTimes,
@@ -20,7 +21,18 @@ for (const fileName of ['.env', '.env.local']) {
   }
 }
 
-const testDate = '2026-08-03'
+const today = getTodayInAdvisoryZone()
+const testDate = addDaysToDateValue(today, 7)
+const specialDate = addDaysToDateValue(today, 8)
+const exactDate = addDaysToDateValue(today, 9)
+const blockedDate = addDaysToDateValue(today, 10)
+const restoreDate = addDaysToDateValue(today, 11)
+const sourceDate = addDaysToDateValue(today, 12)
+const targetDate = addDaysToDateValue(today, 13)
+
+after(async () => {
+  await disconnectDb()
+})
 
 test('availability generates slots from weekly rules and removes local bookings', async () => {
   const db = getDb()
@@ -98,7 +110,7 @@ test('availability respects blocked periods and special dates', async () => {
   const exception = await db.availabilityException.create({
     data: {
       settingsId: settings.id,
-      date: '2026-08-04',
+      date: specialDate,
       type: 'SPECIAL_HOURS',
       reason: 'QA temporal',
       ranges: {
@@ -111,7 +123,7 @@ test('availability respects blocked periods and special dates', async () => {
   })
 
   try {
-    const special = await listAvailableSlots('2026-08-04')
+    const special = await listAvailableSlots(specialDate)
     assert.deepEqual(
       special.slots.map((slot) => slot.value),
       ['15:00'],
@@ -124,7 +136,6 @@ test('availability respects blocked periods and special dates', async () => {
 test('specific dates override weekly rules with exact configured hours', async () => {
   const db = getDb()
   const settings = await ensureAvailabilitySettings()
-  const exactDate = '2026-08-18'
   const ranges = buildAvailabilityRangesFromTimes(['14:00', '15:00', '16:00'], settings.durationMinutes)
 
   const exception = await db.availabilityException.create({
@@ -153,7 +164,6 @@ test('specific dates override weekly rules with exact configured hours', async (
 test('blocked specific date hides all weekly availability', async () => {
   const db = getDb()
   const settings = await ensureAvailabilitySettings()
-  const blockedDate = '2026-08-19'
 
   const exception = await db.availabilityException.create({
     data: {
@@ -175,7 +185,6 @@ test('blocked specific date hides all weekly availability', async () => {
 test('removing a specific date restores weekly rules', async () => {
   const db = getDb()
   const settings = await ensureAvailabilitySettings()
-  const restoreDate = '2026-08-20'
   const weeklyRule = await db.availabilityRule.create({
     data: {
       settingsId: settings.id,
@@ -217,8 +226,6 @@ test('removing a specific date restores weekly rules', async () => {
 test('reschedule moves an active booking to selected target availability', async () => {
   const db = getDb()
   const settings = await ensureAvailabilitySettings()
-  const sourceDate = '2026-08-24'
-  const targetDate = '2026-08-25'
   const requestId = `test-reschedule-${Date.now()}`
   const sourceSlot = await assertSlotAvailable(sourceDate, '09:00')
   const admin = await db.adminUser.findFirst({ select: { id: true } })
