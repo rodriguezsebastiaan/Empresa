@@ -3,12 +3,15 @@ import {
   type AdvisoryBookingStatus,
   type ContactSubmissionStatus,
   type DiagnosticSubmissionStatus,
+  type DeliveryStatus,
   Prisma,
 } from '@prisma/client'
 import { siteConfig } from '@/config/site'
 import { getTodayInAdvisoryZone } from '@/lib/advisory-time'
 import { getDb } from '@/lib/db'
-import { deleteGoogleCalendarEvent } from '@/lib/google-calendar/events'
+import { getCalendarAdapter } from '@/lib/calendar-adapter'
+import { getResendAdapter } from '@/lib/resend-adapter'
+import { assertSlotAvailable, buildAdvisorySlotKey } from '@/lib/availability-service'
 import { normalizeEmail, sanitizeInline, sanitizeMultiline } from '@/lib/security'
 
 const CONTACT_PAGE_SIZE = 10
@@ -1198,7 +1201,24 @@ export async function updateAdvisoryBookingStatus(input: {
       id: true,
       status: true,
       slotKey: true,
+      fullName: true,
+      company: true,
+      email: true,
+      phone: true,
+      processGoal: true,
+      scheduledDate: true,
+      scheduledTime: true,
+      timezone: true,
+      durationMinutes: true,
+      meetingUrl: true,
+      googleMeetUrl: true,
+      calendarEventId: true,
+      calendarId: true,
       googleCalendarEventId: true,
+      clientEmailStatus: true,
+      customerEmailStatus: true,
+      customerCancellationEmailStatus: true,
+      companyCancellationEmailStatus: true,
     },
   })
 
@@ -1210,11 +1230,49 @@ export async function updateAdvisoryBookingStatus(input: {
     return current
   }
 
-  if (shouldReleaseBookingSlot(nextStatus) && current.googleCalendarEventId) {
-    await deleteGoogleCalendarEvent(current.googleCalendarEventId)
+  const note = sanitizeMultiline(input.note ?? '').slice(0, 2000)
+  let cancellationSyncStatus: 'SENT' | 'FAILED' | 'SKIPPED' | null = null
+  let cancellationSyncError: string | null = null
+  const eventId = current.calendarEventId ?? current.googleCalendarEventId
+
+  if (shouldReleaseBookingSlot(nextStatus) && eventId) {
+    const snapshot = await db.availabilitySettings.findFirst({
+      orderBy: { createdAt: 'asc' },
+      select: { calendarMockMode: true },
+    })
+
+    const result = await getCalendarAdapter(snapshot?.calendarMockMode ?? 'none').cancelEvent(
+      eventId,
+      note,
+    )
+    cancellationSyncStatus = result.status
+    cancellationSyncError = result.error
   }
 
-  const note = sanitizeMultiline(input.note ?? '').slice(0, 2000)
+  let cancellationEmailStatus: DeliveryStatus | null = null
+  let cancellationEmailError: string | null = null
+
+  if (
+    shouldReleaseBookingSlot(nextStatus) &&
+    current.customerCancellationEmailStatus !== 'SENT'
+  ) {
+    const result = await getResendAdapter().sendCancellation({
+      bookingId: current.id,
+      fullName: current.fullName,
+      company: current.company,
+      email: current.email,
+      phone: current.phone,
+      dateLabel: current.scheduledDate,
+      timeLabel: current.scheduledTime,
+      timezone: current.timezone,
+      meetUrl: current.meetingUrl ?? current.googleMeetUrl,
+      reason: current.processGoal,
+      description: current.processGoal,
+      cancellationReason: note || undefined,
+    })
+    cancellationEmailStatus = result.status
+    cancellationEmailError = result.error
+  }
 
   return db.$transaction(async (tx) => {
     const updated = await tx.advisoryBooking.update({
@@ -1224,6 +1282,21 @@ export async function updateAdvisoryBookingStatus(input: {
       data: {
         status: nextStatus,
         slotKey: shouldReleaseBookingSlot(nextStatus) ? null : current.slotKey,
+        cancelledAt: shouldReleaseBookingSlot(nextStatus) ? new Date() : undefined,
+        cancellationReason: shouldReleaseBookingSlot(nextStatus) ? note || null : undefined,
+        calendarSyncStatus: cancellationSyncStatus ?? undefined,
+        calendarSyncError: shouldReleaseBookingSlot(nextStatus)
+          ? cancellationSyncError
+          : undefined,
+        customerEmailStatus: cancellationEmailStatus ?? undefined,
+        clientEmailStatus: cancellationEmailStatus ?? undefined,
+        customerCancellationEmailStatus: cancellationEmailStatus ?? undefined,
+        companyCancellationEmailStatus: cancellationEmailStatus ?? undefined,
+        lastDeliveryAttemptAt: cancellationEmailStatus ? new Date() : undefined,
+        lastDeliveryError:
+          shouldReleaseBookingSlot(nextStatus)
+            ? [cancellationSyncError, cancellationEmailError].filter(Boolean).join(' ') || null
+            : undefined,
       },
     })
 
@@ -1259,6 +1332,80 @@ export async function addAdvisoryBookingNote(input: {
       advisoryBookingId: input.id,
       body: note,
     },
+  })
+}
+
+export async function rescheduleAdvisoryBooking(input: {
+  id: string
+  date: string
+  time: string
+  note?: string
+  adminUserId: string
+}) {
+  const db = getDb()
+  const current = await db.advisoryBooking.findUnique({
+    where: { id: input.id },
+    select: {
+      id: true,
+      status: true,
+      scheduledDate: true,
+      scheduledTime: true,
+      slotKey: true,
+    },
+  })
+
+  if (!current) {
+    throw new Error('NOT_FOUND')
+  }
+
+  if (!bookingActiveStatuses.includes(current.status)) {
+    throw new Error('BOOKING_NOT_ACTIVE')
+  }
+
+  const slotCheck = await assertSlotAvailable(input.date, input.time)
+  const nextSlotKey = buildAdvisorySlotKey(slotCheck.startAt, slotCheck.endAt)
+  const note = sanitizeMultiline(input.note ?? '').slice(0, 2000)
+  const historyNote =
+    note ||
+    `Reprogramada desde ${current.scheduledDate} ${current.scheduledTime} hacia ${input.date} ${input.time}.`
+
+  return db.$transaction(async (tx) => {
+    const updated = await tx.advisoryBooking.update({
+      where: { id: input.id },
+      data: {
+        status: 'RESCHEDULED',
+        scheduledDate: input.date,
+        scheduledTime: input.time,
+        startAt: slotCheck.startAt,
+        endAt: slotCheck.endAt,
+        durationMinutes: slotCheck.snapshot.settings.durationMinutes,
+        timezone: slotCheck.snapshot.settings.timezoneLabel,
+        modality: slotCheck.snapshot.settings.defaultModality,
+        slotKey: nextSlotKey,
+        calendarSyncStatus: 'SKIPPED',
+        calendarSyncError: 'Reprogramacion local. Integraciones externas aun no retomadas.',
+      },
+    })
+
+    await tx.statusHistory.create({
+      data: {
+        adminUserId: input.adminUserId,
+        advisoryBookingId: input.id,
+        fromStatus: current.status,
+        toStatus: 'RESCHEDULED',
+        note: historyNote,
+        metadata: {
+          sourceDate: current.scheduledDate,
+          sourceTime: current.scheduledTime,
+          targetDate: input.date,
+          targetTime: input.time,
+          previousSlotKey: current.slotKey,
+          nextSlotKey,
+        },
+      },
+    })
+
+    return updated
   })
 }
 

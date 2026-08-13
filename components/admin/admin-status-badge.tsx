@@ -21,6 +21,26 @@ const badgeClasses: Record<string, string> = {
   SKIPPED: 'border-muted-foreground/30 bg-muted/25 text-muted-foreground',
 }
 
+const statusDotClasses: Record<string, string> = {
+  NEW: 'bg-primary',
+  IN_REVIEW: 'bg-sky-300',
+  CONTACTED: 'bg-emerald-300',
+  CLOSED: 'bg-muted-foreground',
+  IN_ANALYSIS: 'bg-amber-300',
+  PROPOSAL_SENT: 'bg-fuchsia-300',
+  WON: 'bg-emerald-300',
+  LOST: 'bg-rose-300',
+  PENDING: 'bg-amber-300',
+  CONFIRMED: 'bg-sky-300',
+  COMPLETED: 'bg-emerald-300',
+  CANCELLED: 'bg-rose-300',
+  RESCHEDULED: 'bg-indigo-300',
+  NO_SHOW: 'bg-orange-300',
+  SENT: 'bg-emerald-300',
+  FAILED: 'bg-rose-300',
+  SKIPPED: 'bg-muted-foreground',
+}
+
 export function AdminStatusBadge({
   status,
   compact = false,
@@ -31,11 +51,12 @@ export function AdminStatusBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border font-semibold tracking-[0.18em]',
+        'inline-flex items-center gap-1.5 rounded-full border font-semibold tracking-[0.16em]',
         compact ? 'px-2.5 py-1 text-[0.6rem]' : 'px-3 py-1.5 text-[0.64rem]',
         badgeClasses[status] ?? 'border-border/70 bg-background/40 text-foreground/80',
       )}
     >
+      <span className={cn('size-1.5 rounded-full', statusDotClasses[status] ?? 'bg-foreground/60')} />
       {getStatusLabel(status)}
     </span>
   )

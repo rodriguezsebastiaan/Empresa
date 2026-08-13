@@ -1,6 +1,6 @@
 import { CalendarCheck2, ClipboardList, Mail } from 'lucide-react'
 import type { Metadata } from 'next'
-import { AdminExecutiveModuleCard } from '@/components/admin/admin-ui'
+import { AdminExecutiveModuleCard, AdminPageHeader } from '@/components/admin/admin-ui'
 import { getAdminDashboardSnapshot } from '@/lib/admin-data'
 
 export const dynamic = 'force-dynamic'
@@ -14,21 +14,24 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[1.75rem] border border-border/70 bg-background/50 p-6 backdrop-blur-sm lg:p-8">
-        <p className="text-xs font-semibold tracking-[0.32em] text-primary">DASHBOARD</p>
-        <h1 className="mt-4 text-3xl font-semibold text-foreground">Operación comercial en curso</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Tres módulos, una sola lectura: qué ingresó, qué sigue pendiente y qué ya avanzó lo
-          suficiente como para no perder tiempo buscando contexto.
-        </p>
-      </section>
+      <AdminPageHeader
+        eyebrow="DASHBOARD"
+        title="Operacion comercial en curso"
+        description="Tres modulos, una sola lectura: que ingreso, que sigue pendiente y que ya avanzo lo suficiente para mantener el seguimiento ordenado."
+        action={
+          <div className="rounded-2xl border border-primary/20 bg-primary/[0.06] px-4 py-3 text-right">
+            <p className="text-[0.62rem] font-semibold tracking-[0.18em] text-primary">VISTA EJECUTIVA</p>
+            <p className="mt-1 text-sm text-muted-foreground">Prospectos, diagnosticos y asesorias.</p>
+          </div>
+        }
+      />
 
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <AdminExecutiveModuleCard
           href="/admin/contactos"
           label="CONTACTOS"
           title="Formularios breves"
-          description="Entradas rápidas para responder, actualizar estado y sostener el seguimiento sin abrir vistas secundarias."
+          description="Entradas rapidas para responder, actualizar estado y sostener seguimiento sin perder contexto."
           total={snapshot.modules.contacts.total}
           totalLabel="TOTAL RECIBIDO"
           tone="primary"
@@ -51,9 +54,9 @@ export default async function AdminDashboardPage() {
 
         <AdminExecutiveModuleCard
           href="/admin/diagnosticos"
-          label="DIAGNÓSTICOS"
-          title="Diagnósticos empresariales"
-          description="Lectura ejecutiva de cada empresa para revisar necesidad, operación actual y siguiente paso comercial."
+          label="DIAGNOSTICOS"
+          title="Diagnosticos empresariales"
+          description="Lectura ejecutiva de cada empresa para revisar necesidad, operacion actual y siguiente paso comercial."
           total={snapshot.modules.diagnostics.total}
           totalLabel="TOTAL RECIBIDO"
           tone="accent"
@@ -77,9 +80,9 @@ export default async function AdminDashboardPage() {
         <div className="md:col-span-2 xl:col-span-1">
           <AdminExecutiveModuleCard
             href="/admin/reuniones"
-            label="ASESORÍAS"
-            title="Asesorías agendadas"
-            description="Asesorías listas para confirmar, ejecutar y cerrar con trazabilidad completa sobre Meet, Calendar y seguimiento."
+            label="ASESORIAS"
+            title="Asesorias agendadas"
+            description="Asesorias listas para confirmar, ejecutar, reprogramar y cerrar con trazabilidad operativa."
             total={snapshot.modules.bookings.total}
             totalLabel="TOTAL REGISTRADO"
             tone="success"

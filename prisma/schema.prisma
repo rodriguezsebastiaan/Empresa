@@ -43,6 +43,11 @@ enum AdvisoryBookingStatus {
   NO_SHOW
 }
 
+enum AvailabilityExceptionType {
+  BLOCKED_DAY
+  SPECIAL_HOURS
+}
+
 model AdminUser {
   id               String         @id @default(uuid()) @db.Uuid
   email            String         @db.VarChar(191)
@@ -59,6 +64,7 @@ model AdminUser {
   sessions         AdminSession[]
   notes            AdminNote[]
   statusChanges    StatusHistory[]
+  availabilitySettings AvailabilitySettings[]
 
   @@index([isActive, createdAt])
 }
@@ -173,14 +179,28 @@ model AdvisoryBooking {
   durationMinutes        Int
   privacyAcceptedAt      DateTime
   privacyPolicyVersion   String                @db.VarChar(120)
+  calendarEventId        String?               @unique @db.VarChar(191)
+  calendarId             String?               @db.VarChar(191)
+  meetingUrl             String?               @db.Text
   googleCalendarEventId  String?               @unique @db.VarChar(191)
   googleCalendarHtmlLink String?               @db.Text
   googleMeetUrl          String?               @db.Text
   calendarEventStatus    DeliveryStatus        @default(PENDING)
+  calendarSyncStatus     DeliveryStatus        @default(PENDING)
+  calendarSyncedAt       DateTime?
+  calendarSyncError      String?               @db.Text
   internalEmailStatus    DeliveryStatus        @default(PENDING)
   clientEmailStatus      DeliveryStatus        @default(PENDING)
+  companyEmailStatus     DeliveryStatus        @default(PENDING)
+  customerEmailStatus    DeliveryStatus        @default(PENDING)
+  customerConfirmationEmailStatus DeliveryStatus @default(PENDING)
+  companyConfirmationEmailStatus  DeliveryStatus @default(PENDING)
+  customerCancellationEmailStatus DeliveryStatus @default(PENDING)
+  companyCancellationEmailStatus  DeliveryStatus @default(PENDING)
   lastDeliveryError      String?               @db.Text
   lastDeliveryAttemptAt  DateTime?
+  cancelledAt            DateTime?
+  cancellationReason     String?               @db.Text
   requestOrigin          String?               @db.VarChar(191)
   requestPath            String?               @db.VarChar(191)
   referer                String?               @db.VarChar(191)
@@ -194,6 +214,99 @@ model AdvisoryBooking {
   @@index([status, startAt])
   @@index([emailNormalized, createdAt])
   @@index([scheduledDate, status])
+}
+
+model AvailabilitySettings {
+  id                 String   @id @default(uuid()) @db.Uuid
+  isEnabled          Boolean  @default(true)
+  timezone           String   @default("America/Bogota") @db.VarChar(80)
+  timezoneLabel      String   @default("America/Bogota") @db.VarChar(80)
+  durationMinutes    Int      @default(45)
+  bufferMinutes      Int      @default(15)
+  minNoticeHours     Int      @default(12)
+  maxDaysAhead       Int      @default(30)
+  defaultModality    String   @default("Virtual") @db.VarChar(80)
+  calendarMockMode   String   @default("none") @db.VarChar(40)
+  updatedByAdminId   String?  @db.Uuid
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  updatedByAdmin     AdminUser? @relation(fields: [updatedByAdminId], references: [id], onDelete: SetNull)
+  rules              AvailabilityRule[]
+  exceptions         AvailabilityException[]
+  blockedPeriods     BlockedPeriod[]
+
+  @@index([isEnabled, updatedAt])
+}
+
+model AvailabilityRule {
+  id         String               @id @default(uuid()) @db.Uuid
+  settingsId String               @db.Uuid
+  weekday    Int
+  startTime  String               @db.VarChar(5)
+  endTime    String               @db.VarChar(5)
+  isEnabled  Boolean              @default(true)
+  sortOrder  Int                  @default(0)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  settings   AvailabilitySettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@index([settingsId, weekday, isEnabled])
+}
+
+model AvailabilityException {
+  id         String                    @id @default(uuid()) @db.Uuid
+  settingsId String                    @db.Uuid
+  date       String                    @db.VarChar(10)
+  type       AvailabilityExceptionType
+  reason     String?                   @db.VarChar(180)
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+  settings   AvailabilitySettings      @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  ranges     AvailabilityExceptionRange[]
+
+  @@index([settingsId, date, type])
+}
+
+model AvailabilityExceptionRange {
+  id          String                @id @default(uuid()) @db.Uuid
+  exceptionId String                @db.Uuid
+  startTime   String                @db.VarChar(5)
+  endTime     String                @db.VarChar(5)
+  sortOrder   Int                   @default(0)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  exception   AvailabilityException @relation(fields: [exceptionId], references: [id], onDelete: Cascade)
+
+  @@index([exceptionId, sortOrder])
+}
+
+model BlockedPeriod {
+  id         String               @id @default(uuid()) @db.Uuid
+  settingsId String               @db.Uuid
+  date       String               @db.VarChar(10)
+  startTime  String               @db.VarChar(5)
+  endTime    String               @db.VarChar(5)
+  reason     String?              @db.VarChar(180)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  settings   AvailabilitySettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@index([settingsId, date])
+}
+
+model CalendarIntegration {
+  id             String         @id @default(uuid()) @db.Uuid
+  provider       String         @default("google_calendar") @db.VarChar(80)
+  mode           String         @default("mock") @db.VarChar(40)
+  calendarId     String?        @db.VarChar(191)
+  isEnabled      Boolean        @default(false)
+  syncStatus     DeliveryStatus @default(SKIPPED)
+  lastSyncError  String?        @db.Text
+  lastCheckedAt  DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([provider, mode, isEnabled])
 }
 
 model AdminNote {

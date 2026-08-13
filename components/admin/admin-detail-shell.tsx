@@ -26,10 +26,11 @@ export function AdminDetailShell({
 }) {
   return (
     <div className="space-y-6">
-      <section className="rounded-[1.85rem] border border-border/70 bg-background/50 p-6 backdrop-blur-sm lg:p-8">
+      <section className="relative overflow-hidden rounded-[1.85rem] border border-border/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.045),rgba(4,13,20,0.46)_48%,rgba(4,13,20,0.7))] p-6 shadow-[0_24px_90px_-72px_var(--primary)] backdrop-blur-sm lg:p-8">
+        <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent" />
         <Link
           href={backHref}
-          className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/35 px-3.5 py-2 text-xs font-semibold tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
+          className="inline-flex items-center gap-2 rounded-xl border border-border/70 bg-background/35 px-3.5 py-2 text-xs font-semibold tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/35 hover:bg-primary/[0.06] hover:text-primary"
         >
           <ChevronLeft className="size-4" />
           {backLabel}

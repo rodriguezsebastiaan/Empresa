@@ -42,10 +42,11 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   const errorMessage = getAdminLoginErrorMessage(errorCode)
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] px-4 py-8 text-foreground lg:px-6">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_15%_5%,rgba(45,242,230,0.14),transparent_31%),radial-gradient(circle_at_82%_18%,rgba(125,211,252,0.08),transparent_28%),linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] px-4 py-8 text-foreground lg:px-6">
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl items-center justify-center">
         <div className="grid w-full max-w-5xl gap-8 lg:grid-cols-[minmax(0,1fr)_28rem]">
-          <section className="rounded-[2rem] border border-border/70 bg-background/45 p-8 backdrop-blur-sm lg:p-10">
+          <section className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.05),rgba(4,13,20,0.48)_45%,rgba(4,13,20,0.76))] p-8 shadow-[0_28px_100px_-78px_var(--primary)] backdrop-blur-sm lg:p-10">
+            <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
             <div className="max-w-xl">
               <Link
                 href="/"
@@ -66,14 +67,14 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
+                <div className="rounded-2xl border border-primary/20 bg-primary/[0.055] p-4 shadow-inner shadow-black/5">
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">SEGURIDAD</p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                     Sesión en cookie httpOnly, contraseña con hash fuerte y bloqueo temporal
                     después de intentos fallidos.
                   </p>
                 </div>
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
+                <div className="rounded-2xl border border-border/70 bg-background/35 p-4 shadow-inner shadow-black/5">
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">ALCANCE</p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                     Dashboard, contactos, diagnósticos, asesorías, estados, notas, historial y exportación CSV.
@@ -83,7 +84,8 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
             </div>
           </section>
 
-          <section className={panelClassName}>
+          <section className={`${panelClassName} relative overflow-hidden shadow-[0_24px_90px_-76px_var(--primary)]`}>
+            <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
             <p className="text-xs font-semibold tracking-[0.32em] text-primary">INICIAR SESIÓN</p>
             <h2 className="mt-4 text-2xl font-semibold text-foreground">Acceso administrativo</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

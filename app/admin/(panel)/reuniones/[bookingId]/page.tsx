@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { AdminBookingRescheduleForm } from '@/components/admin/admin-booking-reschedule-form'
 import { AdminDetailShell } from '@/components/admin/admin-detail-shell'
 import { AdminStatusBadge } from '@/components/admin/admin-status-badge'
 import {
@@ -59,6 +60,7 @@ export default async function AdminBookingDetailPage({
 
   const listHref = buildAdminListHref('/admin/reuniones', filters)
   const returnTo = buildAdminDetailHref('/admin/reuniones', detail.id, filters)
+  const meetUrl = detail.meetingUrl ?? detail.googleMeetUrl
 
   return (
     <AdminDetailShell
@@ -76,19 +78,19 @@ export default async function AdminBookingDetailPage({
         </>
       }
       actions={[
-        ...(detail.googleMeetUrl
+        ...(meetUrl
           ? [
               {
                 label: 'ABRIR MEET',
                 kind: 'link' as const,
-                value: detail.googleMeetUrl,
+                value: meetUrl,
                 icon: 'video' as const,
                 external: true,
               },
               {
                 label: 'COPIAR MEET',
                 kind: 'copy' as const,
-                value: detail.googleMeetUrl,
+                value: meetUrl,
                 icon: 'copy' as const,
               },
             ]
@@ -151,9 +153,9 @@ export default async function AdminBookingDetailPage({
               <AdminInfoCard label="MODALIDAD">{detail.modality}</AdminInfoCard>
               <AdminInfoCard label="CIUDAD">{detail.city}</AdminInfoCard>
               <AdminInfoCard label="GOOGLE MEET">
-                {detail.googleMeetUrl ? (
+                {meetUrl ? (
                   <a
-                    href={detail.googleMeetUrl}
+                    href={meetUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:opacity-80"
@@ -178,7 +180,13 @@ export default async function AdminBookingDetailPage({
                   'Sin enlace HTML disponible.'
                 )}
                 <p className="mt-3 break-all text-xs text-muted-foreground">
-                  ID: {detail.googleCalendarEventId ?? 'Sin dato'}
+                  ID: {detail.calendarEventId ?? detail.googleCalendarEventId ?? 'Sin dato'}
+                </p>
+                <p className="mt-1 break-all text-xs text-muted-foreground">
+                  Calendario: {detail.calendarId ?? 'Sin dato'}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Sincronizado: {detail.calendarSyncedAt ? formatAdminDateTime(detail.calendarSyncedAt) : 'Sin dato'}
                 </p>
               </AdminInfoCard>
             </div>
@@ -198,10 +206,16 @@ export default async function AdminBookingDetailPage({
             title="GESTIÓN"
             description="Actualice el estado de la asesoría y documente reprogramaciones, cierre o novedades."
           >
+            <AdminBookingRescheduleForm bookingId={detail.id} returnTo={returnTo} />
+
+            <details className="mt-4 rounded-2xl border border-border/70 bg-background/35 p-4">
+              <summary className="cursor-pointer list-none text-xs font-semibold tracking-[0.18em] text-muted-foreground">
+                CAMBIAR ESTADO MANUALMENTE
+              </summary>
             <form
               action={`/admin/api/reuniones/${detail.id}/status`}
               method="post"
-              className="space-y-4"
+              className="mt-4 space-y-4"
             >
               <input type="hidden" name="returnTo" value={returnTo} />
               <AdminInfoCard label="ESTADO ACTUAL">
@@ -228,6 +242,7 @@ export default async function AdminBookingDetailPage({
                 GUARDAR ESTADO
               </button>
             </form>
+            </details>
           </AdminSectionCard>
 
           <AdminSectionCard

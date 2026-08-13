@@ -6,17 +6,17 @@ import { formatAdminDateTime, type RelatedActivityItem } from '@/lib/admin-data'
 import { cn } from '@/lib/utils'
 
 const tileToneClasses = {
-  default: 'border-border/70 bg-background/35',
-  primary: 'border-primary/25 bg-primary/10',
-  success: 'border-emerald-400/25 bg-emerald-400/10',
-  warning: 'border-amber-400/25 bg-amber-400/10',
-  accent: 'border-sky-400/25 bg-sky-400/10',
+  default: 'border-border/70 bg-background/38',
+  primary: 'border-primary/25 bg-primary/[0.075]',
+  success: 'border-emerald-400/25 bg-emerald-400/[0.075]',
+  warning: 'border-amber-400/25 bg-amber-400/[0.075]',
+  accent: 'border-sky-400/25 bg-sky-400/[0.075]',
 } as const
 
 const moduleToneClasses = {
-  primary: 'border-primary/25 bg-primary/8 text-primary',
-  accent: 'border-sky-400/25 bg-sky-400/8 text-sky-200',
-  success: 'border-emerald-400/25 bg-emerald-400/8 text-emerald-200',
+  primary: 'border-primary/25 bg-primary/[0.08] text-primary',
+  accent: 'border-sky-400/25 bg-sky-400/[0.08] text-sky-200',
+  success: 'border-emerald-400/25 bg-emerald-400/[0.08] text-emerald-200',
 } as const
 
 const relatedEntityLabels: Record<RelatedActivityItem['entity'], string> = {
@@ -55,8 +55,9 @@ export function AdminExecutiveModuleCard({
     <Link
       href={href}
       scroll={false}
-      className="group block rounded-[2rem] border border-border/70 bg-background/45 p-6 backdrop-blur-sm transition-colors hover:border-primary/30 lg:p-7"
+      className="group relative block overflow-hidden rounded-[2rem] border border-border/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.045),rgba(4,13,20,0.42)_42%,rgba(4,13,20,0.72))] p-6 shadow-[0_24px_90px_-70px_var(--primary)] backdrop-blur-sm transition-colors hover:border-primary/30 lg:p-7"
     >
+      <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent" />
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-xs font-semibold tracking-[0.28em] text-primary">{label}</p>
@@ -77,7 +78,7 @@ export function AdminExecutiveModuleCard({
         </div>
       </div>
 
-      <div className="mt-6 rounded-[1.55rem] border border-border/70 bg-background/34 p-5">
+      <div className="mt-6 rounded-[1.55rem] border border-border/70 bg-background/34 p-5 shadow-inner shadow-black/10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[0.64rem] font-semibold tracking-[0.18em] text-primary">{totalLabel}</p>
@@ -136,6 +137,32 @@ export function AdminExecutiveModuleCard({
   )
 }
 
+export function AdminPageHeader({
+  eyebrow,
+  title,
+  description,
+  action,
+}: {
+  eyebrow: string
+  title: string
+  description: string
+  action?: ReactNode
+}) {
+  return (
+    <section className="relative overflow-hidden rounded-[1.85rem] border border-border/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.045),rgba(4,13,20,0.46)_48%,rgba(4,13,20,0.7))] p-6 shadow-[0_24px_90px_-72px_var(--primary)] backdrop-blur-sm lg:p-8">
+      <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent" />
+      <div className="flex flex-wrap items-start justify-between gap-5">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold tracking-[0.32em] text-primary">{eyebrow}</p>
+          <h1 className="mt-4 text-3xl font-semibold leading-tight text-foreground">{title}</h1>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p>
+        </div>
+        {action ? <div className="shrink-0">{action}</div> : null}
+      </div>
+    </section>
+  )
+}
+
 export function AdminModuleSummaryBoard({
   totalLabel,
   total,
@@ -156,7 +183,8 @@ export function AdminModuleSummaryBoard({
   const totalMetrics = metrics.reduce((sum, metric) => sum + metric.value, 0)
 
   return (
-    <section className="rounded-[1.7rem] border border-border/70 bg-background/40 p-5 backdrop-blur-sm lg:p-6">
+    <section className="relative overflow-hidden rounded-[1.7rem] border border-border/70 bg-[linear-gradient(135deg,rgba(255,255,255,0.04),rgba(4,13,20,0.46)_46%,rgba(4,13,20,0.7))] p-5 shadow-[0_20px_70px_-62px_var(--primary)] backdrop-blur-sm lg:p-6">
+      <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="grid gap-5 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
         <div
           className={cn(
@@ -238,7 +266,7 @@ export function AdminSummaryTile({
   return (
     <article
       className={cn(
-        'rounded-[1.35rem] border p-4 backdrop-blur-sm',
+        'rounded-[1.35rem] border p-4 shadow-[0_16px_55px_-52px_var(--primary)] backdrop-blur-sm',
         tileToneClasses[tone],
         className,
       )}
@@ -266,7 +294,7 @@ export function AdminQuickFilterLink({
       className={cn(
         'inline-flex items-center rounded-full border px-3 py-2 text-[0.68rem] font-semibold tracking-[0.18em] transition-colors',
         active
-          ? 'border-primary/40 bg-primary/12 text-primary shadow-[0_0_20px_-12px_var(--primary)]'
+          ? 'border-primary/40 bg-primary/[0.12] text-primary shadow-[0_0_20px_-12px_var(--primary)]'
           : 'border-border/70 bg-background/30 text-muted-foreground hover:border-primary/30 hover:text-primary',
       )}
     >
@@ -287,8 +315,8 @@ export function AdminInfoCard({
   children: ReactNode
 }) {
   return (
-    <div className={cn('rounded-2xl border border-border/70 bg-background/35 p-4', className)}>
-      <p className="text-xs tracking-[0.16em] text-primary">{label}</p>
+    <div className={cn('rounded-2xl border border-border/70 bg-background/35 p-4 shadow-inner shadow-black/5', className)}>
+      <p className="text-xs font-semibold tracking-[0.18em] text-primary">{label}</p>
       <div className="mt-2 text-sm text-foreground">{children}</div>
       {hint ? <p className="mt-2 text-xs text-muted-foreground">{hint}</p> : null}
     </div>
@@ -307,7 +335,8 @@ export function AdminSectionCard({
   children: ReactNode
 }) {
   return (
-    <section className={cn('rounded-[1.55rem] border border-border/70 bg-background/40 p-5 lg:p-6', className)}>
+    <section className={cn('relative overflow-hidden rounded-[1.55rem] border border-border/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(4,13,20,0.46)_48%,rgba(4,13,20,0.68))] p-5 shadow-[0_18px_65px_-58px_var(--primary)] lg:p-6', className)}>
+      <span className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
       <div className="max-w-3xl">
         <p className="text-xs font-semibold tracking-[0.18em] text-primary">{title}</p>
         {description ? (
@@ -329,7 +358,7 @@ export function AdminEmptyState({
   return (
     <div
       className={cn(
-        'rounded-2xl border border-dashed border-border/70 bg-background/20 p-5 text-sm leading-relaxed text-muted-foreground',
+        'rounded-2xl border border-dashed border-primary/20 bg-primary/[0.035] p-5 text-sm leading-relaxed text-muted-foreground',
         className,
       )}
     >
@@ -352,7 +381,7 @@ export function AdminCollapsiblePanel({
   return (
     <details
       open={defaultOpen}
-      className="group rounded-2xl border border-border/70 bg-background/35 p-4"
+      className="group rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors open:border-primary/20 open:bg-background/45"
     >
       <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
         <div>
@@ -379,7 +408,7 @@ export function AdminTechnicalDetails({
   items: Array<{ label: string; value: string }>
 }) {
   return (
-    <details className="group rounded-2xl border border-border/70 bg-background/35 p-4">
+    <details className="group rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors open:border-primary/20 open:bg-background/45">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
         <div>
           <p className="text-xs tracking-[0.16em] text-primary">{title}</p>
@@ -423,7 +452,7 @@ export function AdminNotesSection({
       {items.length > 0 ? (
         <div className="max-h-80 space-y-3 overflow-y-auto pr-1">
           {items.map((note) => (
-            <article key={note.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
+            <article key={note.id} className="rounded-2xl border border-border/70 bg-background/35 p-4 shadow-inner shadow-black/5">
               <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{note.body}</p>
               <p className="mt-3 text-xs text-muted-foreground">
                 {note.adminUser.name} - {formatAdminDateTime(note.createdAt)}
@@ -460,7 +489,7 @@ export function AdminHistorySection({
       {items.length > 0 ? (
         <div className="max-h-80 space-y-3 overflow-y-auto pr-1">
           {items.map((entry) => (
-            <article key={entry.id} className="rounded-2xl border border-border/70 bg-background/35 p-4">
+            <article key={entry.id} className="rounded-2xl border border-border/70 bg-background/35 p-4 shadow-inner shadow-black/5">
               <div className="flex flex-wrap items-center gap-2">
                 {entry.fromStatus ? <AdminStatusBadge status={entry.fromStatus} compact /> : null}
                 <span className="text-xs text-muted-foreground">-&gt;</span>
@@ -502,7 +531,7 @@ export function AdminRelatedActivity({
             <Link
               key={`${item.entity}-${item.id}`}
               href={item.href}
-              className="block rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors hover:border-primary/30"
+              className="block rounded-2xl border border-border/70 bg-background/35 p-4 transition-colors hover:border-primary/30 hover:bg-background/45"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">

@@ -17,6 +17,18 @@ type AvailabilityResponse = {
   configured?: boolean
   message?: string
   slots?: Array<{ label: string; value: string }>
+  rules?: Partial<PublicAvailabilitySettings>
+}
+
+type PublicAvailabilitySettings = {
+  isEnabled: boolean
+  timezoneLabel: string
+  durationMinutes: number
+  bufferMinutes: number
+  minNoticeHours: number
+  maxDaysAhead: number
+  defaultModality: string
+  calendarMode: 'real' | 'mock-development'
 }
 
 type BookingConfirmation = {
@@ -70,9 +82,54 @@ export function AdvisoryBookingForm() {
     'Seleccione una fecha para consultar horarios disponibles.',
   )
   const [availabilityConfigured, setAvailabilityConfigured] = useState(true)
+  const [availabilitySettings, setAvailabilitySettings] = useState<PublicAvailabilitySettings>({
+    isEnabled: true,
+    timezoneLabel: siteConfig.advisory.timezoneLabel,
+    durationMinutes: siteConfig.advisory.durationMinutes,
+    bufferMinutes: siteConfig.advisory.bufferMinutes,
+    minNoticeHours: siteConfig.advisory.minNoticeHours,
+    maxDaysAhead: siteConfig.advisory.maxDaysAhead,
+    defaultModality: siteConfig.advisory.modality,
+    calendarMode: 'mock-development',
+  })
   const [slots, setSlots] = useState<Array<{ label: string; value: string }>>([])
   const [confirmation, setConfirmation] = useState<BookingConfirmation | null>(null)
   const [statusMessage, setStatusMessage] = useState('')
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadSettings() {
+      try {
+        const response = await fetch('/api/availability/settings')
+        const payload = (await response.json()) as {
+          settings?: PublicAvailabilitySettings
+        }
+
+        if (!ignore && response.ok && payload.settings) {
+          setAvailabilitySettings(payload.settings)
+          setAvailabilityConfigured(payload.settings.isEnabled)
+          setForm((current) => ({
+            ...current,
+            modality: payload.settings?.defaultModality ?? current.modality,
+            timezone: payload.settings?.timezoneLabel ?? current.timezone,
+          }))
+        }
+      } catch {
+        if (!ignore) {
+          setAvailabilityMessage(
+            'No fue posible cargar la configuración de disponibilidad. Intente de nuevo.',
+          )
+        }
+      }
+    }
+
+    loadSettings()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   useEffect(() => {
     if (!form.date) {
@@ -107,10 +164,14 @@ export function AdvisoryBookingForm() {
         }
 
         setSlots(payload.slots ?? [])
+        setAvailabilitySettings((current) => ({
+          ...current,
+          ...payload.rules,
+        }))
         setAvailabilityMessage(
           (payload.slots ?? []).length > 0
             ? 'Seleccione uno de los horarios disponibles.'
-            : 'No hay horarios disponibles para esa fecha.',
+            : 'No hay horarios disponibles para este día. Selecciona otra fecha.',
         )
       } catch {
         if (!ignore) {
@@ -162,9 +223,9 @@ export function AdvisoryBookingForm() {
       ['Fecha', form.date || 'Pendiente'],
       ['Hora', form.time || 'Pendiente'],
       ['Modalidad', form.modality],
-      ['Zona horaria', siteConfig.advisory.timezoneLabel],
+      ['Zona horaria', availabilitySettings.timezoneLabel],
     ],
-    [form],
+    [form, availabilitySettings.timezoneLabel],
   )
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -250,7 +311,7 @@ export function AdvisoryBookingForm() {
               <dd className="mt-1 text-foreground">{confirmation.guestEmail}</dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Google Meet</dt>
+              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Enlace de reunion</dt>
               <dd className="mt-1 text-foreground">
                 {confirmation.meetUrl ? (
                   <a
@@ -262,7 +323,7 @@ export function AdvisoryBookingForm() {
                     Abrir enlace de la asesoría
                   </a>
                 ) : (
-                  'El enlace se enviará en la invitación del calendario.'
+                  'El enlace quedara pendiente hasta activar la integracion de calendario.'
                 )}
               </dd>
             </div>
@@ -271,8 +332,8 @@ export function AdvisoryBookingForm() {
 
         <div className={`${panelClassName} h-fit`}>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            También recibirá la invitación desde Google Calendar con sus
-            recordatorios programados.
+            La reserva queda guardada en el sistema local. Las invitaciones automaticas se activaran
+            cuando retomemos las integraciones externas.
           </p>
           <div className="mt-6 flex flex-col gap-3">
             <SiteAction href={siteConfig.routes.home}>VOLVER AL INICIO</SiteAction>
@@ -366,7 +427,7 @@ export function AdvisoryBookingForm() {
             type="date"
             value={form.date}
             min={todayValue()}
-            max={futureValue(siteConfig.advisory.maxDaysAhead)}
+            max={futureValue(availabilitySettings.maxDaysAhead)}
             onChange={(event) => updateDate(event.target.value)}
             error={errors.date}
           />
@@ -469,8 +530,11 @@ export function AdvisoryBookingForm() {
         </dl>
 
         <div className="mt-5 rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm text-muted-foreground">
-          <p>Duración predeterminada: 30 minutos.</p>
-          <p className="mt-2">{siteConfig.advisory.timezoneLabel}</p>
+          <p>Duración predeterminada: {availabilitySettings.durationMinutes} minutos.</p>
+          <p className="mt-2">{availabilitySettings.timezoneLabel}</p>
+          <p className="mt-2">
+            El flujo local valida disponibilidad, evita doble reserva y guarda la asesoria en el panel.
+          </p>
           <p className="mt-2">
             Esta conversación inicial nos permitirá comprender su necesidad y
             definir el mejor siguiente paso.

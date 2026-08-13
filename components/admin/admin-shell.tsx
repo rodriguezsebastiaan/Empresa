@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import {
   ArrowUpRight,
   CalendarCheck2,
+  Clock3,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
@@ -50,11 +51,16 @@ const navigationItems = [
     label: 'Asesorías',
     icon: CalendarCheck2,
   },
+  {
+    href: '/admin/reuniones/disponibilidad',
+    label: 'Disponibilidad',
+    icon: Clock3,
+  },
 ] as const
 
 function getCurrentSection(pathname: string) {
   const match =
-    navigationItems.find(
+    [...navigationItems].sort((a, b) => b.href.length - a.href.length).find(
       (item) => pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href)),
     ) ?? navigationItems[0]
 
@@ -91,8 +97,8 @@ export function AdminShell({ children, admin }: AdminShellProps) {
   const currentSection = getCurrentSection(pathname)
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] text-foreground">
-      <div className="sticky top-0 z-30 border-b border-border/60 bg-background/75 backdrop-blur-md lg:hidden">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_15%_0%,rgba(45,242,230,0.11),transparent_30%),radial-gradient(circle_at_90%_18%,rgba(125,211,252,0.07),transparent_28%),linear-gradient(180deg,oklch(0.13_0.02_240)_0%,oklch(0.16_0.03_222)_38%,oklch(0.185_0.028_232)_68%,oklch(0.14_0.02_240)_100%)] text-foreground">
+      <div className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl lg:hidden">
         <div className="mx-auto flex max-w-[1640px] items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <p className="text-[0.62rem] font-semibold tracking-[0.24em] text-primary">KONAMY ADMIN</p>
@@ -131,7 +137,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-50 flex w-[20rem] flex-col border-r border-border/70 bg-background/92 p-4 backdrop-blur-md transition-transform duration-300 lg:sticky lg:top-6 lg:z-auto lg:h-[calc(100vh-3rem)] lg:rounded-[1.7rem] lg:border lg:bg-background/58 lg:p-4',
+            'fixed inset-y-0 left-0 z-50 flex w-[20rem] flex-col border-r border-border/70 bg-background/92 p-4 shadow-[24px_0_90px_-72px_var(--primary)] backdrop-blur-md transition-transform duration-300 lg:sticky lg:top-6 lg:z-auto lg:h-[calc(100vh-3rem)] lg:rounded-[1.7rem] lg:border lg:bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(4,13,20,0.56)_42%,rgba(4,13,20,0.72))] lg:p-4',
             desktopCollapsed ? 'lg:w-[5.8rem]' : 'lg:w-[15.8rem]',
             mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
           )}
@@ -165,7 +171,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
           <div
             className={cn(
-              'mt-4 rounded-[1.45rem] border border-primary/18 bg-primary/8 p-3.5',
+              'mt-4 rounded-[1.45rem] border border-primary/18 bg-primary/[0.08] p-3.5 shadow-inner shadow-black/10',
               desktopCollapsed && 'lg:px-2.5 lg:py-3',
             )}
           >
@@ -201,8 +207,8 @@ export function AdminShell({ children, admin }: AdminShellProps) {
                   className={cn(
                     'flex items-center gap-3 rounded-2xl border px-3.5 py-3 text-sm font-medium transition-colors',
                     active
-                      ? 'border-primary/35 bg-primary/10 text-primary shadow-[0_0_18px_-10px_var(--primary)]'
-                      : 'border-border/70 bg-background/35 text-foreground/85 hover:border-primary/25 hover:text-primary',
+                      ? 'border-primary/35 bg-primary/[0.12] text-primary shadow-[0_0_22px_-13px_var(--primary)]'
+                      : 'border-border/70 bg-background/32 text-foreground/85 hover:border-primary/25 hover:bg-primary/[0.045] hover:text-primary',
                     desktopCollapsed && 'lg:justify-center lg:px-0',
                   )}
                 >
@@ -214,7 +220,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
           </nav>
 
           {!desktopCollapsed ? (
-            <div className="mt-4 hidden rounded-2xl border border-border/70 bg-background/28 p-3 text-xs leading-relaxed text-muted-foreground lg:block">
+            <div className="mt-4 hidden rounded-2xl border border-border/70 bg-background/28 p-3 text-xs leading-relaxed text-muted-foreground shadow-inner shadow-black/5 lg:block">
               Seguimiento comercial, diagnósticos y asesorías en una sola operación interna.
             </div>
           ) : null}
