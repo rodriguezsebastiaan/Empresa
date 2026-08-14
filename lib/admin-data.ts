@@ -204,6 +204,51 @@ export type AdvisoryBookingListResult = AdminPaginatedList<
   }
 >
 
+export type ContactSubmissionExportItem = {
+  id: string
+  createdAt: Date
+  status: ContactSubmissionStatus
+  name: string
+  company: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+  internalEmailStatus: DeliveryStatus
+  clientEmailStatus: DeliveryStatus
+  lastDeliveryError: string | null
+}
+
+export type DiagnosticSubmissionExportItem = {
+  id: string
+  createdAt: Date
+  status: DiagnosticSubmissionStatus
+  name: string
+  company: string
+  role: string
+  email: string
+  phone: string
+  city: string
+  sector: string
+  teamSize: string
+  summary: string
+  processes: string
+  currentProcess: string
+  tools: string
+  repetitiveTasks: string
+  mainProblem: string
+  expectedResult: string
+  contactPreference: string
+  wantsMeeting: boolean
+  internalEmailStatus: DeliveryStatus
+  clientEmailStatus: DeliveryStatus
+  webhookStatus: DeliveryStatus
+  lastDeliveryError: string | null
+}
+
+export type CsvCellValue = string | number | boolean | null
+export type CsvRow = Record<string, CsvCellValue>
+
 type SearchParamsInput =
   | URLSearchParams
   | Record<string, string | string[] | undefined>
@@ -1511,7 +1556,9 @@ export async function rescheduleAdvisoryBooking(input: {
   })
 }
 
-export async function exportContactSubmissions(filters: AdminListFilters) {
+export async function exportContactSubmissions(
+  filters: AdminListFilters,
+): Promise<ContactSubmissionExportItem[]> {
   const db = getDb()
   return db.contactSubmission.findMany({
     where: buildContactWhere(filters),
@@ -1536,7 +1583,9 @@ export async function exportContactSubmissions(filters: AdminListFilters) {
   })
 }
 
-export async function exportDiagnosticSubmissions(filters: AdminListFilters) {
+export async function exportDiagnosticSubmissions(
+  filters: AdminListFilters,
+): Promise<DiagnosticSubmissionExportItem[]> {
   const db = getDb()
   return db.diagnosticSubmission.findMany({
     where: buildDiagnosticWhere(filters),
@@ -1573,7 +1622,7 @@ export async function exportDiagnosticSubmissions(filters: AdminListFilters) {
   })
 }
 
-export function serializeCsv(rows: Array<Record<string, string | number | boolean | null>>) {
+export function serializeCsv(rows: CsvRow[]) {
   if (rows.length === 0) {
     return ''
   }
