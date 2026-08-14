@@ -1,7 +1,23 @@
 import { existsSync, mkdirSync } from 'node:fs'
+import { syncBuiltinESMExports } from 'node:module'
+import os from 'node:os'
 import { resolve } from 'node:path'
 import { config as loadDotenv } from 'dotenv'
-import EmbeddedPostgres from 'embedded-postgres'
+
+try {
+  os.userInfo()
+} catch {
+  os.userInfo = () => ({
+    username: process.env.USERNAME || process.env.USER || 'postgres',
+    uid: 1000,
+    gid: 1000,
+    shell: null,
+    homedir: process.env.USERPROFILE || process.cwd(),
+  })
+  syncBuiltinESMExports()
+}
+
+const { default: EmbeddedPostgres } = await import('embedded-postgres')
 
 for (const fileName of ['.env', '.env.local']) {
   const filePath = resolve(process.cwd(), fileName)
@@ -54,7 +70,10 @@ async function stopAndExit(code = 0) {
 }
 
 async function main() {
-  await pg.initialise()
+  if (!existsSync(resolve(databaseDir, 'PG_VERSION'))) {
+    await pg.initialise()
+  }
+
   await pg.start()
   await ensureDatabase()
 

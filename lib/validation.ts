@@ -364,7 +364,7 @@ export function validateDiagnosticStep(
     }
 
     if (!input.wantsMeeting?.trim()) {
-      errors.wantsMeeting = 'Indique si desea agendar una reunión.'
+      errors.wantsMeeting = 'Indique si desea agendar una asesoría.'
     }
   }
 

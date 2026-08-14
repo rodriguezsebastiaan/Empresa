@@ -23,16 +23,39 @@ function parseBooleanEnv(value?: string) {
   return ['1', 'true', 'yes', 'on'].includes(value?.trim().toLowerCase() ?? '')
 }
 
-export function getMissingSmtpEnv() {
-  const requiredEnv = [
-    'SMTP_HOST',
-    'SMTP_PORT',
-    'SMTP_USER',
-    'SMTP_PASS',
-    'SMTP_FROM_EMAIL',
-  ] as const
+function readEnv(name: string) {
+  return process.env[name]?.trim() ?? ''
+}
 
-  return requiredEnv.filter((name) => !process.env[name]?.trim())
+function isPlaceholderValue(value: string) {
+  const normalized = value.toLowerCase()
+
+  return (
+    !normalized ||
+    normalized.includes('pendiente') ||
+    normalized.endsWith('.invalid') ||
+    normalized.includes('@example.')
+  )
+}
+
+function getSmtpPassword() {
+  return readEnv('SMTP_PASSWORD') || readEnv('SMTP_PASS')
+}
+
+export function getMissingSmtpEnv() {
+  const missing: string[] = []
+
+  for (const name of ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_FROM_EMAIL'] as const) {
+    if (!readEnv(name)) {
+      missing.push(name)
+    }
+  }
+
+  if (!getSmtpPassword()) {
+    missing.push('SMTP_PASSWORD')
+  }
+
+  return missing
 }
 
 function getSmtpConfig(): SmtpConfig | null {
@@ -49,22 +72,67 @@ function getSmtpConfig(): SmtpConfig | null {
   }
 
   return {
-    host: process.env.SMTP_HOST!.trim(),
+    host: readEnv('SMTP_HOST'),
     port,
     secure: parseBooleanEnv(process.env.SMTP_SECURE),
-    user: process.env.SMTP_USER!.trim(),
-    pass: process.env.SMTP_PASS!.trim(),
-    fromEmail: process.env.SMTP_FROM_EMAIL!.trim(),
-    fromName: process.env.SMTP_FROM_NAME?.trim() || siteConfig.name,
+    user: readEnv('SMTP_USER'),
+    pass: getSmtpPassword(),
+    fromEmail: readEnv('SMTP_FROM_EMAIL'),
+    fromName: readEnv('SMTP_FROM_NAME') || siteConfig.name,
   }
 }
 
+function sanitizeHeaderValue(value: string) {
+  return value.replace(/[\r\n]+/g, ' ').trim()
+}
+
 function buildFromHeader(fromName: string, fromEmail: string) {
-  return `${fromName} <${fromEmail}>`
+  return `${sanitizeHeaderValue(fromName)} <${sanitizeHeaderValue(fromEmail)}>`
 }
 
 export function isSmtpConfigured() {
   return Boolean(getSmtpConfig())
+}
+
+export function getAdminNotificationDestination(moduleEnvName: string) {
+  const moduleDestination = readEnv(moduleEnvName)
+  const generalDestination = readEnv('ADMIN_NOTIFICATION_EMAIL')
+
+  if (!isPlaceholderValue(moduleDestination)) {
+    return moduleDestination
+  }
+
+  if (!isPlaceholderValue(generalDestination)) {
+    return generalDestination
+  }
+
+  return ''
+}
+
+export function getAdminNotificationDestinationLabel(moduleEnvName: string) {
+  return `${moduleEnvName} o ADMIN_NOTIFICATION_EMAIL`
+}
+
+function createTransporter(smtp: SmtpConfig) {
+  return nodemailer.createTransport({
+    host: smtp.host,
+    port: smtp.port,
+    secure: smtp.secure,
+    auth: {
+      user: smtp.user,
+      pass: smtp.pass,
+    },
+  })
+}
+
+export async function verifySmtpConnection() {
+  const smtp = getSmtpConfig()
+
+  if (!smtp) {
+    throw new Error('SMTP_NOT_CONFIGURED')
+  }
+
+  await createTransporter(smtp).verify()
 }
 
 export function escapeHtml(value: string) {
@@ -133,6 +201,22 @@ export function renderDefinitionList(items: Array<{ label: string; value: string
   return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">${rows}</table>`
 }
 
+export function renderEmailSection(title: string, items: Array<{ label: string; value: string }>) {
+  return `
+    <div style="margin-top:18px;padding:18px;border:1px solid rgba(65,245,255,0.12);border-radius:18px;background:rgba(255,255,255,0.025);">
+      <p style="margin:0 0 10px;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#7fefff;font-weight:700;">${escapeHtml(title)}</p>
+      ${renderDefinitionList(items)}
+    </div>`
+}
+
+export function formatEmailDateTime(date: Date) {
+  return new Intl.DateTimeFormat('es-CO', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+    timeZone: siteConfig.advisory.timezone,
+  }).format(date)
+}
+
 export async function sendEmail(input: MailInput) {
   const smtp = getSmtpConfig()
 
@@ -140,21 +224,13 @@ export async function sendEmail(input: MailInput) {
     throw new Error('SMTP_NOT_CONFIGURED')
   }
 
-  const transporter = nodemailer.createTransport({
-    host: smtp.host,
-    port: smtp.port,
-    secure: smtp.secure,
-    auth: {
-      user: smtp.user,
-      pass: smtp.pass,
-    },
-  })
+  const transporter = createTransporter(smtp)
 
   await transporter.sendMail({
     from: buildFromHeader(smtp.fromName, smtp.fromEmail),
-    to: input.to,
-    replyTo: input.replyTo,
-    subject: input.subject,
+    to: sanitizeHeaderValue(input.to),
+    replyTo: input.replyTo ? sanitizeHeaderValue(input.replyTo) : undefined,
+    subject: sanitizeHeaderValue(input.subject),
     html: input.html,
     text: input.text,
   })

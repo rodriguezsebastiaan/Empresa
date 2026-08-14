@@ -30,16 +30,58 @@ function unique(values: string[]) {
   return Array.from(new Set(values))
 }
 
-function getMissingSmtpEnv() {
-  const requiredEnv = [
-    'SMTP_HOST',
-    'SMTP_PORT',
-    'SMTP_USER',
-    'SMTP_PASS',
-    'SMTP_FROM_EMAIL',
-  ] as const
+function readEnv(name: string) {
+  return process.env[name]?.trim() ?? ''
+}
 
-  return requiredEnv.filter((name) => !process.env[name]?.trim())
+function isPlaceholderValue(value: string) {
+  const normalized = value.toLowerCase()
+
+  return (
+    !normalized ||
+    normalized.includes('pendiente') ||
+    normalized.endsWith('.invalid') ||
+    normalized.includes('@example.')
+  )
+}
+
+function getSmtpPassword() {
+  return readEnv('SMTP_PASSWORD') || readEnv('SMTP_PASS')
+}
+
+function getAdminNotificationDestination(moduleEnvName: string) {
+  const moduleDestination = readEnv(moduleEnvName)
+  const generalDestination = readEnv('ADMIN_NOTIFICATION_EMAIL')
+
+  if (!isPlaceholderValue(moduleDestination)) {
+    return moduleDestination
+  }
+
+  if (!isPlaceholderValue(generalDestination)) {
+    return generalDestination
+  }
+
+  return ''
+}
+
+function getAdminNotificationDestinationLabel(moduleEnvName: string) {
+  return `${moduleEnvName} o ADMIN_NOTIFICATION_EMAIL`
+}
+
+function getMissingSmtpEnv() {
+  const missing: string[] = []
+
+  for (const name of ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_FROM_EMAIL'] as const) {
+    if (!readEnv(name)) {
+      missing.push(name)
+    }
+  }
+
+  if (!getSmtpPassword()) {
+    missing.push('SMTP_PASSWORD')
+  }
+
+  return missing
 }
 
 function getSmtpConfig() {
@@ -56,13 +98,13 @@ function getSmtpConfig() {
   }
 
   return {
-    host: process.env.SMTP_HOST!.trim(),
+    host: readEnv('SMTP_HOST'),
     port,
     secure: parseBooleanEnv(process.env.SMTP_SECURE),
-    user: process.env.SMTP_USER!.trim(),
-    pass: process.env.SMTP_PASS!.trim(),
-    fromEmail: process.env.SMTP_FROM_EMAIL!.trim(),
-    fromName: process.env.SMTP_FROM_NAME?.trim() || siteConfig.name,
+    user: readEnv('SMTP_USER'),
+    pass: getSmtpPassword(),
+    fromEmail: readEnv('SMTP_FROM_EMAIL'),
+    fromName: readEnv('SMTP_FROM_NAME') || siteConfig.name,
   }
 }
 
@@ -184,15 +226,15 @@ function buildDiagnosticEmailText(data: SanitizedDiagnosticFormData) {
     data.expectedResult,
     '',
     `Preferencia de contacto: ${data.contactPreference}`,
-    `Interés en reunión: ${data.wantsMeeting}`,
+    `Interés en asesoría: ${data.wantsMeeting}`,
   ].join('\n')
 }
 
 function getContactPendingVariables() {
   const pending: string[] = [...getMissingSmtpEnv()]
 
-  if (!process.env.CONTACT_DESTINATION_EMAIL?.trim()) {
-    pending.push(siteConfig.integrations.contact.destinationEmailEnv)
+  if (!getAdminNotificationDestination('CONTACT_DESTINATION_EMAIL')) {
+    pending.push(getAdminNotificationDestinationLabel('CONTACT_DESTINATION_EMAIL'))
   }
 
   return unique(pending)
@@ -240,12 +282,12 @@ export async function deliverContactSubmission(
         success: false,
         configured: false,
         message:
-          'El formulario de contacto ya valida en cliente y servidor, pero todavía no tiene un destino real completamente configurado.',
+          'El formulario breve ya valida en cliente y servidor, pero todavía no tiene un destino real completamente configurado.',
       },
     }
   }
 
-  const destinationEmail = process.env.CONTACT_DESTINATION_EMAIL!.trim()
+  const destinationEmail = getAdminNotificationDestination('CONTACT_DESTINATION_EMAIL')
   const payload = sanitizeContactFormData(data)
 
   try {
@@ -272,7 +314,7 @@ export async function deliverContactSubmission(
         success: false,
         configured: true,
         message:
-          'No fue posible entregar el formulario de contacto al destino configurado.',
+          'No fue posible entregar el formulario breve al destino configurado.',
       },
     }
   }
@@ -287,7 +329,8 @@ export async function deliverDiagnosticSubmission(
   const pending: string[] = []
 
   const diagnosticEmailConfigured =
-    Boolean(process.env.DIAGNOSTIC_DESTINATION_EMAIL?.trim()) && Boolean(getSmtpConfig())
+    Boolean(getAdminNotificationDestination('DIAGNOSTIC_DESTINATION_EMAIL')) &&
+    Boolean(getSmtpConfig())
   const diagnosticWebhookConfigured =
     Boolean(process.env.N8N_DIAGNOSTIC_WEBHOOK_URL?.trim()) &&
     Boolean(process.env.N8N_DIAGNOSTIC_WEBHOOK_SECRET?.trim())
@@ -295,8 +338,8 @@ export async function deliverDiagnosticSubmission(
   if (!diagnosticEmailConfigured) {
     pending.push(...getMissingSmtpEnv())
 
-    if (!process.env.DIAGNOSTIC_DESTINATION_EMAIL?.trim()) {
-      pending.push(siteConfig.integrations.diagnostics.destinationEmailEnv)
+    if (!getAdminNotificationDestination('DIAGNOSTIC_DESTINATION_EMAIL')) {
+      pending.push(getAdminNotificationDestinationLabel('DIAGNOSTIC_DESTINATION_EMAIL'))
     }
   }
 
@@ -319,7 +362,7 @@ export async function deliverDiagnosticSubmission(
   if (diagnosticEmailConfigured) {
     try {
       await sendPlainEmail({
-        to: process.env.DIAGNOSTIC_DESTINATION_EMAIL!.trim(),
+        to: getAdminNotificationDestination('DIAGNOSTIC_DESTINATION_EMAIL'),
         subject: `[Diagnóstico] ${payload.company} · ${payload.name}`,
         replyTo: payload.email,
         text: buildDiagnosticEmailText(payload),

@@ -6,7 +6,6 @@ import {
   evaluateRateLimit,
 } from '@/lib/rate-limit'
 import { readJsonRequestBody } from '@/lib/request-body'
-import { isGoogleCalendarConfigured } from '@/lib/site'
 import { validateAdvisoryBookingForm } from '@/lib/validation'
 
 export async function POST(request: Request) {
@@ -19,7 +18,7 @@ export async function POST(request: Request) {
   if (!rateLimit.allowed) {
     return buildRateLimitResponse(
       rateLimit,
-      'Demasiados intentos de reserva. Espere unos minutos antes de intentar de nuevo.',
+      'Demasiados intentos de agendamiento. Espere unos minutos antes de intentar de nuevo.',
     )
   }
 
@@ -29,13 +28,7 @@ export async function POST(request: Request) {
   const body = await readJsonRequestBody(request)
 
   if (!body.success) {
-    return respond(
-      {
-        success: false,
-        message: body.message,
-      },
-      body.status,
-    )
+    return respond({ success: false, message: body.message }, body.status)
   }
 
   const result = validateAdvisoryBookingForm(body.data)
@@ -51,18 +44,6 @@ export async function POST(request: Request) {
     )
   }
 
-  if (!isGoogleCalendarConfigured()) {
-    return respond(
-      {
-        success: false,
-        configured: false,
-        message:
-          'El flujo de agendamiento está preparado, pero la creación real de citas todavía está bloqueada hasta configurar Google Calendar y Google Meet.',
-      },
-      503,
-    )
-  }
-
   try {
     const submission = await submitAdvisoryBooking(result.data, request)
     return respond(submission.body, submission.status)
@@ -70,7 +51,7 @@ export async function POST(request: Request) {
     const message =
       error instanceof Error && error.message === 'SLOT_NOT_AVAILABLE'
         ? 'Ese horario ya no está disponible. Seleccione otro antes de confirmar.'
-        : 'No fue posible crear la asesoría en Google Calendar.'
+        : 'No fue posible crear la asesoría en este momento.'
 
     return respond(
       {

@@ -24,10 +24,12 @@ tsconfig.tsbuildinfo
 *.log
 .tmp-*.log
 .tmp-browser-audit-profile*/
+.tmp-*/
 
 # Backups and database dumps
 backups/
 *.sql
+!prisma/migrations/**/*.sql
 *.dump
 *.bak
 *.backup

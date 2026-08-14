@@ -12,34 +12,34 @@ const bookingHighlights = [
   {
     title: 'Duración',
     value: `${siteConfig.advisory.durationMinutes} minutos`,
-    description: 'Conversación inicial enfocada en entender la necesidad y decidir el siguiente paso.',
+    description: 'Asesoría inicial enfocada en entender la necesidad y decidir el siguiente paso.',
     icon: Clock3,
   },
   {
     title: 'Modalidad',
     value: siteConfig.advisory.modality,
-    description: 'La primera versión usa Google Calendar y Google Meet como flujo principal.',
+    description: 'La asesoría inicial se coordina de forma virtual y con confirmación controlada.',
     icon: Video,
   },
   {
     title: 'Disponibilidad',
     value: 'Lunes a viernes',
-    description: 'Los horarios visibles respetan configuración, anticipación mínima y cruces reales del calendario.',
+    description: 'Los horarios visibles respetan la agenda actual, la anticipación mínima y posibles cruces de horario.',
     icon: CalendarDays,
   },
   {
     title: 'Validación',
     value: 'Cliente y servidor',
-    description: 'El formulario bloquea dobles envíos razonables y no simula reservas cuando faltan credenciales.',
+    description: 'El formulario valida los datos y evita confirmar horarios cuando la agenda no está disponible.',
     icon: ShieldCheck,
   },
 ] as const
 
 const afterBooking = [
   'Se validan los datos y el horario seleccionado.',
-  'Se consulta la disponibilidad real en Google Calendar.',
-  'Si el horario sigue libre, se crea el evento con Google Meet y recordatorios.',
-  'La confirmación muestra fecha, hora, zona horaria y enlace de reunión.',
+  'Se consulta la disponibilidad real de la agenda.',
+  'Si el horario sigue libre, se confirma la asesoría con invitación y recordatorios.',
+  'La confirmación muestra fecha, hora, zona horaria y enlace de asesoría.',
 ] as const
 
 export const metadata = buildPageMetadata('advisory')
@@ -49,8 +49,8 @@ export default function AdvisoryPage() {
     <SiteShell>
       <PageHero
         eyebrow="AGENDAR ASESORÍA"
-        title="Programe una reunión inicial para revisar qué proceso conviene ordenar o automatizar."
-        description="Esta conversación inicial nos permitirá comprender su necesidad y definir el mejor siguiente paso. La duración predeterminada es de 30 minutos y la modalidad base es reunión virtual."
+        title="Programe una asesoría inicial para revisar qué proceso conviene ordenar o automatizar."
+        description="Esta asesoría inicial nos permitirá comprender su necesidad y definir el mejor siguiente paso. La duración predeterminada es de 30 minutos y la modalidad base es virtual."
         actions={
           <>
             <SiteAction href={siteConfig.routes.diagnostics}>SOLICITAR DIAGNÓSTICO</SiteAction>
@@ -62,12 +62,12 @@ export default function AdvisoryPage() {
         aside={
           <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
             <p>
-              La integración ya está preparada para consultar disponibilidad real,
-              evitar cruces y crear eventos con Google Meet desde el servidor.
+              La agenda está preparada para consultar disponibilidad real, evitar
+              cruces y confirmar asesorías de forma controlada.
             </p>
             <p>
-              Si las credenciales aún no están configuradas, la interfaz mostrará
-              un bloqueo administrativo claro en lugar de fingir una reserva.
+              Si la agenda aún no está disponible, la interfaz indicará un canal
+              alternativo en lugar de confirmar una asesoría incompleta.
             </p>
           </div>
         }
@@ -105,8 +105,8 @@ export default function AdvisoryPage() {
         <div className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
           <SectionHeading
             eyebrow="RESERVA"
-            title="Elija fecha, hora y comparta el contexto de la reunión."
-            description="La disponibilidad visible responde a la configuración actual del calendario de Konamy Systems y a la zona horaria mostrada en la interfaz."
+            title="Elija fecha, hora y comparta el contexto de la asesoría."
+            description="La disponibilidad visible responde a la agenda actual de Konamy Systems y a la zona horaria mostrada en la interfaz."
           />
 
           <Reveal className="mt-8">
@@ -123,7 +123,7 @@ export default function AdvisoryPage() {
           <SectionHeading
             eyebrow="QUÉ OCURRE AL CONFIRMAR"
             title="La asesoría no se procesa como un simple formulario."
-            description="El flujo está preparado para validar, consultar disponibilidad y crear la reunión de forma controlada desde el servidor."
+            description="El flujo valida la información, consulta disponibilidad y confirma la asesoría solo cuando el horario puede reservarse correctamente."
           />
 
           <ol className="mt-8 grid gap-4 lg:grid-cols-2">

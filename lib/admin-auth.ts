@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { AdminRole } from '@prisma/client'
+import { AdminRole, Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
@@ -88,6 +88,58 @@ function getSessionCookieOptions(expires: Date) {
   }
 }
 
+async function recordAdminLoginAttempt(input: {
+  adminUserId?: string | null
+  emailNormalized: string
+  success: boolean
+  failureReason?: string | null
+  request: Request
+}) {
+  const metadata = getRequestMetadata(input.request)
+
+  try {
+    await getDb().adminLoginAttempt.create({
+      data: {
+        adminUserId: input.adminUserId ?? null,
+        emailNormalized: input.emailNormalized,
+        success: input.success,
+        failureReason: input.failureReason ?? null,
+        userAgent: metadata.userAgent,
+        ipHash: metadata.ipHash,
+      },
+    })
+  } catch {
+    // Login audit should never block access or reveal database details to the user.
+  }
+}
+
+async function recordAdminAuditLog(input: {
+  adminUserId: string
+  action: string
+  entityType: string
+  entityId?: string | null
+  metadata?: Prisma.InputJsonObject
+  request: Request
+}) {
+  const requestMetadata = getRequestMetadata(input.request)
+
+  try {
+    await getDb().adminAuditLog.create({
+      data: {
+        adminUserId: input.adminUserId,
+        action: input.action,
+        entityType: input.entityType,
+        entityId: input.entityId ?? null,
+        metadata: input.metadata,
+        userAgent: requestMetadata.userAgent,
+        ipHash: requestMetadata.ipHash,
+      },
+    })
+  } catch {
+    // Operational audit is best-effort; the main flow remains the source of truth.
+  }
+}
+
 export function getAdminRuntimeConfigError() {
   if (!process.env.DATABASE_URL?.trim()) {
     return 'DATABASE_URL'
@@ -134,11 +186,11 @@ export function getAdminLoginErrorMessage(code?: string | null) {
     case 'config':
       return 'Falta configurar AUTH_SECRET o DATABASE_URL antes de usar el panel.'
     case 'locked':
-      return 'El acceso quedo bloqueado temporalmente despues de varios intentos fallidos.'
+      return 'El acceso quedó bloqueado temporalmente después de varios intentos fallidos.'
     case 'signed-out':
-      return 'La sesion administrativa se cerro correctamente.'
+      return 'La sesión administrativa se cerró correctamente.'
     case 'invalid':
-      return 'No fue posible iniciar sesion con esas credenciales.'
+      return 'No fue posible iniciar sesión con esas credenciales.'
     default:
       return ''
   }
@@ -251,6 +303,14 @@ export async function authenticateAdmin(
   const now = new Date()
 
   if (adminUser?.lockedUntil && adminUser.lockedUntil > now) {
+    await recordAdminLoginAttempt({
+      adminUserId: adminUser.id,
+      emailNormalized,
+      success: false,
+      failureReason: 'locked',
+      request,
+    })
+
     return {
       success: false,
       code: 'locked',
@@ -278,12 +338,28 @@ export async function authenticateAdmin(
       })
 
       if (shouldLock) {
+        await recordAdminLoginAttempt({
+          adminUserId: adminUser.id,
+          emailNormalized,
+          success: false,
+          failureReason: 'locked_after_failures',
+          request,
+        })
+
         return {
           success: false,
           code: 'locked',
         }
       }
     }
+
+    await recordAdminLoginAttempt({
+      adminUserId: adminUser?.id ?? null,
+      emailNormalized,
+      success: false,
+      failureReason: 'invalid_credentials',
+      request,
+    })
 
     return {
       success: false,
@@ -323,6 +399,24 @@ export async function authenticateAdmin(
       userAgent: metadata.userAgent,
       ipHash: metadata.ipHash,
     },
+  })
+
+  await recordAdminLoginAttempt({
+    adminUserId: adminUser.id,
+    emailNormalized,
+    success: true,
+    request,
+  })
+
+  await recordAdminAuditLog({
+    adminUserId: adminUser.id,
+    action: 'admin.login',
+    entityType: 'AdminSession',
+    metadata: {
+      email: adminUser.email,
+      role: adminUser.role,
+    },
+    request,
   })
 
   return {

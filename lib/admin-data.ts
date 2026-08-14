@@ -3,12 +3,15 @@ import {
   type AdvisoryBookingStatus,
   type ContactSubmissionStatus,
   type DiagnosticSubmissionStatus,
+  type DeliveryStatus,
   Prisma,
 } from '@prisma/client'
 import { siteConfig } from '@/config/site'
 import { getTodayInAdvisoryZone } from '@/lib/advisory-time'
 import { getDb } from '@/lib/db'
-import { deleteGoogleCalendarEvent } from '@/lib/google-calendar/events'
+import { getCalendarAdapter } from '@/lib/calendar-adapter'
+import { getResendAdapter } from '@/lib/resend-adapter'
+import { assertSlotAvailable, buildAdvisorySlotKey } from '@/lib/availability-service'
 import { normalizeEmail, sanitizeInline, sanitizeMultiline } from '@/lib/security'
 
 const CONTACT_PAGE_SIZE = 10
@@ -37,12 +40,47 @@ export const advisoryBookingStatusOptions: AdvisoryBookingStatus[] = [
   'CONFIRMED',
   'COMPLETED',
   'CANCELLED',
+  'RESCHEDULED',
   'NO_SHOW',
 ]
 
+const contactPendingStatuses: ContactSubmissionStatus[] = ['NEW']
+const contactInProgressStatuses: ContactSubmissionStatus[] = ['IN_REVIEW']
+const contactAttendedStatuses: ContactSubmissionStatus[] = ['CONTACTED', 'CLOSED']
+
+const diagnosticPendingStatuses: DiagnosticSubmissionStatus[] = ['NEW']
+const diagnosticInProgressStatuses: DiagnosticSubmissionStatus[] = [
+  'IN_ANALYSIS',
+  'CONTACTED',
+  'PROPOSAL_SENT',
+]
+const diagnosticFinalStatuses: DiagnosticSubmissionStatus[] = ['WON', 'LOST']
+
+const bookingActiveStatuses: AdvisoryBookingStatus[] = ['PENDING', 'CONFIRMED']
+
+export const statusLabels: Record<string, string> = {
+  NEW: 'Pendiente',
+  IN_REVIEW: 'En proceso',
+  CONTACTED: 'Contactado',
+  CLOSED: 'Cerrado',
+  IN_ANALYSIS: 'En análisis',
+  PROPOSAL_SENT: 'Propuesta enviada',
+  WON: 'Ganado',
+  LOST: 'Descartado',
+  PENDING: 'Pendiente',
+  CONFIRMED: 'Confirmada',
+  COMPLETED: 'Realizada',
+  CANCELLED: 'Cancelada',
+  RESCHEDULED: 'Reprogramada',
+  NO_SHOW: 'No asistió',
+  SENT: 'Enviado',
+  FAILED: 'Error',
+  SKIPPED: 'Omitido',
+}
+
 export const adminRoleLabels: Record<AdminRole, string> = {
-  OWNER: 'Owner',
-  ADMIN: 'Admin',
+  OWNER: 'Administrador',
+  ADMIN: 'Administrador',
 }
 
 export type AdminListFilters = {
@@ -52,6 +90,19 @@ export type AdminListFilters = {
   from: string
   to: string
   id: string
+  preset: string
+}
+
+export type RelatedActivityItem = {
+  id: string
+  entity: 'contactos' | 'diagnosticos' | 'reuniones'
+  href: string
+  title: string
+  subtitle: string
+  description: string
+  status: string
+  happenedAt: Date
+  matchReasons: string[]
 }
 
 type SearchParamsInput =
@@ -116,6 +167,85 @@ function shouldReleaseBookingSlot(status: AdvisoryBookingStatus) {
   return status === 'CANCELLED'
 }
 
+function normalizePhoneDigits(value: string) {
+  return value.replace(/\D/g, '')
+}
+
+function normalizeCompanyKey(value: string | null | undefined) {
+  return sanitizeInline(value ?? '').toLowerCase()
+}
+
+function buildPhoneProbe(phone: string) {
+  const digits = normalizePhoneDigits(phone)
+
+  if (digits.length >= 8) {
+    return digits.slice(-8)
+  }
+
+  return digits.length >= 5 ? digits : ''
+}
+
+function buildScopeFilters(filters: AdminListFilters): AdminListFilters {
+  return {
+    ...filters,
+    page: 1,
+    status: '',
+    id: '',
+  }
+}
+
+function buildRelatedMatchKey(input: {
+  emailNormalized: string
+  phone: string
+  company: string
+}) {
+  return {
+    emailNormalized: input.emailNormalized,
+    phoneDigits: normalizePhoneDigits(input.phone),
+    phoneProbe: buildPhoneProbe(input.phone),
+    company: sanitizeInline(input.company),
+    companyKey: normalizeCompanyKey(input.company),
+  }
+}
+
+function collectMatchReasons(
+  matchKey: ReturnType<typeof buildRelatedMatchKey>,
+  candidate: {
+    emailNormalized: string
+    phone: string
+    company: string
+  },
+) {
+  const reasons: string[] = []
+
+  if (matchKey.emailNormalized && candidate.emailNormalized === matchKey.emailNormalized) {
+    reasons.push('Mismo correo')
+  }
+
+  if (matchKey.phoneDigits && normalizePhoneDigits(candidate.phone) === matchKey.phoneDigits) {
+    reasons.push('Mismo teléfono')
+  }
+
+  if (matchKey.companyKey && normalizeCompanyKey(candidate.company) === matchKey.companyKey) {
+    reasons.push('Misma empresa')
+  }
+
+  return reasons
+}
+
+function getMatchScore(reasons: string[]) {
+  return reasons.reduce((score, reason) => {
+    if (reason === 'Mismo correo') return score + 4
+    if (reason === 'Mismo teléfono') return score + 3
+    if (reason === 'Misma empresa') return score + 1
+    return score
+  }, 0)
+}
+
+function hasStrongRelatedMatch(reasons: string[]) {
+  return reasons.includes('Mismo correo') || reasons.includes('Mismo teléfono')
+}
+
 export function parseAdminListFilters(input: SearchParamsInput): AdminListFilters {
   return {
     page: clampPage(readSearchValue(input, 'page')),
@@ -124,6 +254,7 @@ export function parseAdminListFilters(input: SearchParamsInput): AdminListFilter
     from: sanitizeInline(readSearchValue(input, 'from')).slice(0, 10),
     to: sanitizeInline(readSearchValue(input, 'to')).slice(0, 10),
     id: sanitizeInline(readSearchValue(input, 'id')).slice(0, 64),
+    preset: sanitizeInline(readSearchValue(input, 'preset')).slice(0, 32),
   }
 }
 
@@ -136,13 +267,13 @@ function buildContactWhere(filters: AdminListFilters): Prisma.ContactSubmissionW
 
     andClauses.push({
       OR: [
-        { name: { contains: filters.q, mode: 'insensitive' } },
-        { company: { contains: filters.q, mode: 'insensitive' } },
-        { email: { contains: filters.q, mode: 'insensitive' } },
+        { name: { contains: filters.q } },
+        { company: { contains: filters.q } },
+        { email: { contains: filters.q } },
         { emailNormalized: { contains: emailNormalized } },
         { phone: { contains: filters.q } },
-        { subject: { contains: filters.q, mode: 'insensitive' } },
-        { message: { contains: filters.q, mode: 'insensitive' } },
+        { subject: { contains: filters.q } },
+        { message: { contains: filters.q } },
       ],
     })
   }
@@ -171,14 +302,14 @@ function buildDiagnosticWhere(filters: AdminListFilters): Prisma.DiagnosticSubmi
 
     andClauses.push({
       OR: [
-        { name: { contains: filters.q, mode: 'insensitive' } },
-        { company: { contains: filters.q, mode: 'insensitive' } },
-        { email: { contains: filters.q, mode: 'insensitive' } },
+        { name: { contains: filters.q } },
+        { company: { contains: filters.q } },
+        { email: { contains: filters.q } },
         { emailNormalized: { contains: emailNormalized } },
         { phone: { contains: filters.q } },
-        { city: { contains: filters.q, mode: 'insensitive' } },
-        { sector: { contains: filters.q, mode: 'insensitive' } },
-        { summary: { contains: filters.q, mode: 'insensitive' } },
+        { city: { contains: filters.q } },
+        { sector: { contains: filters.q } },
+        { summary: { contains: filters.q } },
       ],
     })
   }
@@ -207,13 +338,13 @@ function buildBookingWhere(filters: AdminListFilters): Prisma.AdvisoryBookingWhe
 
     andClauses.push({
       OR: [
-        { fullName: { contains: filters.q, mode: 'insensitive' } },
-        { company: { contains: filters.q, mode: 'insensitive' } },
-        { email: { contains: filters.q, mode: 'insensitive' } },
+        { fullName: { contains: filters.q } },
+        { company: { contains: filters.q } },
+        { email: { contains: filters.q } },
         { emailNormalized: { contains: emailNormalized } },
         { phone: { contains: filters.q } },
-        { city: { contains: filters.q, mode: 'insensitive' } },
-        { processGoal: { contains: filters.q, mode: 'insensitive' } },
+        { city: { contains: filters.q } },
+        { processGoal: { contains: filters.q } },
       ],
     })
   }
@@ -241,62 +372,71 @@ export function formatAdminDateTime(date: Date) {
 }
 
 export function getStatusLabel(status: string) {
-  return status.replaceAll('_', ' ')
+  return statusLabels[status] ?? status.replaceAll('_', ' ')
 }
 
 export async function getAdminDashboardSnapshot() {
   const db = getDb()
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-  const now = new Date()
-  const todayValue = getTodayInAdvisoryZone(now)
 
   const [
     totalContacts,
-    newContacts,
-    recentContacts,
+    pendingContacts,
+    inProgressContacts,
+    attendedContacts,
     totalDiagnostics,
-    newDiagnostics,
-    recentDiagnostics,
+    pendingDiagnostics,
+    inProgressDiagnostics,
+    finalizedDiagnostics,
     totalBookings,
-    recentBookings,
     pendingBookings,
-    upcomingBookings,
-    todaysBookings,
+    confirmedBookings,
+    completedBookings,
   ] = await Promise.all([
     db.contactSubmission.count(),
     db.contactSubmission.count({
       where: {
-        status: 'NEW',
+        status: {
+          in: contactPendingStatuses,
+        },
       },
     }),
     db.contactSubmission.count({
       where: {
-        createdAt: {
-          gte: sevenDaysAgo,
+        status: {
+          in: contactInProgressStatuses,
+        },
+      },
+    }),
+    db.contactSubmission.count({
+      where: {
+        status: {
+          in: contactAttendedStatuses,
         },
       },
     }),
     db.diagnosticSubmission.count(),
     db.diagnosticSubmission.count({
       where: {
-        status: 'NEW',
+        status: {
+          in: diagnosticPendingStatuses,
+        },
       },
     }),
     db.diagnosticSubmission.count({
       where: {
-        createdAt: {
-          gte: sevenDaysAgo,
+        status: {
+          in: diagnosticInProgressStatuses,
+        },
+      },
+    }),
+    db.diagnosticSubmission.count({
+      where: {
+        status: {
+          in: diagnosticFinalStatuses,
         },
       },
     }),
     db.advisoryBooking.count(),
-    db.advisoryBooking.count({
-      where: {
-        createdAt: {
-          gte: sevenDaysAgo,
-        },
-      },
-    }),
     db.advisoryBooking.count({
       where: {
         status: 'PENDING',
@@ -304,129 +444,91 @@ export async function getAdminDashboardSnapshot() {
     }),
     db.advisoryBooking.count({
       where: {
-        startAt: {
-          gte: now,
-        },
-        status: {
-          in: ['PENDING', 'CONFIRMED'],
-        },
+        status: 'CONFIRMED',
       },
     }),
     db.advisoryBooking.count({
       where: {
-        scheduledDate: todayValue,
-      },
-    }),
-  ])
-
-  const [recentContactItems, recentDiagnosticItems, upcomingBookingItems] = await Promise.all([
-    db.contactSubmission.findMany({
-      take: 5,
-      orderBy: {
-        createdAt: 'desc',
-      },
-      select: {
-        id: true,
-        status: true,
-        name: true,
-        company: true,
-        subject: true,
-        createdAt: true,
-      },
-    }),
-    db.diagnosticSubmission.findMany({
-      take: 5,
-      orderBy: {
-        createdAt: 'desc',
-      },
-      select: {
-        id: true,
-        status: true,
-        name: true,
-        company: true,
-        summary: true,
-        createdAt: true,
-      },
-    }),
-    db.advisoryBooking.findMany({
-      take: 5,
-      where: {
-        startAt: {
-          gte: now,
-        },
-        status: {
-          in: ['PENDING', 'CONFIRMED'],
-        },
-      },
-      orderBy: {
-        startAt: 'asc',
-      },
-      select: {
-        id: true,
-        status: true,
-        fullName: true,
-        company: true,
-        scheduledDate: true,
-        scheduledTime: true,
-        startAt: true,
-        googleMeetUrl: true,
+        status: 'COMPLETED',
       },
     }),
   ])
 
   return {
-    totals: {
-      totalContacts,
-      newContacts,
-      recentContacts,
-      totalDiagnostics,
-      newDiagnostics,
-      recentDiagnostics,
-      totalBookings,
-      recentBookings,
-      pendingBookings,
-      upcomingBookings,
-      todaysBookings,
+    modules: {
+      contacts: {
+        total: totalContacts,
+        pending: pendingContacts,
+        inProgress: inProgressContacts,
+        attended: attendedContacts,
+      },
+      diagnostics: {
+        total: totalDiagnostics,
+        pending: pendingDiagnostics,
+        inProgress: inProgressDiagnostics,
+        finalized: finalizedDiagnostics,
+      },
+      bookings: {
+        total: totalBookings,
+        pending: pendingBookings,
+        confirmed: confirmedBookings,
+        completed: completedBookings,
+      },
     },
-    recentContactItems,
-    recentDiagnosticItems,
-    upcomingBookingItems,
   }
 }
 
 export async function listContactSubmissions(filters: AdminListFilters) {
   const db = getDb()
   const where = buildContactWhere(filters)
+  const scopeWhere = buildContactWhere(buildScopeFilters(filters))
   const total = await db.contactSubmission.count({ where })
   const pageCount = Math.max(1, Math.ceil(total / CONTACT_PAGE_SIZE))
   const page = Math.min(filters.page, pageCount)
 
-  const items = await db.contactSubmission.findMany({
-    where,
-    orderBy: {
-      createdAt: 'desc',
-    },
-    skip: (page - 1) * CONTACT_PAGE_SIZE,
-    take: CONTACT_PAGE_SIZE,
-    select: {
-      id: true,
-      status: true,
-      name: true,
-      company: true,
-      email: true,
-      phone: true,
-      subject: true,
-      createdAt: true,
-      internalEmailStatus: true,
-      clientEmailStatus: true,
-      _count: {
-        select: {
-          notes: true,
-          statusHistory: true,
+  const [items, pendingCount, inProgressCount, attendedCount] = await Promise.all([
+    db.contactSubmission.findMany({
+      where,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * CONTACT_PAGE_SIZE,
+      take: CONTACT_PAGE_SIZE,
+      select: {
+        id: true,
+        status: true,
+        name: true,
+        company: true,
+        email: true,
+        phone: true,
+        subject: true,
+        createdAt: true,
+        internalEmailStatus: true,
+        clientEmailStatus: true,
+        _count: {
+          select: {
+            notes: true,
+            statusHistory: true,
+          },
         },
       },
-    },
-  })
+    }),
+    db.contactSubmission.count({
+      where: {
+        AND: [scopeWhere, { status: { in: contactPendingStatuses } }],
+      },
+    }),
+    db.contactSubmission.count({
+      where: {
+        AND: [scopeWhere, { status: { in: contactInProgressStatuses } }],
+      },
+    }),
+    db.contactSubmission.count({
+      where: {
+        AND: [scopeWhere, { status: { in: contactAttendedStatuses } }],
+      },
+    }),
+  ])
 
   return {
     items,
@@ -434,6 +536,12 @@ export async function listContactSubmissions(filters: AdminListFilters) {
     pageCount,
     total,
     pageSize: CONTACT_PAGE_SIZE,
+    stats: {
+      total: pendingCount + inProgressCount + attendedCount,
+      pending: pendingCount,
+      inProgress: inProgressCount,
+      attended: attendedCount,
+    },
   }
 }
 
@@ -483,40 +591,58 @@ export async function getContactSubmissionDetail(id: string) {
 export async function listDiagnosticSubmissions(filters: AdminListFilters) {
   const db = getDb()
   const where = buildDiagnosticWhere(filters)
+  const scopeWhere = buildDiagnosticWhere(buildScopeFilters(filters))
   const total = await db.diagnosticSubmission.count({ where })
   const pageCount = Math.max(1, Math.ceil(total / DIAGNOSTIC_PAGE_SIZE))
   const page = Math.min(filters.page, pageCount)
 
-  const items = await db.diagnosticSubmission.findMany({
-    where,
-    orderBy: {
-      createdAt: 'desc',
-    },
-    skip: (page - 1) * DIAGNOSTIC_PAGE_SIZE,
-    take: DIAGNOSTIC_PAGE_SIZE,
-    select: {
-      id: true,
-      status: true,
-      name: true,
-      company: true,
-      email: true,
-      phone: true,
-      city: true,
-      sector: true,
-      summary: true,
-      wantsMeeting: true,
-      createdAt: true,
-      internalEmailStatus: true,
-      clientEmailStatus: true,
-      webhookStatus: true,
-      _count: {
-        select: {
-          notes: true,
-          statusHistory: true,
+  const [items, pendingCount, inProcessCount, finalizedCount] = await Promise.all([
+    db.diagnosticSubmission.findMany({
+      where,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * DIAGNOSTIC_PAGE_SIZE,
+      take: DIAGNOSTIC_PAGE_SIZE,
+      select: {
+        id: true,
+        status: true,
+        name: true,
+        company: true,
+        email: true,
+        phone: true,
+        city: true,
+        sector: true,
+        summary: true,
+        wantsMeeting: true,
+        createdAt: true,
+        internalEmailStatus: true,
+        clientEmailStatus: true,
+        webhookStatus: true,
+        _count: {
+          select: {
+            notes: true,
+            statusHistory: true,
+          },
         },
       },
-    },
-  })
+    }),
+    db.diagnosticSubmission.count({
+      where: {
+        AND: [scopeWhere, { status: { in: diagnosticPendingStatuses } }],
+      },
+    }),
+    db.diagnosticSubmission.count({
+      where: {
+        AND: [scopeWhere, { status: { in: diagnosticInProgressStatuses } }],
+      },
+    }),
+    db.diagnosticSubmission.count({
+      where: {
+        AND: [scopeWhere, { status: { in: diagnosticFinalStatuses } }],
+      },
+    }),
+  ])
 
   return {
     items,
@@ -524,6 +650,12 @@ export async function listDiagnosticSubmissions(filters: AdminListFilters) {
     pageCount,
     total,
     pageSize: DIAGNOSTIC_PAGE_SIZE,
+    stats: {
+      total: pendingCount + inProcessCount + finalizedCount,
+      pending: pendingCount,
+      inProcess: inProcessCount,
+      finalized: finalizedCount,
+    },
   }
 }
 
@@ -573,39 +705,70 @@ export async function getDiagnosticSubmissionDetail(id: string) {
 export async function listAdvisoryBookings(filters: AdminListFilters) {
   const db = getDb()
   const where = buildBookingWhere(filters)
+  const scopeWhere = buildBookingWhere(buildScopeFilters(filters))
   const total = await db.advisoryBooking.count({ where })
   const pageCount = Math.max(1, Math.ceil(total / BOOKING_PAGE_SIZE))
   const page = Math.min(filters.page, pageCount)
+  const todayValue = getTodayInAdvisoryZone()
 
-  const items = await db.advisoryBooking.findMany({
-    where,
-    orderBy: [{ startAt: 'desc' }, { createdAt: 'desc' }],
-    skip: (page - 1) * BOOKING_PAGE_SIZE,
-    take: BOOKING_PAGE_SIZE,
-    select: {
-      id: true,
-      status: true,
-      fullName: true,
-      company: true,
-      email: true,
-      phone: true,
-      scheduledDate: true,
-      scheduledTime: true,
-      startAt: true,
-      createdAt: true,
-      googleMeetUrl: true,
-      googleCalendarEventId: true,
-      calendarEventStatus: true,
-      internalEmailStatus: true,
-      clientEmailStatus: true,
-      _count: {
+  const [items, scopeTotal, todayCount, upcomingCount, activeCount] =
+    await Promise.all([
+      db.advisoryBooking.findMany({
+        where,
+        orderBy: [{ startAt: 'desc' }, { createdAt: 'desc' }],
+        skip: (page - 1) * BOOKING_PAGE_SIZE,
+        take: BOOKING_PAGE_SIZE,
         select: {
-          notes: true,
-          statusHistory: true,
+          id: true,
+          status: true,
+          fullName: true,
+          company: true,
+          email: true,
+          phone: true,
+          scheduledDate: true,
+          scheduledTime: true,
+          startAt: true,
+          createdAt: true,
+          googleMeetUrl: true,
+          googleCalendarEventId: true,
+          calendarEventStatus: true,
+          internalEmailStatus: true,
+          clientEmailStatus: true,
+          _count: {
+            select: {
+              notes: true,
+              statusHistory: true,
+            },
+          },
         },
-      },
-    },
-  })
+      }),
+      db.advisoryBooking.count({
+        where: scopeWhere,
+      }),
+      db.advisoryBooking.count({
+        where: {
+          AND: [scopeWhere, { scheduledDate: todayValue }],
+        },
+      }),
+      db.advisoryBooking.count({
+        where: {
+          AND: [
+            scopeWhere,
+            {
+              startAt: {
+                gte: new Date(),
+              },
+            },
+            { status: { in: bookingActiveStatuses } },
+          ],
+        },
+      }),
+      db.advisoryBooking.count({
+        where: {
+          AND: [scopeWhere, { status: { in: bookingActiveStatuses } }],
+        },
+      }),
+    ])
 
   return {
     items,
@@ -613,6 +776,12 @@ export async function listAdvisoryBookings(filters: AdminListFilters) {
     pageCount,
     total,
     pageSize: BOOKING_PAGE_SIZE,
+    stats: {
+      total: scopeTotal,
+      today: todayCount,
+      upcoming: upcomingCount,
+      active: activeCount,
+    },
   }
 }
 
@@ -657,6 +826,202 @@ export async function getAdvisoryBookingDetail(id: string) {
       },
     },
   })
+}
+
+export async function getRelatedActivityForRecord(input: {
+  entity: RelatedActivityItem['entity']
+  id: string
+  emailNormalized: string
+  phone: string
+  company: string
+}) {
+  const matchKey = buildRelatedMatchKey(input)
+  const db = getDb()
+  const contactOr: Prisma.ContactSubmissionWhereInput[] = []
+  const diagnosticOr: Prisma.DiagnosticSubmissionWhereInput[] = []
+  const bookingOr: Prisma.AdvisoryBookingWhereInput[] = []
+
+  if (matchKey.emailNormalized) {
+    contactOr.push({ emailNormalized: matchKey.emailNormalized })
+    diagnosticOr.push({ emailNormalized: matchKey.emailNormalized })
+    bookingOr.push({ emailNormalized: matchKey.emailNormalized })
+  }
+
+  if (matchKey.phoneProbe) {
+    contactOr.push({ phone: { contains: matchKey.phoneProbe } })
+    diagnosticOr.push({ phone: { contains: matchKey.phoneProbe } })
+    bookingOr.push({ phone: { contains: matchKey.phoneProbe } })
+  }
+
+  if (matchKey.company) {
+    contactOr.push({
+      company: {
+        equals: matchKey.company,
+      },
+    })
+    diagnosticOr.push({
+      company: {
+        equals: matchKey.company,
+      },
+    })
+    bookingOr.push({
+      company: {
+        equals: matchKey.company,
+      },
+    })
+  }
+
+  if (contactOr.length === 0 || diagnosticOr.length === 0 || bookingOr.length === 0) {
+    return [] as RelatedActivityItem[]
+  }
+
+  const [contacts, diagnostics, bookings] = await Promise.all([
+    db.contactSubmission.findMany({
+      where: {
+        OR: contactOr,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 12,
+      select: {
+        id: true,
+        status: true,
+        name: true,
+        company: true,
+        emailNormalized: true,
+        phone: true,
+        subject: true,
+        createdAt: true,
+      },
+    }),
+    db.diagnosticSubmission.findMany({
+      where: {
+        OR: diagnosticOr,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 12,
+      select: {
+        id: true,
+        status: true,
+        name: true,
+        role: true,
+        company: true,
+        emailNormalized: true,
+        phone: true,
+        summary: true,
+        createdAt: true,
+      },
+    }),
+    db.advisoryBooking.findMany({
+      where: {
+        OR: bookingOr,
+      },
+      orderBy: {
+        startAt: 'desc',
+      },
+      take: 12,
+      select: {
+        id: true,
+        status: true,
+        fullName: true,
+        company: true,
+        emailNormalized: true,
+        phone: true,
+        scheduledDate: true,
+        scheduledTime: true,
+        startAt: true,
+      },
+    }),
+  ])
+
+  const relatedItems: RelatedActivityItem[] = []
+
+  for (const item of contacts) {
+    if (input.entity === 'contactos' && item.id === input.id) {
+      continue
+    }
+
+    const matchReasons = collectMatchReasons(matchKey, item)
+
+    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
+      continue
+    }
+
+    relatedItems.push({
+      id: item.id,
+      entity: 'contactos',
+      href: `/admin/contactos/${item.id}`,
+      title: item.company,
+      subtitle: item.name,
+      description: item.subject,
+      status: item.status,
+      happenedAt: item.createdAt,
+      matchReasons,
+    })
+  }
+
+  for (const item of diagnostics) {
+    if (input.entity === 'diagnosticos' && item.id === input.id) {
+      continue
+    }
+
+    const matchReasons = collectMatchReasons(matchKey, item)
+
+    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
+      continue
+    }
+
+    relatedItems.push({
+      id: item.id,
+      entity: 'diagnosticos',
+      href: `/admin/diagnosticos/${item.id}`,
+      title: item.company,
+      subtitle: `${item.name}${item.role ? ` - ${item.role}` : ''}`,
+      description: item.summary,
+      status: item.status,
+      happenedAt: item.createdAt,
+      matchReasons,
+    })
+  }
+
+  for (const item of bookings) {
+    if (input.entity === 'reuniones' && item.id === input.id) {
+      continue
+    }
+
+    const matchReasons = collectMatchReasons(matchKey, item)
+
+    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
+      continue
+    }
+
+    relatedItems.push({
+      id: item.id,
+      entity: 'reuniones',
+      href: `/admin/reuniones/${item.id}`,
+      title: item.company,
+      subtitle: item.fullName,
+      description: `${item.scheduledDate} ${item.scheduledTime}`,
+      status: item.status,
+      happenedAt: item.startAt,
+      matchReasons,
+    })
+  }
+
+  relatedItems.sort((a, b) => {
+    const scoreDiff = getMatchScore(b.matchReasons) - getMatchScore(a.matchReasons)
+
+    if (scoreDiff !== 0) {
+      return scoreDiff
+    }
+
+    return b.happenedAt.getTime() - a.happenedAt.getTime()
+  })
+
+  return relatedItems.slice(0, 8)
 }
 
 export async function updateContactSubmissionStatus(input: {
@@ -833,7 +1198,24 @@ export async function updateAdvisoryBookingStatus(input: {
       id: true,
       status: true,
       slotKey: true,
+      fullName: true,
+      company: true,
+      email: true,
+      phone: true,
+      processGoal: true,
+      scheduledDate: true,
+      scheduledTime: true,
+      timezone: true,
+      durationMinutes: true,
+      meetingUrl: true,
+      googleMeetUrl: true,
+      calendarEventId: true,
+      calendarId: true,
       googleCalendarEventId: true,
+      clientEmailStatus: true,
+      customerEmailStatus: true,
+      customerCancellationEmailStatus: true,
+      companyCancellationEmailStatus: true,
     },
   })
 
@@ -845,11 +1227,49 @@ export async function updateAdvisoryBookingStatus(input: {
     return current
   }
 
-  if (shouldReleaseBookingSlot(nextStatus) && current.googleCalendarEventId) {
-    await deleteGoogleCalendarEvent(current.googleCalendarEventId)
+  const note = sanitizeMultiline(input.note ?? '').slice(0, 2000)
+  let cancellationSyncStatus: 'SENT' | 'FAILED' | 'SKIPPED' | null = null
+  let cancellationSyncError: string | null = null
+  const eventId = current.calendarEventId ?? current.googleCalendarEventId
+
+  if (shouldReleaseBookingSlot(nextStatus) && eventId) {
+    const snapshot = await db.availabilitySettings.findFirst({
+      orderBy: { createdAt: 'asc' },
+      select: { calendarMockMode: true },
+    })
+
+    const result = await getCalendarAdapter(snapshot?.calendarMockMode ?? 'none').cancelEvent(
+      eventId,
+      note,
+    )
+    cancellationSyncStatus = result.status
+    cancellationSyncError = result.error
   }
 
-  const note = sanitizeMultiline(input.note ?? '').slice(0, 2000)
+  let cancellationEmailStatus: DeliveryStatus | null = null
+  let cancellationEmailError: string | null = null
+
+  if (
+    shouldReleaseBookingSlot(nextStatus) &&
+    current.customerCancellationEmailStatus !== 'SENT'
+  ) {
+    const result = await getResendAdapter().sendCancellation({
+      bookingId: current.id,
+      fullName: current.fullName,
+      company: current.company,
+      email: current.email,
+      phone: current.phone,
+      dateLabel: current.scheduledDate,
+      timeLabel: current.scheduledTime,
+      timezone: current.timezone,
+      meetUrl: current.meetingUrl ?? current.googleMeetUrl,
+      reason: current.processGoal,
+      description: current.processGoal,
+      cancellationReason: note || undefined,
+    })
+    cancellationEmailStatus = result.status
+    cancellationEmailError = result.error
+  }
 
   return db.$transaction(async (tx) => {
     const updated = await tx.advisoryBooking.update({
@@ -859,6 +1279,21 @@ export async function updateAdvisoryBookingStatus(input: {
       data: {
         status: nextStatus,
         slotKey: shouldReleaseBookingSlot(nextStatus) ? null : current.slotKey,
+        cancelledAt: shouldReleaseBookingSlot(nextStatus) ? new Date() : undefined,
+        cancellationReason: shouldReleaseBookingSlot(nextStatus) ? note || null : undefined,
+        calendarSyncStatus: cancellationSyncStatus ?? undefined,
+        calendarSyncError: shouldReleaseBookingSlot(nextStatus)
+          ? cancellationSyncError
+          : undefined,
+        customerEmailStatus: cancellationEmailStatus ?? undefined,
+        clientEmailStatus: cancellationEmailStatus ?? undefined,
+        customerCancellationEmailStatus: cancellationEmailStatus ?? undefined,
+        companyCancellationEmailStatus: cancellationEmailStatus ?? undefined,
+        lastDeliveryAttemptAt: cancellationEmailStatus ? new Date() : undefined,
+        lastDeliveryError:
+          shouldReleaseBookingSlot(nextStatus)
+            ? [cancellationSyncError, cancellationEmailError].filter(Boolean).join(' ') || null
+            : undefined,
       },
     })
 
@@ -894,6 +1329,80 @@ export async function addAdvisoryBookingNote(input: {
       advisoryBookingId: input.id,
       body: note,
     },
+  })
+}
+
+export async function rescheduleAdvisoryBooking(input: {
+  id: string
+  date: string
+  time: string
+  note?: string
+  adminUserId: string
+}) {
+  const db = getDb()
+  const current = await db.advisoryBooking.findUnique({
+    where: { id: input.id },
+    select: {
+      id: true,
+      status: true,
+      scheduledDate: true,
+      scheduledTime: true,
+      slotKey: true,
+    },
+  })
+
+  if (!current) {
+    throw new Error('NOT_FOUND')
+  }
+
+  if (!bookingActiveStatuses.includes(current.status)) {
+    throw new Error('BOOKING_NOT_ACTIVE')
+  }
+
+  const slotCheck = await assertSlotAvailable(input.date, input.time)
+  const nextSlotKey = buildAdvisorySlotKey(slotCheck.startAt, slotCheck.endAt)
+  const note = sanitizeMultiline(input.note ?? '').slice(0, 2000)
+  const historyNote =
+    note ||
+    `Reprogramada desde ${current.scheduledDate} ${current.scheduledTime} hacia ${input.date} ${input.time}.`
+
+  return db.$transaction(async (tx) => {
+    const updated = await tx.advisoryBooking.update({
+      where: { id: input.id },
+      data: {
+        status: 'RESCHEDULED',
+        scheduledDate: input.date,
+        scheduledTime: input.time,
+        startAt: slotCheck.startAt,
+        endAt: slotCheck.endAt,
+        durationMinutes: slotCheck.snapshot.settings.durationMinutes,
+        timezone: slotCheck.snapshot.settings.timezoneLabel,
+        modality: slotCheck.snapshot.settings.defaultModality,
+        slotKey: nextSlotKey,
+        calendarSyncStatus: 'SKIPPED',
+        calendarSyncError: 'Reprogramacion local. Integraciones externas aun no retomadas.',
+      },
+    })
+
+    await tx.statusHistory.create({
+      data: {
+        adminUserId: input.adminUserId,
+        advisoryBookingId: input.id,
+        fromStatus: current.status,
+        toStatus: 'RESCHEDULED',
+        note: historyNote,
+        metadata: {
+          sourceDate: current.scheduledDate,
+          sourceTime: current.scheduledTime,
+          targetDate: input.date,
+          targetTime: input.time,
+          previousSlotKey: current.slotKey,
+          nextSlotKey,
+        },
+      },
+    })
+
+    return updated
   })
 }
 

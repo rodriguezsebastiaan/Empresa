@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 enum AdminRole {
@@ -43,8 +43,13 @@ enum AdvisoryBookingStatus {
   NO_SHOW
 }
 
+enum AvailabilityExceptionType {
+  BLOCKED_DAY
+  SPECIAL_HOURS
+}
+
 model AdminUser {
-  id               String         @id @default(uuid()) @db.Uuid
+  id               String         @id @default(uuid()) @db.Char(36)
   email            String         @db.VarChar(191)
   emailNormalized  String         @unique @db.VarChar(191)
   name             String         @db.VarChar(120)
@@ -59,13 +64,17 @@ model AdminUser {
   sessions         AdminSession[]
   notes            AdminNote[]
   statusChanges    StatusHistory[]
+  loginAttempts    AdminLoginAttempt[]
+  auditLogs        AdminAuditLog[]
+  notifications    AdminNotification[]
+  availabilitySettings AvailabilitySettings[]
 
   @@index([isActive, createdAt])
 }
 
 model AdminSession {
-  id          String    @id @default(uuid()) @db.Uuid
-  adminUserId String    @db.Uuid
+  id          String    @id @default(uuid()) @db.Char(36)
+  adminUserId String    @db.Char(36)
   tokenHash   String    @unique @db.VarChar(128)
   expiresAt   DateTime
   lastSeenAt  DateTime?
@@ -78,8 +87,84 @@ model AdminSession {
   @@index([adminUserId, expiresAt])
 }
 
+model AdminPermission {
+  id          String                @id @default(uuid()) @db.Char(36)
+  key         String                @unique @db.VarChar(120)
+  description String?              @db.VarChar(240)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  roles       AdminRolePermission[]
+
+  @@index([key])
+}
+
+model AdminRolePermission {
+  id           String          @id @default(uuid()) @db.Char(36)
+  role         AdminRole
+  permissionId String          @db.Char(36)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  permission   AdminPermission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([role, permissionId])
+  @@index([permissionId])
+}
+
+model AdminLoginAttempt {
+  id              String     @id @default(uuid()) @db.Char(36)
+  adminUserId     String?    @db.Char(36)
+  emailNormalized String     @db.VarChar(191)
+  success         Boolean    @default(false)
+  failureReason   String?    @db.VarChar(80)
+  ipHash          String?    @db.VarChar(128)
+  userAgent       String?    @db.VarChar(500)
+  createdAt       DateTime   @default(now())
+  adminUser       AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+
+  @@index([emailNormalized, createdAt])
+  @@index([adminUserId, createdAt])
+  @@index([success, createdAt])
+}
+
+model AdminAuditLog {
+  id          String     @id @default(uuid()) @db.Char(36)
+  adminUserId String?    @db.Char(36)
+  action      String     @db.VarChar(120)
+  entityType  String     @db.VarChar(80)
+  entityId    String?    @db.VarChar(120)
+  metadata    Json?
+  ipHash      String?    @db.VarChar(128)
+  userAgent   String?    @db.VarChar(500)
+  createdAt   DateTime   @default(now())
+  adminUser   AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+
+  @@index([adminUserId, createdAt])
+  @@index([entityType, entityId])
+  @@index([action, createdAt])
+}
+
+model AdminNotification {
+  id                   String     @id @default(uuid()) @db.Char(36)
+  recipientAdminUserId String?    @db.Char(36)
+  recipientRole        AdminRole?
+  type                 String     @db.VarChar(80)
+  title                String     @db.VarChar(160)
+  description          String?    @db.VarChar(500)
+  entityType           String?    @db.VarChar(80)
+  entityId             String?    @db.VarChar(120)
+  isRead               Boolean    @default(false)
+  readAt               DateTime?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  recipientAdminUser   AdminUser? @relation(fields: [recipientAdminUserId], references: [id], onDelete: SetNull)
+
+  @@index([recipientAdminUserId, isRead, createdAt])
+  @@index([recipientRole, isRead, createdAt])
+  @@index([entityType, entityId])
+}
+
 model ContactSubmission {
-  id                    String                  @id @default(uuid()) @db.Uuid
+  id                    String                  @id @default(uuid()) @db.Char(36)
   status                ContactSubmissionStatus @default(NEW)
   name                  String                  @db.VarChar(80)
   company               String                  @db.VarChar(120)
@@ -110,7 +195,7 @@ model ContactSubmission {
 }
 
 model DiagnosticSubmission {
-  id                    String                     @id @default(uuid()) @db.Uuid
+  id                    String                     @id @default(uuid()) @db.Char(36)
   status                DiagnosticSubmissionStatus @default(NEW)
   name                  String                     @db.VarChar(80)
   company               String                     @db.VarChar(120)
@@ -153,7 +238,7 @@ model DiagnosticSubmission {
 }
 
 model AdvisoryBooking {
-  id                     String                @id @default(uuid()) @db.Uuid
+  id                     String                @id @default(uuid()) @db.Char(36)
   requestId              String                @unique @db.VarChar(120)
   slotKey                String?               @unique @db.VarChar(120)
   status                 AdvisoryBookingStatus @default(CONFIRMED)
@@ -173,14 +258,28 @@ model AdvisoryBooking {
   durationMinutes        Int
   privacyAcceptedAt      DateTime
   privacyPolicyVersion   String                @db.VarChar(120)
+  calendarEventId        String?               @unique @db.VarChar(191)
+  calendarId             String?               @db.VarChar(191)
+  meetingUrl             String?               @db.Text
   googleCalendarEventId  String?               @unique @db.VarChar(191)
   googleCalendarHtmlLink String?               @db.Text
   googleMeetUrl          String?               @db.Text
   calendarEventStatus    DeliveryStatus        @default(PENDING)
+  calendarSyncStatus     DeliveryStatus        @default(PENDING)
+  calendarSyncedAt       DateTime?
+  calendarSyncError      String?               @db.Text
   internalEmailStatus    DeliveryStatus        @default(PENDING)
   clientEmailStatus      DeliveryStatus        @default(PENDING)
+  companyEmailStatus     DeliveryStatus        @default(PENDING)
+  customerEmailStatus    DeliveryStatus        @default(PENDING)
+  customerConfirmationEmailStatus DeliveryStatus @default(PENDING)
+  companyConfirmationEmailStatus  DeliveryStatus @default(PENDING)
+  customerCancellationEmailStatus DeliveryStatus @default(PENDING)
+  companyCancellationEmailStatus  DeliveryStatus @default(PENDING)
   lastDeliveryError      String?               @db.Text
   lastDeliveryAttemptAt  DateTime?
+  cancelledAt            DateTime?
+  cancellationReason     String?               @db.Text
   requestOrigin          String?               @db.VarChar(191)
   requestPath            String?               @db.VarChar(191)
   referer                String?               @db.VarChar(191)
@@ -196,16 +295,110 @@ model AdvisoryBooking {
   @@index([scheduledDate, status])
 }
 
+model AvailabilitySettings {
+  id                 String   @id @default(uuid()) @db.Char(36)
+  isEnabled          Boolean  @default(true)
+  timezone           String   @default("America/Bogota") @db.VarChar(80)
+  timezoneLabel      String   @default("America/Bogota") @db.VarChar(80)
+  durationMinutes    Int      @default(45)
+  bufferMinutes      Int      @default(15)
+  minNoticeHours     Int      @default(12)
+  maxDaysAhead       Int      @default(30)
+  defaultModality    String   @default("Virtual") @db.VarChar(80)
+  calendarMockMode   String   @default("none") @db.VarChar(40)
+  updatedByAdminId   String?  @db.Char(36)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  updatedByAdmin     AdminUser? @relation(fields: [updatedByAdminId], references: [id], onDelete: SetNull)
+  rules              AvailabilityRule[]
+  exceptions         AvailabilityException[]
+  blockedPeriods     BlockedPeriod[]
+
+  @@index([isEnabled, updatedAt])
+}
+
+model AvailabilityRule {
+  id         String               @id @default(uuid()) @db.Char(36)
+  settingsId String               @db.Char(36)
+  weekday    Int
+  startTime  String               @db.VarChar(5)
+  endTime    String               @db.VarChar(5)
+  isEnabled  Boolean              @default(true)
+  sortOrder  Int                  @default(0)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  settings   AvailabilitySettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@index([settingsId, weekday, isEnabled])
+}
+
+model AvailabilityException {
+  id         String                    @id @default(uuid()) @db.Char(36)
+  settingsId String                    @db.Char(36)
+  date       String                    @db.VarChar(10)
+  type       AvailabilityExceptionType
+  reason     String?                   @db.VarChar(180)
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+  settings   AvailabilitySettings      @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  ranges     AvailabilityExceptionRange[]
+
+  @@unique([settingsId, date])
+  @@index([settingsId, date, type])
+}
+
+model AvailabilityExceptionRange {
+  id          String                @id @default(uuid()) @db.Char(36)
+  exceptionId String                @db.Char(36)
+  startTime   String                @db.VarChar(5)
+  endTime     String                @db.VarChar(5)
+  sortOrder   Int                   @default(0)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  exception   AvailabilityException @relation(fields: [exceptionId], references: [id], onDelete: Cascade)
+
+  @@index([exceptionId, sortOrder])
+}
+
+model BlockedPeriod {
+  id         String               @id @default(uuid()) @db.Char(36)
+  settingsId String               @db.Char(36)
+  date       String               @db.VarChar(10)
+  startTime  String               @db.VarChar(5)
+  endTime    String               @db.VarChar(5)
+  reason     String?              @db.VarChar(180)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  settings   AvailabilitySettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@index([settingsId, date])
+}
+
+model CalendarIntegration {
+  id             String         @id @default(uuid()) @db.Char(36)
+  provider       String         @default("google_calendar") @db.VarChar(80)
+  mode           String         @default("mock") @db.VarChar(40)
+  calendarId     String?        @db.VarChar(191)
+  isEnabled      Boolean        @default(false)
+  syncStatus     DeliveryStatus @default(SKIPPED)
+  lastSyncError  String?        @db.Text
+  lastCheckedAt  DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([provider, mode, isEnabled])
+}
+
 model AdminNote {
-  id                     String                @id @default(uuid()) @db.Uuid
-  adminUserId            String                @db.Uuid
-  contactSubmissionId    String?               @db.Uuid
-  diagnosticSubmissionId String?               @db.Uuid
-  advisoryBookingId      String?               @db.Uuid
+  id                     String                @id @default(uuid()) @db.Char(36)
+  adminUserId            String                @db.Char(36)
+  contactSubmissionId    String?               @db.Char(36)
+  diagnosticSubmissionId String?               @db.Char(36)
+  advisoryBookingId      String?               @db.Char(36)
   body                   String                @db.Text
   createdAt              DateTime              @default(now())
   updatedAt              DateTime              @updatedAt
-  adminUser              AdminUser             @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  adminUser              AdminUser             @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
   contactSubmission      ContactSubmission?    @relation("ContactSubmissionNotes", fields: [contactSubmissionId], references: [id], onDelete: Cascade)
   diagnosticSubmission   DiagnosticSubmission? @relation("DiagnosticSubmissionNotes", fields: [diagnosticSubmissionId], references: [id], onDelete: Cascade)
   advisoryBooking        AdvisoryBooking?      @relation("AdvisoryBookingNotes", fields: [advisoryBookingId], references: [id], onDelete: Cascade)
@@ -217,11 +410,11 @@ model AdminNote {
 }
 
 model StatusHistory {
-  id                     String                @id @default(uuid()) @db.Uuid
-  adminUserId            String?               @db.Uuid
-  contactSubmissionId    String?               @db.Uuid
-  diagnosticSubmissionId String?               @db.Uuid
-  advisoryBookingId      String?               @db.Uuid
+  id                     String                @id @default(uuid()) @db.Char(36)
+  adminUserId            String?               @db.Char(36)
+  contactSubmissionId    String?               @db.Char(36)
+  diagnosticSubmissionId String?               @db.Char(36)
+  advisoryBookingId      String?               @db.Char(36)
   fromStatus             String?               @db.VarChar(40)
   toStatus               String                @db.VarChar(40)
   note                   String?               @db.Text

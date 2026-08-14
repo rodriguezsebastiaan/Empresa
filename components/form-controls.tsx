@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils'
 
 export const fieldClassName =
-  'mt-2 w-full rounded-xl border border-border/70 bg-background/70 px-4 py-3 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-muted-foreground/70 focus:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/40'
+  'mt-2 w-full rounded-xl border border-border/70 bg-background/68 px-4 py-3 text-sm text-foreground shadow-inner shadow-black/5 outline-none transition-colors duration-200 placeholder:text-muted-foreground/60 hover:border-border focus:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/35'
 
 export const panelClassName =
-  'rounded-2xl border border-border/70 bg-background/50 p-6 backdrop-blur-sm'
+  'rounded-2xl border border-border/70 bg-background/50 p-6 shadow-[0_18px_70px_-62px_var(--primary)] backdrop-blur-sm'
 
 type TextFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string

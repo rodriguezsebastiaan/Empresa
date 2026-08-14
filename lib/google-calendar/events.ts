@@ -103,8 +103,8 @@ export async function createGoogleCalendarBookingRecord(
     throw new Error('GOOGLE_CALENDAR_NOT_CONFIGURED')
   }
 
-  const availableSlots = await listAvailableSlots(payload.date)
-  const selectedSlot = availableSlots.find((slot) => slot.value === payload.time)
+  const availability = await listAvailableSlots(payload.date)
+  const selectedSlot = availability.slots.find((slot) => slot.value === payload.time)
 
   if (!selectedSlot) {
     throw new Error('SLOT_NOT_AVAILABLE')

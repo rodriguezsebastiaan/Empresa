@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server'
-import { siteConfig } from '@/config/site'
-import { listAvailableSlots } from '@/lib/google-calendar/availability'
+import { listAvailableSlots } from '@/lib/availability-service'
 import {
   applyRateLimitHeaders,
   buildRateLimitResponse,
   evaluateRateLimit,
 } from '@/lib/rate-limit'
-import { isGoogleCalendarConfigured } from '@/lib/site'
 
 export async function GET(request: Request) {
   const rateLimit = evaluateRateLimit(request, {
@@ -29,38 +27,27 @@ export async function GET(request: Request) {
   const date = searchParams.get('date')
 
   if (!date) {
-    return respond(
-      { success: false, message: 'Debe indicar una fecha.' },
-      400,
-    )
-  }
-
-  if (!isGoogleCalendarConfigured()) {
-    return respond(
-      {
-        success: false,
-        configured: false,
-        message:
-          'La disponibilidad real de Google Calendar aún no está activada. Debe configurar las credenciales del calendario antes de publicar el agendamiento.',
-      },
-      503,
-    )
+    return respond({ success: false, message: 'Debe indicar una fecha.' }, 400)
   }
 
   try {
-    const slots = await listAvailableSlots(date)
+    const availability = await listAvailableSlots(date)
 
     return respond(
       {
         success: true,
-        configured: true,
+        configured: availability.configured,
         date,
-        slots,
+        slots: availability.slots,
+        message: availability.message,
         rules: {
-          timezone: siteConfig.advisory.timezoneLabel,
-          durationMinutes: siteConfig.advisory.durationMinutes,
-          bufferMinutes: siteConfig.advisory.bufferMinutes,
-          minNoticeHours: siteConfig.advisory.minNoticeHours,
+          timezone: availability.snapshot.settings.timezoneLabel,
+          durationMinutes: availability.snapshot.settings.durationMinutes,
+          bufferMinutes: availability.snapshot.settings.bufferMinutes,
+          minNoticeHours: availability.snapshot.settings.minNoticeHours,
+          maxDaysAhead: availability.snapshot.settings.maxDaysAhead,
+          calendarMode:
+            process.env.GOOGLE_CALENDAR_MODE === 'real' ? 'real' : 'mock-development',
         },
       },
       200,
@@ -73,7 +60,7 @@ export async function GET(request: Request) {
         success: false,
         message: invalidDate
           ? 'La fecha solicitada no es válida.'
-          : 'No fue posible consultar la disponibilidad del calendario.',
+          : 'No fue posible consultar la disponibilidad.',
       },
       invalidDate ? 400 : 502,
     )
