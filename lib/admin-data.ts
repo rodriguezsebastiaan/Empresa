@@ -105,6 +105,105 @@ export type RelatedActivityItem = {
   matchReasons: string[]
 }
 
+export type AdminPaginatedList<TItem, TStats extends Record<string, number>> = {
+  items: TItem[]
+  page: number
+  pageCount: number
+  total: number
+  pageSize: number
+  stats: TStats
+}
+
+export type ContactSubmissionListItem = {
+  id: string
+  status: ContactSubmissionStatus
+  name: string
+  company: string
+  email: string
+  phone: string
+  subject: string
+  createdAt: Date
+  internalEmailStatus: DeliveryStatus
+  clientEmailStatus: DeliveryStatus
+  _count: {
+    notes: number
+    statusHistory: number
+  }
+}
+
+export type ContactSubmissionListResult = AdminPaginatedList<
+  ContactSubmissionListItem,
+  {
+    total: number
+    pending: number
+    inProgress: number
+    attended: number
+  }
+>
+
+export type DiagnosticSubmissionListItem = {
+  id: string
+  status: DiagnosticSubmissionStatus
+  name: string
+  company: string
+  email: string
+  phone: string
+  city: string
+  sector: string
+  summary: string
+  wantsMeeting: boolean
+  createdAt: Date
+  internalEmailStatus: DeliveryStatus
+  clientEmailStatus: DeliveryStatus
+  webhookStatus: DeliveryStatus
+  _count: {
+    notes: number
+    statusHistory: number
+  }
+}
+
+export type DiagnosticSubmissionListResult = AdminPaginatedList<
+  DiagnosticSubmissionListItem,
+  {
+    total: number
+    pending: number
+    inProcess: number
+    finalized: number
+  }
+>
+
+export type AdvisoryBookingListItem = {
+  id: string
+  status: AdvisoryBookingStatus
+  fullName: string
+  company: string
+  email: string
+  phone: string
+  scheduledDate: string
+  scheduledTime: string
+  startAt: Date
+  createdAt: Date
+  googleMeetUrl: string | null
+  googleCalendarEventId: string | null
+  calendarEventStatus: DeliveryStatus
+  internalEmailStatus: DeliveryStatus
+  clientEmailStatus: DeliveryStatus
+  _count: {
+    notes: number
+    statusHistory: number
+  }
+}
+
+export type AdvisoryBookingListResult = AdminPaginatedList<
+  AdvisoryBookingListItem,
+  {
+    total: number
+    today: number
+    upcoming: number
+    active: number
+  }
+>
+
 type SearchParamsInput =
   | URLSearchParams
   | Record<string, string | string[] | undefined>
@@ -478,7 +577,9 @@ export async function getAdminDashboardSnapshot() {
   }
 }
 
-export async function listContactSubmissions(filters: AdminListFilters) {
+export async function listContactSubmissions(
+  filters: AdminListFilters,
+): Promise<ContactSubmissionListResult> {
   const db = getDb()
   const where = buildContactWhere(filters)
   const scopeWhere = buildContactWhere(buildScopeFilters(filters))
@@ -588,7 +689,9 @@ export async function getContactSubmissionDetail(id: string) {
   })
 }
 
-export async function listDiagnosticSubmissions(filters: AdminListFilters) {
+export async function listDiagnosticSubmissions(
+  filters: AdminListFilters,
+): Promise<DiagnosticSubmissionListResult> {
   const db = getDb()
   const where = buildDiagnosticWhere(filters)
   const scopeWhere = buildDiagnosticWhere(buildScopeFilters(filters))
@@ -702,7 +805,9 @@ export async function getDiagnosticSubmissionDetail(id: string) {
   })
 }
 
-export async function listAdvisoryBookings(filters: AdminListFilters) {
+export async function listAdvisoryBookings(
+  filters: AdminListFilters,
+): Promise<AdvisoryBookingListResult> {
   const db = getDb()
   const where = buildBookingWhere(filters)
   const scopeWhere = buildBookingWhere(buildScopeFilters(filters))
