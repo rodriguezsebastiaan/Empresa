@@ -77,10 +77,8 @@ async function main() {
   await pg.start()
   await ensureDatabase()
 
-  const connectionString = `postgresql://${user}:${password}@127.0.0.1:${port}/${database}`
-
   console.log('LOCAL_POSTGRES_READY')
-  console.log(`DATABASE_URL=${connectionString}`)
+  console.log(`DATABASE_URL=postgresql://${user}:***@127.0.0.1:${port}/${database}`)
   console.log(`DATA_DIR=${databaseDir}`)
   console.log('Press Ctrl+C to stop the local instance.')
 
@@ -94,6 +92,6 @@ async function main() {
 }
 
 main().catch(async (error) => {
-  console.error(error)
+  console.error(error instanceof Error ? error.message : 'LOCAL_POSTGRES_ERROR')
   await stopAndExit(1)
 })
