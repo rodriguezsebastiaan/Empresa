@@ -11,6 +11,7 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "node scripts/run-ts.mjs prisma/seed.ts",
+    "db:check": "node scripts/run-ts.mjs scripts/check-production-db.ts",
     "smtp:check": "node scripts/run-ts.mjs scripts/check-smtp.ts",
     "test": "node scripts/run-ts.mjs scripts/test-availability.ts"
   },
