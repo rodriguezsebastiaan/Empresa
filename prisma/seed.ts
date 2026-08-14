@@ -8,7 +8,7 @@ for (const fileName of ['.env', '.env.local']) {
   const filePath = resolve(process.cwd(), fileName)
 
   if (existsSync(filePath)) {
-    loadDotenv({ path: filePath, override: true })
+    loadDotenv({ path: filePath, override: false })
   }
 }
 

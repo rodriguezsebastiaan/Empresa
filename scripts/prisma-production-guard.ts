@@ -9,7 +9,7 @@ const EXPECTED_DATABASE = 'rserpler4_empresaa'
 const EXPECTED_USER = 'rserpler4_empresaa'
 const INITIAL_MIGRATION = '20260813163000_mysql_initial'
 
-type GuardCommand = 'status' | 'resolve' | 'deploy'
+type GuardCommand = 'status' | 'resolve' | 'deploy' | 'seed'
 
 function fail(message: string): never {
   console.error(`ERROR ${message}`)
@@ -90,23 +90,39 @@ function parseProductionUrl() {
 function getCommand(): GuardCommand {
   const command = process.argv[2]
 
-  if (command === 'status' || command === 'resolve' || command === 'deploy') {
+  if (command === 'status' || command === 'resolve' || command === 'deploy' || command === 'seed') {
     return command
   }
 
-  fail('Comando invalido. Use status, resolve o deploy.')
+  fail('Comando invalido. Use status, resolve, deploy o seed.')
 }
 
-function getPrismaArgs(command: GuardCommand) {
+function getProcessArgs(command: GuardCommand) {
+  if (command === 'seed') {
+    return {
+      command: 'node',
+      args: ['scripts/run-ts.mjs', 'prisma/seed.ts'],
+    }
+  }
+
   if (command === 'status') {
-    return ['prisma', 'migrate', 'status']
+    return {
+      command: 'npx',
+      args: ['prisma', 'migrate', 'status'],
+    }
   }
 
   if (command === 'resolve') {
-    return ['prisma', 'migrate', 'resolve', '--applied', INITIAL_MIGRATION]
+    return {
+      command: 'npx',
+      args: ['prisma', 'migrate', 'resolve', '--applied', INITIAL_MIGRATION],
+    }
   }
 
-  return ['prisma', 'migrate', 'deploy']
+  return {
+    command: 'npx',
+    args: ['prisma', 'migrate', 'deploy'],
+  }
 }
 
 function assertWriteConfirmed(command: GuardCommand) {
@@ -119,12 +135,27 @@ function assertWriteConfirmed(command: GuardCommand) {
   }
 }
 
+function assertSeedEnvironment(command: GuardCommand) {
+  if (command !== 'seed') {
+    return
+  }
+
+  const required = ['ADMIN_SEED_NAME', 'ADMIN_SEED_EMAIL', 'ADMIN_SEED_PASSWORD']
+  const missing = required.filter((key) => !process.env[key]?.trim())
+
+  if (missing.length > 0) {
+    fail(`Faltan variables para seed: ${missing.join(', ')}.`)
+  }
+}
+
 loadLocalEnvironment()
 
 const command = getCommand()
 const { prismaUrl, summary } = parseProductionUrl()
+const processArgs = getProcessArgs(command)
 
 assertWriteConfirmed(command)
+assertSeedEnvironment(command)
 
 console.log('Prisma production guard')
 console.log(`Comando: ${command}`)
@@ -134,7 +165,7 @@ console.log(`Base: ${summary.database}`)
 console.log(`Usuario: ${summary.user}`)
 console.log(`Password configurado: ${summary.passwordConfigured ? 'si' : 'no'}`)
 
-const result = spawnSync('npx', getPrismaArgs(command), {
+const result = spawnSync(processArgs.command, processArgs.args, {
   stdio: 'inherit',
   shell: true,
   env: {
