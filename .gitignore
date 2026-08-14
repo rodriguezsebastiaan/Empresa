@@ -23,6 +23,7 @@ tsconfig.tsbuildinfo
 # Local logs and temporary outputs
 *.log
 .tmp-*.log
+.tmp-browser-audit-profile*/
 
 # Backups and database dumps
 backups/
