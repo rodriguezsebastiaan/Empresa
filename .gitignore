@@ -27,6 +27,7 @@ tsconfig.tsbuildinfo
 .tmp-*/
 
 # Backups and database dumps
+/backup/
 backups/
 *.sql
 !prisma/migrations/**/*.sql
