@@ -249,6 +249,16 @@ export type DiagnosticSubmissionExportItem = {
 export type CsvCellValue = string | number | boolean | null
 export type CsvRow = Record<string, CsvCellValue>
 
+function escapeCsvCell(value: CsvCellValue) {
+  if (value == null) {
+    return ''
+  }
+
+  const text = String(value)
+  const safeText = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text
+  return `"${safeText.replaceAll('"', '""')}"`
+}
+
 type SearchParamsInput =
   | URLSearchParams
   | Record<string, string | string[] | undefined>
@@ -1634,8 +1644,7 @@ export function serializeCsv(rows: CsvRow[]) {
       headers
         .map((header) => {
           const value = row[header]
-          const text = value == null ? '' : String(value)
-          return `"${text.replaceAll('"', '""')}"`
+          return escapeCsvCell(value)
         })
         .join(','),
     ),

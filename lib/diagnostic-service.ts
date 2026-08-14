@@ -1,4 +1,5 @@
 import { DeliveryStatus } from '@prisma/client'
+import { integrationEnvConfig } from '@/config/integrations'
 import { siteConfig } from '@/config/site'
 import { getDb } from '@/lib/db'
 import { isDiagnosticWebhookConfigured, sendDiagnosticWebhook } from '@/lib/diagnostic-webhook'
@@ -305,7 +306,7 @@ export async function submitDiagnosticForm(
   }
 
   if (!webhookReady) {
-    notificationIssues.push(siteConfig.integrations.diagnostics.webhookEnv.join(', '))
+    notificationIssues.push(integrationEnvConfig.diagnostics.webhookEnv.join(', '))
   }
 
   const internalEmail = buildInternalEmail(payload, summary, receivedAt)

@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 import {
+  buildAdminForbiddenResponse,
   getCurrentAdmin,
   getSafeAdminReturnTo,
+  hasAdminPermission,
   isAdminActionOriginValid,
 } from '@/lib/admin-auth'
 import { addAdvisoryBookingNote } from '@/lib/admin-data'
@@ -14,6 +16,10 @@ export async function POST(
 
   if (!admin) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
+  }
+
+  if (!hasAdminPermission(admin, 'bookings:edit')) {
+    return buildAdminForbiddenResponse()
   }
 
   if (!isAdminActionOriginValid(request)) {

@@ -56,11 +56,14 @@ const securityHeaders = [
     key: 'X-Permitted-Cross-Domain-Policies',
     value: 'none',
   },
-  {
+]
+
+if (isProduction) {
+  securityHeaders.push({
     key: 'Strict-Transport-Security',
     value: 'max-age=31536000; includeSubDomains; preload',
-  },
-]
+  })
+}
 
 const nextConfig = {
   images: {

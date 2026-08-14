@@ -37,7 +37,13 @@ backups/
 # Credentials and secrets
 *.pem
 *.key
+*.crt
+*.cer
 *.p12
 *.pfx
+*credentials*.json
+*credential*.json
+*service-account*.json
+*private-key*.json
 secrets/
 credentials/

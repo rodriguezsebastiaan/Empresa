@@ -36,6 +36,16 @@ export const ADMIN_ROLE_PERMISSIONS: Record<AdminRole, string[]> = {
   ],
 }
 
+export type AdminPermissionKey =
+  | 'dashboard:view'
+  | 'contacts:view'
+  | 'contacts:edit'
+  | 'diagnostics:view'
+  | 'diagnostics:edit'
+  | 'bookings:view'
+  | 'bookings:edit'
+  | 'exports:download'
+
 export type AuthenticatedAdmin = {
   id: string
   name: string
@@ -113,7 +123,7 @@ async function recordAdminLoginAttempt(input: {
   }
 }
 
-async function recordAdminAuditLog(input: {
+export async function recordAdminAuditLog(input: {
   adminUserId: string
   action: string
   entityType: string
@@ -138,6 +148,20 @@ async function recordAdminAuditLog(input: {
   } catch {
     // Operational audit is best-effort; the main flow remains the source of truth.
   }
+}
+
+export function hasAdminPermission(admin: Pick<AuthenticatedAdmin, 'role'>, permission: AdminPermissionKey) {
+  return ADMIN_ROLE_PERMISSIONS[admin.role]?.includes(permission) ?? false
+}
+
+export function buildAdminForbiddenResponse() {
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'No tiene permisos para realizar esta acciÃ³n.',
+    },
+    { status: 403 },
+  )
 }
 
 export function getAdminRuntimeConfigError() {

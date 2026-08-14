@@ -177,6 +177,7 @@ async function main() {
   }
 
   let sslActive = false
+  let tableNames: string[] = []
 
   try {
     const connection = await mariadb.createConnection(buildDriverConfig(url))
@@ -184,11 +185,27 @@ async function main() {
     const sslRows = await connection.query<Array<{ Variable_name: string; Value: string }>>(
       "SHOW STATUS LIKE 'Ssl_cipher'",
     )
+    const tableRows = await connection.query<Array<{ tableName: string }>>(
+      `SELECT TABLE_NAME AS tableName
+       FROM information_schema.TABLES
+       WHERE TABLE_SCHEMA = ?
+       ORDER BY TABLE_NAME`,
+      [database],
+    )
     sslActive = Boolean(sslRows[0]?.Value)
+    tableNames = tableRows.map((row) => row.tableName)
     printResult({
       step: 'MySQL',
       ok: true,
       detail: `Autenticación correcta. Versión: ${versionRows[0]?.version ?? 'no disponible'}. SSL: ${sslActive ? 'activo' : 'inactivo'}.`,
+    })
+    printResult({
+      step: 'tablas',
+      ok: true,
+      detail:
+        tableNames.length > 0
+          ? `${tableNames.length} tabla(s): ${tableNames.join(', ')}.`
+          : 'La base no contiene tablas.',
     })
     await connection.end()
   } catch (error) {

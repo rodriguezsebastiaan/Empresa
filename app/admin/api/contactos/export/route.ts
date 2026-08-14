@@ -5,7 +5,12 @@ import {
   parseAdminListFilters,
   serializeCsv,
 } from '@/lib/admin-data'
-import { getCurrentAdmin } from '@/lib/admin-auth'
+import {
+  buildAdminForbiddenResponse,
+  getCurrentAdmin,
+  hasAdminPermission,
+  recordAdminAuditLog,
+} from '@/lib/admin-auth'
 
 export async function GET(request: Request) {
   const admin = await getCurrentAdmin()
@@ -14,8 +19,25 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 
+  if (!hasAdminPermission(admin, 'exports:download')) {
+    return buildAdminForbiddenResponse()
+  }
+
   const filters = parseAdminListFilters(new URL(request.url).searchParams)
   const items = await exportContactSubmissions(filters)
+  await recordAdminAuditLog({
+    adminUserId: admin.id,
+    action: 'contacts.export',
+    entityType: 'ContactSubmission',
+    metadata: {
+      count: items.length,
+      status: filters.status ?? null,
+      hasQuery: Boolean(filters.q),
+      from: filters.from ?? null,
+      to: filters.to ?? null,
+    },
+    request,
+  })
 
   const csv = serializeCsv(
     items.map((item) => ({

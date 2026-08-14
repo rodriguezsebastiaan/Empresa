@@ -8,7 +8,12 @@ import {
   sanitizeAvailabilityTime,
 } from '@/lib/availability-service'
 import { addDaysToDateValue, buildAdvisoryDateTime } from '@/lib/advisory-time'
-import { getCurrentAdmin, isAdminActionOriginValid } from '@/lib/admin-auth'
+import {
+  buildAdminForbiddenResponse,
+  getCurrentAdmin,
+  hasAdminPermission,
+  isAdminActionOriginValid,
+} from '@/lib/admin-auth'
 import { getDb } from '@/lib/db'
 import { sanitizeInline } from '@/lib/security'
 
@@ -76,6 +81,10 @@ export async function POST(request: Request) {
 
   if (!admin) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
+  }
+
+  if (!hasAdminPermission(admin, 'bookings:edit')) {
+    return buildAdminForbiddenResponse()
   }
 
   if (!isAdminActionOriginValid(request)) {

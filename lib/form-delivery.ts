@@ -1,5 +1,6 @@
 import crypto from 'node:crypto'
 import nodemailer from 'nodemailer'
+import { integrationEnvConfig } from '@/config/integrations'
 import { siteConfig } from '@/config/site'
 import type { ContactFormData, DiagnosticFormData } from '@/lib/validation'
 
@@ -344,7 +345,7 @@ export async function deliverDiagnosticSubmission(
   }
 
   if (!diagnosticWebhookConfigured) {
-    pending.push(...siteConfig.integrations.diagnostics.webhookEnv)
+    pending.push(...integrationEnvConfig.diagnostics.webhookEnv)
   }
 
   if (!diagnosticEmailConfigured && !diagnosticWebhookConfigured) {

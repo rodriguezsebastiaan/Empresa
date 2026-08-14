@@ -9,8 +9,11 @@ type JsonRequestBodyResult =
       message: string
     }
 
+const DEFAULT_MAX_JSON_BODY_BYTES = 64 * 1024
+
 export async function readJsonRequestBody(
   request: Request,
+  maxBytes = DEFAULT_MAX_JSON_BODY_BYTES,
 ): Promise<JsonRequestBodyResult> {
   const contentType = request.headers
     .get('content-type')
@@ -27,7 +30,18 @@ export async function readJsonRequestBody(
   }
 
   try {
-    const data = await request.json()
+    const text = await request.text()
+    const size = new TextEncoder().encode(text).byteLength
+
+    if (size > maxBytes) {
+      return {
+        success: false,
+        status: 400,
+        message: 'La solicitud supera el tamaÃ±o permitido.',
+      }
+    }
+
+    const data = JSON.parse(text) as unknown
 
     return {
       success: true,
