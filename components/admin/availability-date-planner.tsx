@@ -109,9 +109,11 @@ function findException(exceptions: DateException[], dateValue: string) {
 }
 
 const plannerWeekdays = weekdayLabels.map((label, index) => ({ label, value: index }))
-const defaultPlannerWeekdays = plannerWeekdays
+const allPlannerWeekdays = plannerWeekdays.map((day) => day.value)
+const businessPlannerWeekdays = plannerWeekdays
   .filter((day) => day.value >= 1 && day.value <= 5)
   .map((day) => day.value)
+const defaultPlannerWeekdays = allPlannerWeekdays
 const timePresets = {
   full: '09:00\n10:00\n11:00\n14:00\n15:00\n16:00',
   morning: '09:00\n10:00\n11:00',
@@ -170,6 +172,16 @@ function countDatesInRange(from: string, to: string, weekdays: number[], maxDays
   return count
 }
 
+function getMonthRange(monthKey: string) {
+  const [year, month] = monthKey.split('-').map(Number)
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate()
+
+  return {
+    from: `${monthKey}-01`,
+    to: `${monthKey}-${String(lastDay).padStart(2, '0')}`,
+  }
+}
+
 export function AvailabilityDatePlanner({
   actionPath,
   dateSummaries,
@@ -185,11 +197,13 @@ export function AvailabilityDatePlanner({
   const [planTo, setPlanTo] = useState(lastDate)
   const [planWeekdays, setPlanWeekdays] = useState(defaultPlannerWeekdays)
   const [planTimesByDay, setPlanTimesByDay] = useState<Record<number, string>>({
+    0: '09:00\n10:00\n11:00',
     1: '09:00\n10:00\n11:00\n14:00\n15:00',
     2: '09:00\n10:00\n11:00\n14:00\n15:00',
     3: '09:00\n10:00\n11:00\n14:00\n15:00',
     4: '09:00\n10:00\n11:00\n14:00\n15:00',
     5: '09:00\n10:00\n11:00',
+    6: '09:00\n10:00\n11:00',
   })
   const summariesByDate = useMemo(
     () => new Map(dateSummaries.map((summary) => [summary.date, summary])),
@@ -232,6 +246,14 @@ export function AvailabilityDatePlanner({
     )
   }
 
+  function useVisibleMonthAsPlanRange() {
+    const range = getMonthRange(visibleMonth)
+    setPlanFrom(range.from)
+    setPlanTo(range.to)
+    setRangeFrom(range.from)
+    setRangeTo(range.to)
+  }
+
   function updatePlanTimes(weekday: number, value: string) {
     setPlanTimesByDay((current) => ({
       ...current,
@@ -268,6 +290,27 @@ export function AvailabilityDatePlanner({
             <div className="mt-5 grid gap-3 lg:grid-cols-[0.8fr_1.2fr]">
               <div className="rounded-2xl border border-border/70 bg-background/45 p-3">
                 <p className="text-xs font-semibold tracking-[0.18em] text-primary">1. PERIODO</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={useVisibleMonthAsPlanRange}
+                    className="rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-[0.65rem] font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45"
+                  >
+                    USAR MES VISIBLE
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPlanFrom(firstDate)
+                      setPlanTo(lastDate)
+                      setRangeFrom(firstDate)
+                      setRangeTo(lastDate)
+                    }}
+                    className="rounded-lg border border-border/70 bg-background/40 px-3 py-2 text-[0.65rem] font-semibold tracking-[0.14em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                  >
+                    USAR RANGO DISPONIBLE
+                  </button>
+                </div>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                   <label>
                     <span className="text-sm font-medium text-foreground">Desde</span>
@@ -293,12 +336,29 @@ export function AvailabilityDatePlanner({
                   </label>
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                  Recomendado: programe de 2 a 4 semanas para mantener la agenda actualizada.
+                  Para organizar septiembre completo, navegue a septiembre, use el mes visible y deje
+                  seleccionados los dias que realmente atendera.
                 </p>
               </div>
 
               <fieldset className="rounded-2xl border border-border/70 bg-background/45 p-3">
                 <legend className="px-1 text-xs font-semibold tracking-[0.18em] text-primary">2. DIAS</legend>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPlanWeekdays(allPlannerWeekdays)}
+                    className="rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-[0.65rem] font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45"
+                  >
+                    TODOS LOS DIAS
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPlanWeekdays(businessPlannerWeekdays)}
+                    className="rounded-lg border border-border/70 bg-background/40 px-3 py-2 text-[0.65rem] font-semibold tracking-[0.14em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
+                  >
+                    LUNES A VIERNES
+                  </button>
+                </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-4 lg:grid-cols-3">
                   {plannerWeekdays.map((day) => {
                     const checked = planWeekdays.includes(day.value)
@@ -633,7 +693,7 @@ export function AvailabilityDatePlanner({
               <p className="mt-1 text-2xl font-semibold text-foreground">{selectedSummary?.activeBookings ?? 0}</p>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/35 px-4 py-3">
-              <p className="text-xs tracking-[0.14em] text-muted-foreground">Horas base</p>
+              <p className="text-xs tracking-[0.14em] text-muted-foreground">Cupos libres</p>
               <p className="mt-1 text-2xl font-semibold text-foreground">{selectedSummary?.availableStarts.length ?? 0}</p>
             </div>
           </div>

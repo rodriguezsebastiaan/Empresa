@@ -10,6 +10,17 @@ export function isMysqlSslEnabled() {
   return readBooleanEnv(process.env.MYSQL_SSL_ENABLED)
 }
 
+export function shouldUseMysqlPoolConfig(connectionString: string) {
+  const url = new URL(connectionString)
+  const hostname = url.hostname.toLowerCase()
+
+  if (isMysqlSslEnabled()) {
+    return true
+  }
+
+  return !['localhost', '127.0.0.1', '::1'].includes(hostname)
+}
+
 export function buildMysqlPoolConfig(connectionString: string) {
   const url = new URL(connectionString)
   const sslEnabled = isMysqlSslEnabled()

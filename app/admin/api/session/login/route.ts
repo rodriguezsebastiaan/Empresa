@@ -50,7 +50,15 @@ export async function POST(request: Request) {
     })
   }
 
-  const result = await authenticateAdmin(email, password, request)
+  let result: Awaited<ReturnType<typeof authenticateAdmin>>
+
+  try {
+    result = await authenticateAdmin(email, password, request)
+  } catch {
+    return NextResponse.redirect(new URL(buildAdminLoginUrl(next, 'config'), request.url), {
+      status: 303,
+    })
+  }
 
   if (!result.success) {
     return NextResponse.redirect(new URL(buildAdminLoginUrl(next, result.code), request.url), {

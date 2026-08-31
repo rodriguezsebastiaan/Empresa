@@ -137,7 +137,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-50 flex w-[20rem] flex-col border-r border-border/70 bg-background/92 p-4 shadow-[24px_0_90px_-72px_var(--primary)] backdrop-blur-md transition-transform duration-300 lg:sticky lg:top-6 lg:z-auto lg:h-[calc(100vh-3rem)] lg:rounded-[1.7rem] lg:border lg:bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(4,13,20,0.56)_42%,rgba(4,13,20,0.72))] lg:p-4',
+            'fixed inset-y-0 left-0 z-50 flex w-[20rem] flex-col overflow-y-auto border-r border-border/70 bg-background/92 p-4 shadow-[24px_0_90px_-72px_var(--primary)] backdrop-blur-md transition-transform duration-300 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:rounded-[1.7rem] lg:border lg:bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(4,13,20,0.56)_42%,rgba(4,13,20,0.72))] lg:p-3.5',
             desktopCollapsed ? 'lg:w-[5.8rem]' : 'lg:w-[15.8rem]',
             mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
           )}
@@ -171,19 +171,19 @@ export function AdminShell({ children, admin }: AdminShellProps) {
 
           <div
             className={cn(
-              'mt-4 rounded-[1.45rem] border border-primary/18 bg-primary/[0.08] p-3.5 shadow-inner shadow-black/10',
+              'mt-3 rounded-[1.35rem] border border-primary/18 bg-primary/[0.08] p-3 shadow-inner shadow-black/10',
               desktopCollapsed && 'lg:px-2.5 lg:py-3',
             )}
           >
             <p className={cn('text-[0.62rem] font-semibold tracking-[0.2em] text-primary', desktopCollapsed && 'lg:text-center')}>
               PERFIL
             </p>
-            <div className={cn('mt-3 flex items-start gap-3', desktopCollapsed && 'lg:justify-center lg:gap-0')}>
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-background/60 text-primary">
+            <div className={cn('mt-2.5 flex items-start gap-3', desktopCollapsed && 'lg:justify-center lg:gap-0')}>
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-background/60 text-primary">
                 <UserRound className="size-[1.05rem]" />
               </div>
               <div className={cn('min-w-0', desktopCollapsed && 'lg:hidden')}>
-                <p className="text-[0.98rem] font-semibold text-foreground">{admin.name}</p>
+                <p className="text-[0.92rem] font-semibold leading-snug text-foreground">{admin.name}</p>
                 <p className="mt-1 text-[0.72rem] font-semibold tracking-[0.16em] text-primary">
                   {admin.role}
                 </p>
@@ -192,7 +192,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
             </div>
           </div>
 
-          <nav className="mt-5 flex-1 space-y-2" aria-label="Navegación administrativa">
+          <nav className="mt-4 flex-1 space-y-1.5" aria-label="Navegación administrativa">
             {navigationItems.map((item) => {
               const Icon = item.icon
               const active =
@@ -205,7 +205,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
                   onClick={() => setMobileOpen(false)}
                   title={desktopCollapsed ? item.label : undefined}
                   className={cn(
-                    'flex items-center gap-3 rounded-2xl border px-3.5 py-3 text-sm font-medium transition-colors',
+                    'flex items-center gap-3 rounded-2xl border px-3.5 py-2.5 text-sm font-medium transition-colors',
                     active
                       ? 'border-primary/35 bg-primary/[0.12] text-primary shadow-[0_0_22px_-13px_var(--primary)]'
                       : 'border-border/70 bg-background/32 text-foreground/85 hover:border-primary/25 hover:bg-primary/[0.045] hover:text-primary',
@@ -220,18 +220,18 @@ export function AdminShell({ children, admin }: AdminShellProps) {
           </nav>
 
           {!desktopCollapsed ? (
-            <div className="mt-4 hidden rounded-2xl border border-border/70 bg-background/28 p-3 text-xs leading-relaxed text-muted-foreground shadow-inner shadow-black/5 lg:block">
+            <div className="mt-3 hidden rounded-2xl border border-border/70 bg-background/28 p-3 text-[0.72rem] leading-relaxed text-muted-foreground shadow-inner shadow-black/5 lg:block">
               Seguimiento comercial, diagnósticos y asesorías en una sola operación interna.
             </div>
           ) : null}
 
-          <div className="mt-4 space-y-2">
+          <div className="mt-3 space-y-1.5">
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
               title={desktopCollapsed ? 'Volver al sitio' : undefined}
               className={cn(
-                'inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border/70 bg-background/35 px-4 py-3 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary',
+                'inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border/70 bg-background/35 px-4 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary',
                 desktopCollapsed && 'lg:px-0',
               )}
             >
@@ -244,7 +244,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
                 type="submit"
                 title={desktopCollapsed ? 'Cerrar sesión' : undefined}
                 className={cn(
-                  'inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border/70 bg-background/40 px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/35 hover:text-primary',
+                  'inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border/70 bg-background/40 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/35 hover:text-primary',
                   desktopCollapsed && 'lg:px-0',
                 )}
               >

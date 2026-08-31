@@ -1,6 +1,6 @@
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { PrismaClient } from '@prisma/client'
-import { buildMysqlPoolConfig, isMysqlSslEnabled } from '@/lib/mysql-config'
+import { buildMysqlPoolConfig, shouldUseMysqlPoolConfig } from '@/lib/mysql-config'
 
 const globalForPrisma = globalThis as typeof globalThis & {
   __konamyPrisma?: PrismaClient
@@ -14,7 +14,9 @@ function createPrismaClient() {
   }
 
   const adapter = new PrismaMariaDb(
-    isMysqlSslEnabled() ? buildMysqlPoolConfig(connectionString) : connectionString,
+    shouldUseMysqlPoolConfig(connectionString)
+      ? buildMysqlPoolConfig(connectionString)
+      : connectionString,
   )
 
   return new PrismaClient({

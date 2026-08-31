@@ -206,7 +206,13 @@ export default async function AdminBookingDetailPage({
             title="GESTIÓN"
             description="Actualice el estado de la asesoría y documente reprogramaciones, cierre o novedades."
           >
-            <AdminBookingRescheduleForm bookingId={detail.id} returnTo={returnTo} />
+            <AdminBookingRescheduleForm
+              bookingId={detail.id}
+              returnTo={returnTo}
+              currentDate={detail.scheduledDate}
+              currentTime={detail.scheduledTime}
+              currentLabel={formatAdminDateTime(detail.startAt)}
+            />
 
             <details className="mt-4 rounded-2xl border border-border/70 bg-background/35 p-4">
               <summary className="cursor-pointer list-none text-xs font-semibold tracking-[0.18em] text-muted-foreground">

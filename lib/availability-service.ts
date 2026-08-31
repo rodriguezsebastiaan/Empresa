@@ -100,6 +100,14 @@ function listDateValues(startDate: string, days: number) {
   return Array.from({ length: days + 1 }, (_, index) => addDaysToDateValue(startDate, index))
 }
 
+function buildBusyInterval(startAt: Date, endAt: Date, source: BusyInterval['source']): BusyInterval {
+  return {
+    start: startAt.toISOString(),
+    end: endAt.toISOString(),
+    source,
+  }
+}
+
 function overlaps(slotStart: Date, slotEnd: Date, busy: BusyInterval) {
   const busyStart = new Date(busy.start)
   const busyEnd = new Date(busy.end)
@@ -120,6 +128,49 @@ function buildSlotKey(startAt: Date, endAt: Date) {
 
 export function buildAdvisorySlotKey(startAt: Date, endAt: Date) {
   return buildSlotKey(startAt, endAt)
+}
+
+function listAvailableStartTimesForDate({
+  date,
+  ranges,
+  durationMinutes,
+  bufferMinutes,
+  minNoticeHours,
+  busyIntervals,
+}: {
+  date: string
+  ranges: TimeRange[]
+  durationMinutes: number
+  bufferMinutes: number
+  minNoticeHours: number
+  busyIntervals: BusyInterval[]
+}) {
+  const starts: string[] = []
+  const slotDuration = durationMinutes
+  const slotStep = durationMinutes + bufferMinutes
+
+  for (const range of ranges) {
+    let cursor = buildAdvisoryDateTime(date, range.startTime)
+    const endBoundary = buildAdvisoryDateTime(date, range.endTime)
+
+    while (cursor.getTime() + minutesToMilliseconds(slotDuration) <= endBoundary.getTime()) {
+      const slotStart = new Date(cursor)
+      const slotEnd = new Date(cursor.getTime() + minutesToMilliseconds(slotDuration))
+
+      const minimumLead = minutesToMilliseconds(minNoticeHours * 60)
+
+      if (
+        slotStart.getTime() - Date.now() >= minimumLead &&
+        !busyIntervals.some((busy) => overlaps(slotStart, slotEnd, busy))
+      ) {
+        starts.push(formatTimeValueInAdvisoryZone(slotStart))
+      }
+
+      cursor = new Date(cursor.getTime() + minutesToMilliseconds(slotStep))
+    }
+  }
+
+  return starts
 }
 
 export async function ensureAvailabilitySettings() {
@@ -214,12 +265,18 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
     },
     select: {
       scheduledDate: true,
+      startAt: true,
+      endAt: true,
     },
   })
   const bookingsByDate = new Map<string, number>()
+  const busyByDate = new Map<string, BusyInterval[]>()
 
   for (const booking of bookings) {
     bookingsByDate.set(booking.scheduledDate, (bookingsByDate.get(booking.scheduledDate) ?? 0) + 1)
+    const intervals = busyByDate.get(booking.scheduledDate) ?? []
+    intervals.push(buildBusyInterval(booking.startAt, booking.endAt, 'local'))
+    busyByDate.set(booking.scheduledDate, intervals)
   }
 
   const snapshot = {
@@ -232,6 +289,26 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
         .map((rule) => ({ startTime: rule.startTime, endTime: rule.endTime }))
         .filter(isRangeValid)
       const blockedPeriods = snapshotCore.blockedPeriods.filter((period) => period.date === date)
+      const busyIntervals = [
+        ...(busyByDate.get(date) ?? []),
+        ...blockedPeriods
+          .filter(isRangeValid)
+          .map((period) =>
+            buildBusyInterval(
+              buildAdvisoryDateTime(date, period.startTime),
+              buildAdvisoryDateTime(date, period.endTime),
+              'blocked',
+            ),
+          ),
+      ]
+      const availableStarts = listAvailableStartTimesForDate({
+        date,
+        ranges: exception?.type === 'SPECIAL_HOURS' ? exception.ranges.filter(isRangeValid) : weeklyRanges,
+        durationMinutes: fullSettings.durationMinutes,
+        bufferMinutes: fullSettings.bufferMinutes,
+        minNoticeHours: fullSettings.minNoticeHours,
+        busyIntervals,
+      })
 
       if (exception?.type === 'BLOCKED_DAY') {
         return {
@@ -253,7 +330,7 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
           reason: exception.reason,
           activeBookings: bookingsByDate.get(date) ?? 0,
           blockedPeriods: blockedPeriods.length,
-          availableStarts: exception.ranges.filter(isRangeValid).map((range) => range.startTime),
+          availableStarts,
         }
       }
 
@@ -264,7 +341,7 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
         reason: null,
         activeBookings: bookingsByDate.get(date) ?? 0,
         blockedPeriods: blockedPeriods.length,
-        availableStarts: weeklyRanges.map((range) => range.startTime),
+        availableStarts,
       }
     }),
   }

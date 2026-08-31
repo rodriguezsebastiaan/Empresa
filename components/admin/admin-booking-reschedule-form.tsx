@@ -11,11 +11,17 @@ type AvailabilityResponse = {
 type AdminBookingRescheduleFormProps = {
   bookingId: string
   returnTo: string
+  currentDate: string
+  currentTime: string
+  currentLabel: string
 }
 
 export function AdminBookingRescheduleForm({
   bookingId,
   returnTo,
+  currentDate,
+  currentTime,
+  currentLabel,
 }: AdminBookingRescheduleFormProps) {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
@@ -81,7 +87,18 @@ export function AdminBookingRescheduleForm({
       <div>
         <p className="text-xs font-semibold tracking-[0.18em] text-primary">REAGENDAR</p>
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          Mueva esta asesoria a una fecha con horario disponible.
+          Mueva esta asesoría a una fecha con horario disponible. El nuevo horario se valida
+          contra la misma disponibilidad que ve el cliente.
+        </p>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-border/70 bg-background/35 p-3">
+        <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-muted-foreground">
+          HORARIO ACTUAL
+        </p>
+        <p className="mt-1 text-sm font-semibold text-foreground">{currentLabel}</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Registro interno: {currentDate} · {currentTime}
         </p>
       </div>
 
@@ -128,6 +145,17 @@ export function AdminBookingRescheduleForm({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/[0.07] p-3">
+        <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-primary">
+          NUEVO HORARIO
+        </p>
+        <p className="mt-1 text-sm font-semibold text-foreground">
+          {date && time
+            ? `${date} · ${slots.find((slot) => slot.value === time)?.label ?? time}`
+            : 'Seleccione fecha y hora para confirmar el cambio.'}
+        </p>
       </div>
 
       <details className="mt-4 rounded-xl border border-border/70 bg-background/35 p-3">
