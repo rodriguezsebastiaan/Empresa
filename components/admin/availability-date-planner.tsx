@@ -273,13 +273,13 @@ export function AvailabilityDatePlanner({
           <div className="p-4 lg:p-5">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="max-w-2xl">
-                <p className="text-xs font-semibold tracking-[0.24em] text-primary">PLANIFICACION MENSUAL</p>
+                <p className="text-xs font-semibold tracking-[0.24em] text-primary">PLANIFICACIÓN MENSUAL</p>
                 <h2 className="mt-2 text-xl font-semibold text-foreground">
-                  Construya el calendario que veran los clientes.
+                  Construya el calendario que verán los clientes.
                 </h2>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Defina el periodo, seleccione los dias de atencion y ajuste las horas de cada dia
-                  con plantillas rapidas o edicion manual.
+                  Defina el periodo, seleccione los días de atención y ajuste las horas de cada día
+                  con plantillas rápidas o edición manual.
                 </p>
               </div>
               <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold tracking-[0.16em] text-primary">
@@ -337,19 +337,19 @@ export function AvailabilityDatePlanner({
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                   Para organizar septiembre completo, navegue a septiembre, use el mes visible y deje
-                  seleccionados los dias que realmente atendera.
+                  seleccionados los días que realmente atenderá.
                 </p>
               </div>
 
               <fieldset className="rounded-2xl border border-border/70 bg-background/45 p-3">
-                <legend className="px-1 text-xs font-semibold tracking-[0.18em] text-primary">2. DIAS</legend>
+                <legend className="px-1 text-xs font-semibold tracking-[0.18em] text-primary">2. DÍAS</legend>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={() => setPlanWeekdays(allPlannerWeekdays)}
                     className="rounded-lg border border-primary/25 bg-primary/10 px-3 py-2 text-[0.65rem] font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45"
                   >
-                    TODOS LOS DIAS
+                    TODOS LOS DÍAS
                   </button>
                   <button
                     type="button"
@@ -389,14 +389,14 @@ export function AvailabilityDatePlanner({
               </fieldset>
 
               <div className="rounded-2xl border border-border/70 bg-background/45 p-3 lg:col-span-2">
-                <span className="text-xs font-semibold tracking-[0.18em] text-primary">3. HORARIOS POR DIA</span>
+                <span className="text-xs font-semibold tracking-[0.18em] text-primary">3. HORARIOS POR DÍA</span>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Use una plantilla para avanzar rapido y ajuste manualmente cuando un dia tenga una agenda diferente.
+                  Use una plantilla para avanzar rápido y ajuste manualmente cuando un día tenga una agenda diferente.
                 </p>
                 <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                   {planWeekdays.length === 0 ? (
                     <div className="rounded-xl border border-amber-300/25 bg-amber-300/10 p-4 text-xs leading-relaxed text-amber-50 md:col-span-2 xl:col-span-3">
-                      Seleccione al menos un dia de atencion para configurar horarios.
+                      Seleccione al menos un día de atención para configurar horarios.
                     </div>
                   ) : null}
                   {plannerWeekdays
@@ -432,7 +432,7 @@ export function AvailabilityDatePlanner({
                               onClick={() => updatePlanTimes(day.value, timePresets.morning)}
                               className="rounded-lg border border-border/70 bg-background/45 px-2 py-1.5 text-[0.65rem] font-semibold text-muted-foreground transition-colors hover:border-primary/35 hover:text-primary"
                             >
-                              MANANA
+                              MAÑANA
                             </button>
                             <button
                               type="button"
@@ -468,14 +468,14 @@ export function AvailabilityDatePlanner({
 
               <label className="rounded-2xl border border-border/70 bg-background/45 p-3 lg:col-span-2">
                 <span className="text-xs font-semibold tracking-[0.18em] text-primary">4. NOTA INTERNA</span>
-                <span className="mt-3 block text-sm font-medium text-foreground">Observacion interna opcional</span>
+                <span className="mt-3 block text-sm font-medium text-foreground">Observación interna opcional</span>
                 <input
                   name="reason"
-                  placeholder="Ejemplo: Agenda agosto, atencion comercial, jornada especial..."
+                  placeholder="Ejemplo: Agenda agosto, atención comercial, jornada especial..."
                   className={fieldClassName}
                 />
                 <span className="mt-2 block text-xs leading-relaxed text-muted-foreground">
-                  Esta nota solo la vera el equipo administrativo. No se muestra al cliente.
+                  Esta nota solo la verá el equipo administrativo. No se muestra al cliente.
                 </span>
               </label>
             </div>
@@ -484,9 +484,9 @@ export function AvailabilityDatePlanner({
           <aside className="border-t border-primary/15 bg-background/50 p-4 xl:border-l xl:border-t-0 lg:p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold tracking-[0.24em] text-primary">REVISION</p>
+                <p className="text-xs font-semibold tracking-[0.24em] text-primary">REVISIÓN</p>
                 <h3 className="mt-2 text-lg font-semibold text-foreground">
-                  {planIsReady ? 'Plan listo para guardar.' : 'Complete la planificacion.'}
+                  {planIsReady ? 'Plan listo para guardar.' : 'Complete la planificación.'}
                 </h3>
               </div>
               <span
@@ -501,24 +501,24 @@ export function AvailabilityDatePlanner({
               </span>
             </div>
             <div className="mt-4 space-y-3">
-              <SummaryMetric label="Fechas que se guardaran" value={planDateCount} tone={planDateCount > 0 ? 'success' : 'warning'} />
+              <SummaryMetric label="Fechas que se guardarán" value={planDateCount} tone={planDateCount > 0 ? 'success' : 'warning'} />
               <SummaryMetric label="Cupos visibles estimados" value={planSlotCount} tone={planSlotCount > 0 ? 'success' : 'warning'} />
               <SummaryMetric label="Horas configuradas por semana" value={planTimeCount} />
             </div>
 
             {!planIsReady ? (
               <div className="mt-4 rounded-2xl border border-amber-300/25 bg-amber-300/10 p-3 text-xs leading-relaxed text-amber-50">
-                Revise que el rango sea valido, que haya al menos un dia activo y que cada dia seleccionado tenga horarios.
+                Revise que el rango sea válido, que haya al menos un día activo y que cada día seleccionado tenga horarios.
               </div>
             ) : null}
 
             <div className="mt-4 rounded-2xl border border-amber-300/20 bg-amber-300/10 p-3 text-xs leading-relaxed text-amber-50">
-              Guardar este rango actualiza las fechas seleccionadas. Si una fecha estaba bloqueada o tenia
-              otro horario especial, sera reemplazada por esta nueva planificacion.
+              Guardar este rango actualiza las fechas seleccionadas. Si una fecha estaba bloqueada o tenía
+              otro horario especial, será reemplazada por esta nueva planificación.
             </div>
 
             <div className="mt-4">
-              <SubmitButton disabled={!planIsReady}>GUARDAR PLANIFICACION</SubmitButton>
+              <SubmitButton disabled={!planIsReady}>GUARDAR PLANIFICACIÓN</SubmitButton>
             </div>
           </aside>
         </div>
@@ -578,7 +578,7 @@ export function AvailabilityDatePlanner({
             </span>
           </div>
           <p className="text-xs text-muted-foreground">
-            {filteredSpecialDays.length} dia{filteredSpecialDays.length === 1 ? '' : 's'} con cambios o reservas.
+            {filteredSpecialDays.length} día{filteredSpecialDays.length === 1 ? '' : 's'} con cambios o reservas.
           </p>
         </div>
       </div>
@@ -656,6 +656,11 @@ export function AvailabilityDatePlanner({
                       ? summary.availableStarts.slice(0, 3).join(', ')
                       : 'Sin horas'}
                   </p>
+                  {summary?.bookedStarts.length ? (
+                    <p className="mt-1 line-clamp-1 text-[0.62rem] leading-relaxed text-amber-100">
+                      Ocupado: {summary.bookedStarts.slice(0, 3).join(', ')}
+                    </p>
+                  ) : null}
                   <div className="mt-2 flex flex-wrap gap-1">
                     {summary?.activeBookings ? (
                       <span className="rounded-full bg-amber-300/15 px-1.5 py-0.5 text-[0.55rem] font-semibold text-amber-100">
@@ -701,7 +706,21 @@ export function AvailabilityDatePlanner({
           {(selectedSummary?.activeBookings ?? 0) > 0 ? (
             <div className="mt-4 rounded-xl border border-amber-300/25 bg-amber-300/10 px-4 py-3 text-xs leading-relaxed text-amber-50">
               Esta fecha tiene reservas activas. Antes de modificar, bloquear o restablecer sus
-              horarios, revise que el cambio no afecte reuniones ya confirmadas.
+              horarios, revise que el cambio no afecte asesorías ya confirmadas.
+            </div>
+          ) : null}
+
+          {(selectedSummary?.bookedStarts.length ?? 0) > 0 ? (
+            <div className="mt-3 rounded-xl border border-amber-300/25 bg-background/35 px-4 py-3">
+              <p className="text-xs font-semibold tracking-[0.14em] text-amber-100">
+                HORARIOS YA RESERVADOS
+              </p>
+              <p className="mt-2 text-sm font-semibold text-foreground">
+                {selectedSummary?.bookedStarts.join(', ')}
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                Estas horas no se muestran al cliente porque ya están ocupadas por asesorías activas o reprogramadas.
+              </p>
             </div>
           ) : null}
 
@@ -726,7 +745,7 @@ export function AvailabilityDatePlanner({
                 defaultValue={selectedException?.type ?? 'SPECIAL_HOURS'}
                 className={fieldClassName}
               >
-                <option value="SPECIAL_HOURS">Usar horarios especificos</option>
+                <option value="SPECIAL_HOURS">Usar horarios específicos</option>
                 <option value="BLOCKED_DAY">Bloquear fecha completa</option>
               </select>
             </label>
@@ -740,16 +759,16 @@ export function AvailabilityDatePlanner({
                 aria-describedby="selected-times-help"
               />
               <span id="selected-times-help" className="mt-2 block text-xs text-muted-foreground">
-                Una hora por linea. Si la fecha queda como bloqueo completo, estas horas se ignoran.
+                Una hora por línea. Si la fecha queda como bloqueo completo, estas horas se ignoran.
               </span>
             </label>
             <label>
-              <span className="text-sm font-medium text-foreground">Observacion interna</span>
+              <span className="text-sm font-medium text-foreground">Observación interna</span>
               <input
                 key={`${selectedDate}-${selectedException?.reason ?? 'reason'}`}
                 name="reason"
                 defaultValue={selectedException?.reason ?? ''}
-                placeholder="Ejemplo: Viaje, reunion, capacitacion..."
+                placeholder="Ejemplo: Viaje, reunión, capacitación..."
                 className={fieldClassName}
               />
             </label>

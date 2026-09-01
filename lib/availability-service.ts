@@ -265,15 +265,21 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
     },
     select: {
       scheduledDate: true,
+      scheduledTime: true,
       startAt: true,
       endAt: true,
     },
   })
   const bookingsByDate = new Map<string, number>()
+  const bookedStartsByDate = new Map<string, string[]>()
   const busyByDate = new Map<string, BusyInterval[]>()
 
   for (const booking of bookings) {
     bookingsByDate.set(booking.scheduledDate, (bookingsByDate.get(booking.scheduledDate) ?? 0) + 1)
+    bookedStartsByDate.set(booking.scheduledDate, [
+      ...(bookedStartsByDate.get(booking.scheduledDate) ?? []),
+      booking.scheduledTime,
+    ])
     const intervals = busyByDate.get(booking.scheduledDate) ?? []
     intervals.push(buildBusyInterval(booking.startAt, booking.endAt, 'local'))
     busyByDate.set(booking.scheduledDate, intervals)
@@ -317,6 +323,7 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
           mode: 'blocked' as const,
           reason: exception.reason,
           activeBookings: bookingsByDate.get(date) ?? 0,
+          bookedStarts: [...(bookedStartsByDate.get(date) ?? [])].sort(),
           blockedPeriods: blockedPeriods.length,
           availableStarts: [],
         }
@@ -329,6 +336,7 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
           mode: 'special' as const,
           reason: exception.reason,
           activeBookings: bookingsByDate.get(date) ?? 0,
+          bookedStarts: [...(bookedStartsByDate.get(date) ?? [])].sort(),
           blockedPeriods: blockedPeriods.length,
           availableStarts,
         }
@@ -340,6 +348,7 @@ export async function getAvailabilitySnapshot(): Promise<AvailabilityRulesSnapsh
         mode: weeklyRanges.length > 0 ? ('weekly' as const) : ('none' as const),
         reason: null,
         activeBookings: bookingsByDate.get(date) ?? 0,
+        bookedStarts: [...(bookedStartsByDate.get(date) ?? [])].sort(),
         blockedPeriods: blockedPeriods.length,
         availableStarts,
       }

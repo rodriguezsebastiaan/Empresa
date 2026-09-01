@@ -135,7 +135,7 @@ export async function submitAdvisoryBooking(
         idempotent: true,
         bookingId: existingBooking.id,
         confirmation: buildConfirmation(existingBooking),
-        message: 'La asesoria ya habia sido registrada anteriormente.',
+        message: 'La asesoría ya había sido registrada anteriormente.',
       },
     }
   }
@@ -211,7 +211,7 @@ export async function submitAdvisoryBooking(
                 calendarRecord.syncStatus === 'PENDING'
                   ? 'Asesoria guardada con evento de Calendar creado y Google Meet pendiente.'
                   : calendarRecord.syncStatus === 'FAILED'
-                  ? 'Asesoria guardada localmente; Calendar fallo y requiere revision.'
+                  ? 'Asesoría guardada localmente; Calendar falló y requiere revisión.'
                   : calendarRecord.syncStatus === 'SKIPPED'
                     ? 'Asesoria confirmada con adaptador simulado de Calendar.'
                     : 'Asesoria confirmada con evento de Calendar.',
@@ -293,12 +293,12 @@ export async function submitAdvisoryBooking(
       confirmation,
       message:
         calendarRecord.syncStatus === 'PENDING'
-          ? 'La asesoria fue guardada y el evento de Calendar fue creado. Google Meet sigue pendiente de generacion.'
+          ? 'La asesoría fue guardada y el evento de Calendar fue creado. Google Meet sigue pendiente de generación.'
           : calendarRecord.syncStatus === 'FAILED'
-          ? 'La asesoria fue guardada localmente, pero Calendar fallo. El equipo debe revisar la sincronizacion.'
+          ? 'La asesoría fue guardada localmente, pero Calendar falló. El equipo debe revisar la sincronización.'
           : calendarRecord.syncStatus === 'SKIPPED'
-            ? 'La asesoria fue confirmada y guardada localmente. Calendar y correos estan simulados en desarrollo.'
-            : 'La asesoria fue confirmada, guardada y sincronizada correctamente.',
+            ? 'La asesoría fue confirmada y guardada localmente. Calendar y correos están simulados en desarrollo.'
+            : 'La asesoría fue confirmada, guardada y sincronizada correctamente.',
     },
   }
 }

@@ -26,7 +26,7 @@ export async function POST(
     return NextResponse.json(
       {
         success: false,
-        message: 'Origen invalido.',
+        message: 'Origen inválido.',
       },
       { status: 403 },
     )

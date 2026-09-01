@@ -6,7 +6,7 @@ import { getAvailabilitySnapshot } from '@/lib/availability-service'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Disponibilidad de asesorias | Konamy Systems',
+  title: 'Disponibilidad de asesorías | Konamy Systems',
   robots: {
     index: false,
     follow: false,
@@ -21,14 +21,14 @@ export default async function AdminAvailabilityPage() {
   return (
     <div className="space-y-6">
       <AdminPageHeader
-        eyebrow="DISPONIBILIDAD DE ASESORIAS"
-        title="Planifique la agenda mensual de asesorias."
-        description="Defina los periodos de atencion, revise cada fecha del calendario y bloquee dias puntuales cuando sea necesario. Esta pantalla controla la disponibilidad que vera el cliente al agendar; las asesorias ya reservadas se administran desde el detalle de cada asesoria."
+        eyebrow="DISPONIBILIDAD DE ASESORÍAS"
+        title="Planifique la agenda mensual de asesorías."
+        description="Defina los periodos de atención, revise cada fecha del calendario y bloquee días puntuales cuando sea necesario. Esta pantalla controla la disponibilidad que verá el cliente al agendar; las asesorías ya reservadas se administran desde el detalle de cada asesoría."
       />
 
       <AdminSectionCard
         title="AGENDA DEL MES"
-        description="Planifique un rango de fechas, revise el calendario y ajuste solamente los dias que requieran una configuracion especial."
+        description="Planifique un rango de fechas, revise el calendario y ajuste solamente los días que requieran una configuración especial."
       >
         <AvailabilityDatePlanner
           actionPath={actionPath}

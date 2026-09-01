@@ -16,7 +16,7 @@ export default async function AdminDashboardPage() {
     <div className="space-y-6">
       <AdminPageHeader
         eyebrow="DASHBOARD"
-        title="Operacion comercial en curso"
+        title="Operación comercial en curso"
         description="Diagnósticos y asesorías en una sola lectura: qué ingresó, qué sigue pendiente y qué ya avanzó lo suficiente para mantener el seguimiento ordenado."
         action={
           <div className="rounded-2xl border border-primary/20 bg-primary/[0.06] px-4 py-3 text-right">

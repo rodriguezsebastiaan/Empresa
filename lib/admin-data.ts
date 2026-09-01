@@ -1457,7 +1457,7 @@ export async function rescheduleAdvisoryBooking(input: {
         modality: slotCheck.snapshot.settings.defaultModality,
         slotKey: nextSlotKey,
         calendarSyncStatus: 'SKIPPED',
-        calendarSyncError: 'Reprogramacion local. Integraciones externas aun no retomadas.',
+        calendarSyncError: 'Reprogramación local. Integraciones externas aún no retomadas.',
       },
     })
 

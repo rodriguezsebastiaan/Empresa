@@ -8,10 +8,10 @@ export const weekdayLabels = [
   'Domingo',
   'Lunes',
   'Martes',
-  'Miercoles',
+  'Miércoles',
   'Jueves',
   'Viernes',
-  'Sabado',
+  'Sábado',
 ] as const
 
 export type TimeRange = {
@@ -27,6 +27,7 @@ export type AvailabilityDateSummary = {
   mode: AvailabilityDateMode
   reason: string | null
   activeBookings: number
+  bookedStarts: string[]
   blockedPeriods: number
   availableStarts: string[]
 }

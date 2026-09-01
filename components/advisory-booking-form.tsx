@@ -311,7 +311,7 @@ export function AdvisoryBookingForm() {
               <dd className="mt-1 text-foreground">{confirmation.guestEmail}</dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Enlace de reunion</dt>
+              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Enlace de reunión</dt>
               <dd className="mt-1 text-foreground">
                 {confirmation.meetUrl ? (
                   <a
@@ -332,7 +332,7 @@ export function AdvisoryBookingForm() {
 
         <div className={`${panelClassName} h-fit`}>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            La reserva queda guardada en el sistema local. Las invitaciones automaticas se activaran
+            La reserva queda guardada en el sistema local. Las invitaciones automáticas se activarán
             cuando retomemos las integraciones externas.
           </p>
           <div className="mt-6 flex flex-col gap-3">
@@ -533,7 +533,7 @@ export function AdvisoryBookingForm() {
           <p>Duración predeterminada: {availabilitySettings.durationMinutes} minutos.</p>
           <p className="mt-2">{availabilitySettings.timezoneLabel}</p>
           <p className="mt-2">
-            El flujo local valida disponibilidad, evita doble reserva y guarda la asesoria en el panel.
+            El flujo local valida disponibilidad, evita doble reserva y guarda la asesoría en el panel.
           </p>
           <p className="mt-2">
             Esta conversación inicial nos permitirá comprender su necesidad y
