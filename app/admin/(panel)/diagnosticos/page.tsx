@@ -105,7 +105,23 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
       />
 
       <section className={panelClassName}>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold tracking-[0.22em] text-primary">CONTROL DEL LISTADO</p>
+            <h2 className="mt-2 text-xl font-semibold text-foreground">Filtre por periodo, estado o cliente.</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Use rangos de fecha para revisar campañas, semanas o meses completos sin cargar la vista con información innecesaria.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border/70 bg-background/35 px-4 py-3 text-right">
+            <p className="text-[0.62rem] font-semibold tracking-[0.16em] text-muted-foreground">
+              RESULTADOS
+            </p>
+            <p className="mt-1 text-2xl font-semibold text-foreground">{list.total}</p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2">
           <AdminQuickFilterLink
             href={buildListHref({ preset: 'today', from: today, to: today, page: 1 })}
             label="HOY"
@@ -128,7 +144,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
               to: today,
               page: 1,
             })}
-            label="ULTIMOS 7 DIAS"
+            label="ÚLTIMOS 7 DÍAS"
             active={filters.preset === 'last-7-days'}
           />
           <AdminQuickFilterLink
@@ -259,12 +275,11 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
           <table className="min-w-full table-fixed">
             <thead className="bg-background/65 text-left text-[0.65rem] font-semibold tracking-[0.18em] text-muted-foreground">
               <tr>
-                <th className="px-5 py-3">EMPRESA</th>
-                <th className="px-5 py-3">CLIENTE</th>
-                <th className="px-5 py-3">CONTACTO</th>
-                <th className="px-5 py-3">FECHA</th>
-                <th className="px-5 py-3">ESTADO</th>
-                <th className="px-5 py-3 text-right">ACCION</th>
+                <th className="w-[31%] px-5 py-3">EMPRESA</th>
+                <th className="w-[29%] px-5 py-3">CLIENTE Y CONTACTO</th>
+                <th className="w-[18%] px-5 py-3">FECHA</th>
+                <th className="w-[12%] px-5 py-3">ESTADO</th>
+                <th className="w-[10%] px-5 py-3 text-right">ACCIÓN</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60 bg-background/22">
@@ -277,10 +292,10 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                       </p>
                     </td>
                     <td className="px-5 py-4 align-top">
-                      <p className="text-sm font-medium text-foreground">{item.name}</p>
-                    </td>
-                    <td className="px-5 py-4 align-top">
                       <div className="min-w-0 space-y-2">
+                        <p className="truncate text-sm font-medium text-foreground" title={item.name}>
+                          {item.name}
+                        </p>
                         <p className="truncate text-sm text-foreground" title={item.phone}>
                           {item.phone}
                         </p>
@@ -307,7 +322,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-5 py-6">
+                  <td colSpan={5} className="px-5 py-6">
                     <AdminEmptyState>No se encontraron diagnósticos con esos filtros.</AdminEmptyState>
                   </td>
                 </tr>

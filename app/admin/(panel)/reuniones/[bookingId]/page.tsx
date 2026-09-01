@@ -4,19 +4,14 @@ import { AdminBookingRescheduleForm } from '@/components/admin/admin-booking-res
 import { AdminDetailShell } from '@/components/admin/admin-detail-shell'
 import { AdminStatusBadge } from '@/components/admin/admin-status-badge'
 import {
-  AdminHistorySection,
   AdminInfoCard,
-  AdminNotesSection,
-  AdminRelatedActivity,
   AdminSectionCard,
-  AdminTechnicalDetails,
 } from '@/components/admin/admin-ui'
 import { fieldClassName } from '@/components/form-controls'
 import {
   advisoryBookingStatusOptions,
   formatAdminDateTime,
   getAdvisoryBookingDetail,
-  getRelatedActivityForRecord,
   getStatusLabel,
   parseAdminListFilters,
 } from '@/lib/admin-data'
@@ -49,14 +44,6 @@ export default async function AdminBookingDetailPage({
   if (!detail) {
     notFound()
   }
-
-  const relatedActivity = await getRelatedActivityForRecord({
-    entity: 'reuniones',
-    id: detail.id,
-    emailNormalized: detail.emailNormalized,
-    phone: detail.phone,
-    company: detail.company,
-  })
 
   const listHref = buildAdminListHref('/admin/reuniones', filters)
   const returnTo = buildAdminDetailHref('/admin/reuniones', detail.id, filters)
@@ -192,12 +179,6 @@ export default async function AdminBookingDetailPage({
             </div>
           </AdminSectionCard>
 
-          <AdminSectionCard
-            title="ACTIVIDAD RELACIONADA"
-            description="Otros diagnósticos o asesorías vinculadas a la misma empresa o al mismo contacto."
-          >
-            <AdminRelatedActivity items={relatedActivity} />
-          </AdminSectionCard>
         </>
       }
       secondary={
@@ -251,80 +232,6 @@ export default async function AdminBookingDetailPage({
             </details>
           </AdminSectionCard>
 
-          <AdminSectionCard
-            title="SINCRONIZACIÓN Y PRIVACIDAD"
-            description="Estado de Calendar, correos y consentimiento del cliente."
-          >
-            <div className="space-y-3">
-              <AdminInfoCard
-                label="PRIVACIDAD"
-                hint={`Aceptada el ${formatAdminDateTime(detail.privacyAcceptedAt)}`}
-              >
-                {detail.privacyPolicyVersion}
-              </AdminInfoCard>
-              <AdminInfoCard label="ESTADO DE SINCRONIZACIÓN">
-                <div className="flex flex-wrap gap-2">
-                  <AdminStatusBadge status={detail.calendarEventStatus} compact />
-                  <AdminStatusBadge status={detail.internalEmailStatus} compact />
-                  <AdminStatusBadge status={detail.clientEmailStatus} compact />
-                </div>
-                {detail.lastDeliveryError ? (
-                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                    {detail.lastDeliveryError}
-                  </p>
-                ) : null}
-              </AdminInfoCard>
-            </div>
-          </AdminSectionCard>
-
-          <AdminSectionCard
-            title="AGREGAR NOTA"
-            description="Registre acuerdos, reprogramaciones o contexto para el siguiente seguimiento."
-          >
-            <form
-              action={`/admin/api/reuniones/${detail.id}/notes`}
-              method="post"
-              className="space-y-4"
-            >
-              <input type="hidden" name="returnTo" value={returnTo} />
-              <label className="block">
-                <span className="text-sm font-medium text-foreground">Nota interna</span>
-                <textarea
-                  name="note"
-                  required
-                  className={`${fieldClassName} min-h-[8rem] resize-y`}
-                />
-              </label>
-              <button
-                type="submit"
-                className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
-              >
-                GUARDAR NOTA
-              </button>
-            </form>
-          </AdminSectionCard>
-
-          <AdminNotesSection
-            items={detail.notes}
-            emptyLabel="Todavía no hay notas internas para esta asesoría."
-          />
-
-          <AdminHistorySection
-            items={detail.statusHistory}
-            emptyLabel="Todavía no hay cambios de estado registrados."
-          />
-
-          <AdminTechnicalDetails
-            title="INFORMACIÓN TÉCNICA"
-            items={[
-              { label: 'Origen', value: detail.requestOrigin ?? 'Sin dato' },
-              { label: 'Ruta', value: detail.requestPath ?? 'Sin dato' },
-              { label: 'Referer', value: detail.referer ?? 'Sin dato' },
-              { label: 'User-Agent', value: detail.userAgent ?? 'Sin dato' },
-              { label: 'IP Hash', value: detail.ipHash ?? 'Sin dato' },
-              { label: 'Creada', value: formatAdminDateTime(detail.createdAt) },
-            ]}
-          />
         </>
       }
     />

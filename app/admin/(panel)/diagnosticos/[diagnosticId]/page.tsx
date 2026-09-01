@@ -4,19 +4,14 @@ import { AdminDetailShell } from '@/components/admin/admin-detail-shell'
 import { AdminStatusBadge } from '@/components/admin/admin-status-badge'
 import {
   AdminCollapsiblePanel,
-  AdminHistorySection,
   AdminInfoCard,
-  AdminNotesSection,
-  AdminRelatedActivity,
   AdminSectionCard,
-  AdminTechnicalDetails,
 } from '@/components/admin/admin-ui'
 import { fieldClassName } from '@/components/form-controls'
 import {
   diagnosticStatusOptions,
   formatAdminDateTime,
   getDiagnosticSubmissionDetail,
-  getRelatedActivityForRecord,
   getStatusLabel,
   parseAdminListFilters,
 } from '@/lib/admin-data'
@@ -49,14 +44,6 @@ export default async function AdminDiagnosticDetailPage({
   if (!detail) {
     notFound()
   }
-
-  const relatedActivity = await getRelatedActivityForRecord({
-    entity: 'diagnosticos',
-    id: detail.id,
-    emailNormalized: detail.emailNormalized,
-    phone: detail.phone,
-    company: detail.company,
-  })
 
   const listHref = buildAdminListHref('/admin/diagnosticos', filters)
   const returnTo = buildAdminDetailHref('/admin/diagnosticos', detail.id, filters)
@@ -210,12 +197,6 @@ export default async function AdminDiagnosticDetailPage({
             </div>
           </AdminSectionCard>
 
-          <AdminSectionCard
-            title="ACTIVIDAD RELACIONADA"
-            description="Relación comercial detectada con otros diagnósticos o asesorías."
-          >
-            <AdminRelatedActivity items={relatedActivity} />
-          </AdminSectionCard>
         </>
       }
       secondary={
@@ -256,79 +237,6 @@ export default async function AdminDiagnosticDetailPage({
             </form>
           </AdminSectionCard>
 
-          <AdminSectionCard
-            title="ENTREGA Y PRIVACIDAD"
-            description="Consulte consentimiento y estados de entrega sin quitar foco al diagnóstico principal."
-          >
-            <div className="space-y-3">
-              <AdminInfoCard
-                label="PRIVACIDAD"
-                hint={`Aceptada el ${formatAdminDateTime(detail.privacyAcceptedAt)}`}
-              >
-                {detail.privacyPolicyVersion}
-              </AdminInfoCard>
-              <AdminInfoCard label="ENTREGA">
-                <div className="flex flex-wrap gap-2">
-                  <AdminStatusBadge status={detail.internalEmailStatus} compact />
-                  <AdminStatusBadge status={detail.clientEmailStatus} compact />
-                  <AdminStatusBadge status={detail.webhookStatus} compact />
-                </div>
-                {detail.lastDeliveryError ? (
-                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                    {detail.lastDeliveryError}
-                  </p>
-                ) : null}
-              </AdminInfoCard>
-            </div>
-          </AdminSectionCard>
-
-          <AdminSectionCard
-            title="AGREGAR NOTA"
-            description="Notas internas para seguimiento, propuesta o contexto adicional."
-          >
-            <form
-              action={`/admin/api/diagnosticos/${detail.id}/notes`}
-              method="post"
-              className="space-y-4"
-            >
-              <input type="hidden" name="returnTo" value={returnTo} />
-              <label className="block">
-                <span className="text-sm font-medium text-foreground">Nota interna</span>
-                <textarea
-                  name="note"
-                  required
-                  className={`${fieldClassName} min-h-[8rem] resize-y`}
-                />
-              </label>
-              <button
-                type="submit"
-                className="inline-flex items-center rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/35 hover:text-primary"
-              >
-                GUARDAR NOTA
-              </button>
-            </form>
-          </AdminSectionCard>
-
-          <AdminNotesSection
-            items={detail.notes}
-            emptyLabel="Todavía no hay notas internas para este diagnóstico."
-          />
-
-          <AdminHistorySection
-            items={detail.statusHistory}
-            emptyLabel="Todavía no hay cambios de estado registrados."
-          />
-
-          <AdminTechnicalDetails
-            title="INFORMACIÓN TÉCNICA"
-            items={[
-              { label: 'Origen', value: detail.requestOrigin ?? 'Sin dato' },
-              { label: 'Ruta', value: detail.requestPath ?? 'Sin dato' },
-              { label: 'Referer', value: detail.referer ?? 'Sin dato' },
-              { label: 'User-Agent', value: detail.userAgent ?? 'Sin dato' },
-              { label: 'IP Hash', value: detail.ipHash ?? 'Sin dato' },
-            ]}
-          />
         </>
       }
     />
