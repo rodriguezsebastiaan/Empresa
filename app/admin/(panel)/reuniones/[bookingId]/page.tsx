@@ -9,6 +9,10 @@ import {
 } from '@/components/admin/admin-ui'
 import { fieldClassName } from '@/components/form-controls'
 import {
+  formatAdvisoryDateTimeLabel,
+  formatAdvisoryEndTimeLabel,
+} from '@/lib/advisory-time'
+import {
   advisoryBookingStatusOptions,
   formatAdminDateTime,
   getAdvisoryBookingDetail,
@@ -48,6 +52,12 @@ export default async function AdminBookingDetailPage({
   const listHref = buildAdminListHref('/admin/reuniones', filters)
   const returnTo = buildAdminDetailHref('/admin/reuniones', detail.id, filters)
   const meetUrl = detail.meetingUrl ?? detail.googleMeetUrl
+  const scheduledLabel = formatAdvisoryDateTimeLabel(detail.scheduledDate, detail.scheduledTime)
+  const endTimeLabel = formatAdvisoryEndTimeLabel(
+    detail.scheduledDate,
+    detail.scheduledTime,
+    detail.durationMinutes,
+  )
 
   return (
     <AdminDetailShell
@@ -55,7 +65,7 @@ export default async function AdminBookingDetailPage({
       backLabel="VOLVER A ASESORÍAS"
       eyebrow="DETALLE DE ASESORÍA"
       title={detail.fullName}
-      subtitle={`${detail.company} · ${detail.scheduledDate} · ${detail.scheduledTime}`}
+      subtitle={`${detail.company} · ${scheduledLabel}`}
       badges={
         <>
           <AdminStatusBadge status={detail.status} />
@@ -133,9 +143,9 @@ export default async function AdminBookingDetailPage({
             <div className="grid gap-3 md:grid-cols-2">
               <AdminInfoCard label="FECHA">{detail.scheduledDate}</AdminInfoCard>
               <AdminInfoCard label="HORA DE INICIO" hint={`${detail.durationMinutes} minutos`}>
-                {formatAdminDateTime(detail.startAt)}
+                {scheduledLabel}
               </AdminInfoCard>
-              <AdminInfoCard label="HORA FINAL">{formatAdminDateTime(detail.endAt)}</AdminInfoCard>
+              <AdminInfoCard label="HORA FINAL">{endTimeLabel}</AdminInfoCard>
               <AdminInfoCard label="ZONA HORARIA">{detail.timezone}</AdminInfoCard>
               <AdminInfoCard label="MODALIDAD">{detail.modality}</AdminInfoCard>
               <AdminInfoCard label="CIUDAD">{detail.city}</AdminInfoCard>
@@ -192,7 +202,7 @@ export default async function AdminBookingDetailPage({
               returnTo={returnTo}
               currentDate={detail.scheduledDate}
               currentTime={detail.scheduledTime}
-              currentLabel={formatAdminDateTime(detail.startAt)}
+              currentLabel={scheduledLabel}
             />
 
             <details className="mt-4 rounded-2xl border border-border/70 bg-background/35 p-4">

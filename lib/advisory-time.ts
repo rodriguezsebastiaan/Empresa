@@ -12,6 +12,33 @@ export function buildAdvisoryDateTime(date: string, time: string) {
   return new Date(`${date}T${time}:00${siteConfig.advisory.utcOffset}`)
 }
 
+export function formatAdvisoryDateTimeLabel(date: string, time: string) {
+  return new Intl.DateTimeFormat('es-CO', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: siteConfig.advisory.timezone,
+  }).format(buildAdvisoryDateTime(date, time))
+}
+
+export function formatAdvisoryTimeLabel(date: string, time: string) {
+  return new Intl.DateTimeFormat('es-CO', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: siteConfig.advisory.timezone,
+  }).format(buildAdvisoryDateTime(date, time))
+}
+
+export function formatAdvisoryEndTimeLabel(date: string, time: string, durationMinutes: number) {
+  const startAt = buildAdvisoryDateTime(date, time)
+  const endAt = new Date(startAt.getTime() + durationMinutes * 60 * 1000)
+
+  return new Intl.DateTimeFormat('es-CO', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: siteConfig.advisory.timezone,
+  }).format(endAt)
+}
+
 export function formatDateValueInAdvisoryZone(date: Date) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: siteConfig.advisory.timezone,
