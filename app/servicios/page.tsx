@@ -151,18 +151,6 @@ export default function ServicesPage() {
             ) : null}
           </>
         }
-        aside={
-          <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
-            <p>
-              Servicios y beneficios no son lo mismo. Aquí encontrará lo que
-              Konamy Systems puede construir, mejorar o integrar.
-            </p>
-            <p>
-              Los beneficios siguen estando visibles en la home como resultados;
-              esta página organiza la oferta real de trabajo.
-            </p>
-          </div>
-        }
       />
 
       <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">

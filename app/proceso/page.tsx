@@ -84,18 +84,6 @@ export default function ProcessPage() {
             </SiteAction>
           </>
         }
-        aside={
-          <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
-            <p>
-              No ocultamos el proceso detrás de tecnicismos. Cada etapa existe
-              para dar claridad, validar avances y construir con orden.
-            </p>
-            <p>
-              Después de la entrega no desaparecemos: la mejora continua forma
-              parte de la lógica de trabajo.
-            </p>
-          </div>
-        }
       />
 
       <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">

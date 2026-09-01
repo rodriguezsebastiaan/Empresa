@@ -134,19 +134,6 @@ export default function ContactPage() {
             ) : null}
           </>
         }
-        aside={
-          <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
-            <p>
-              Centralizamos los canales de contacto para responder con orden,
-              claridad y continuidad desde el primer mensaje.
-            </p>
-            <p>{siteConfig.contact.coverage}</p>
-            <p>
-              Si algún canal aún no tiene datos oficiales, evitamos mostrar
-              enlaces incompletos o información no confirmada.
-            </p>
-          </div>
-        }
       />
 
       <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
