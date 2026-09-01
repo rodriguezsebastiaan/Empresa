@@ -91,19 +91,6 @@ export default function SolutionsPage() {
             </SiteAction>
           </>
         }
-        aside={
-          <div className="space-y-4">
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Una solución de Konamy Systems puede ordenar procesos, centralizar
-              información, conectar equipos, automatizar tareas y escalar con la
-              empresa sin perder control.
-            </p>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              La home resume esta visión. Aquí está el mapa completo de problemas
-              que podemos transformar.
-            </p>
-          </div>
-        }
       />
 
       <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
