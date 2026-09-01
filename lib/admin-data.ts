@@ -56,7 +56,7 @@ const contactPendingStatuses: ContactSubmissionStatus[] = ['NEW']
 const contactInProgressStatuses: ContactSubmissionStatus[] = ['IN_REVIEW', 'CONTACTED']
 const contactAttendedStatuses: ContactSubmissionStatus[] = ['CLOSED']
 
-const bookingActiveStatuses: AdvisoryBookingStatus[] = ['PENDING', 'CONFIRMED']
+const bookingActiveStatuses: AdvisoryBookingStatus[] = ['PENDING', 'CONFIRMED', 'RESCHEDULED']
 
 export const statusLabels: Record<string, string> = {
   NEW: 'Pendiente',

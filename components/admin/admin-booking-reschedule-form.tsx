@@ -16,6 +16,23 @@ type AdminBookingRescheduleFormProps = {
   currentLabel: string
 }
 
+function formatDateForPreview(value: string) {
+  if (!value) {
+    return ''
+  }
+
+  const [year, month, day] = value.split('-').map(Number)
+  const date = new Date(Date.UTC(year, month - 1, day, 12))
+
+  return new Intl.DateTimeFormat('es-CO', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'America/Bogota',
+  }).format(date)
+}
+
 export function AdminBookingRescheduleForm({
   bookingId,
   returnTo,
@@ -54,8 +71,8 @@ export function AdminBookingRescheduleForm({
         setSlots(nextSlots)
         setMessage(
           nextSlots.length > 0
-            ? 'Seleccione el nuevo horario de la asesoria.'
-            : payload.message ?? 'No hay horarios disponibles para este dia.',
+            ? 'Seleccione el nuevo horario de la asesoría.'
+            : payload.message ?? 'No hay horarios disponibles para este día.',
         )
       } catch {
         if (!ignore) {
@@ -87,8 +104,8 @@ export function AdminBookingRescheduleForm({
       <div>
         <p className="text-xs font-semibold tracking-[0.18em] text-primary">REAGENDAR</p>
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          Mueva esta asesoría a una fecha con horario disponible. El nuevo horario se valida
-          contra la misma disponibilidad que ve el cliente.
+          Mueva esta asesoría a una fecha con horario disponible. Puede reprogramarse las veces
+          que sea necesario; cada cambio queda registrado en el historial.
         </p>
       </div>
 
@@ -153,7 +170,7 @@ export function AdminBookingRescheduleForm({
         </p>
         <p className="mt-1 text-sm font-semibold text-foreground">
           {date && time
-            ? `${date} · ${slots.find((slot) => slot.value === time)?.label ?? time}`
+            ? `${formatDateForPreview(date)} · ${slots.find((slot) => slot.value === time)?.label ?? time}`
             : 'Seleccione fecha y hora para confirmar el cambio.'}
         </p>
       </div>

@@ -15,7 +15,7 @@ import type {
   TimeRange,
 } from '@/lib/availability-types'
 
-const activeBookingStatuses = ['PENDING', 'CONFIRMED'] as const
+const activeBookingStatuses = ['PENDING', 'CONFIRMED', 'RESCHEDULED'] as const
 
 const defaultRules = [
   { weekday: 1, startTime: '09:00', endTime: '12:00', sortOrder: 10 },
