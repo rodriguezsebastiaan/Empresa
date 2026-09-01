@@ -275,11 +275,11 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
           <table className="min-w-full table-fixed">
             <thead className="bg-background/65 text-left text-[0.65rem] font-semibold tracking-[0.18em] text-muted-foreground">
               <tr>
-                <th className="w-[31%] px-5 py-3">EMPRESA</th>
-                <th className="w-[29%] px-5 py-3">CLIENTE Y CONTACTO</th>
-                <th className="w-[18%] px-5 py-3">FECHA</th>
-                <th className="w-[12%] px-5 py-3">ESTADO</th>
-                <th className="w-[10%] px-5 py-3 text-right">ACCIÓN</th>
+                <th className="w-[30%] px-5 py-3">EMPRESA</th>
+                <th className="w-[28%] px-5 py-3">CLIENTE Y CONTACTO</th>
+                <th className="w-[17%] px-5 py-3">FECHA</th>
+                <th className="w-[11%] px-5 py-3">ESTADO</th>
+                <th className="w-[14%] px-5 py-3 text-right">ACCIÓN</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60 bg-background/22">
@@ -313,7 +313,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                     <td className="px-5 py-4 align-top text-right">
                       <Link
                         href={buildDetailHref(item.id)}
-                        className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3.5 py-2 text-xs font-semibold tracking-[0.16em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
+                        className="inline-flex min-w-[7.5rem] items-center justify-center whitespace-nowrap rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
                       >
                         VER DETALLE
                       </Link>
@@ -362,7 +362,7 @@ export default async function AdminDiagnosticosPage({ searchParams }: Diagnostic
                 <div className="mt-4">
                   <Link
                     href={buildDetailHref(item.id)}
-                    className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3.5 py-2 text-xs font-semibold tracking-[0.16em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
+                    className="inline-flex items-center whitespace-nowrap rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
                   >
                     VER DETALLE
                   </Link>

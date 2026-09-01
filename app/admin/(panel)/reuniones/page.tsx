@@ -319,7 +319,7 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
                     <td className="px-5 py-4 align-top text-right">
                       <Link
                         href={buildDetailHref(item.id)}
-                        className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3.5 py-2 text-xs font-semibold tracking-[0.16em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
+                        className="inline-flex min-w-[7.5rem] items-center justify-center whitespace-nowrap rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
                       >
                         VER DETALLE
                       </Link>
@@ -372,7 +372,7 @@ export default async function AdminReunionesPage({ searchParams }: ReunionesPage
                 <div className="mt-4">
                   <Link
                     href={buildDetailHref(item.id)}
-                    className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3.5 py-2 text-xs font-semibold tracking-[0.16em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
+                    className="inline-flex items-center whitespace-nowrap rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold tracking-[0.14em] text-primary transition-colors hover:border-primary/45 hover:bg-primary/14"
                   >
                     VER DETALLE
                   </Link>
