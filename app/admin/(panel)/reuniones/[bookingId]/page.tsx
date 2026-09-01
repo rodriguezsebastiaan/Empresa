@@ -194,7 +194,7 @@ export default async function AdminBookingDetailPage({
 
           <AdminSectionCard
             title="ACTIVIDAD RELACIONADA"
-            description="Otros formularios breves, diagnósticos o asesorías vinculadas a la misma empresa o al mismo contacto."
+            description="Otros diagnósticos o asesorías vinculadas a la misma empresa o al mismo contacto."
           >
             <AdminRelatedActivity items={relatedActivity} />
           </AdminSectionCard>

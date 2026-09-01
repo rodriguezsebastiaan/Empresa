@@ -59,7 +59,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
                 PANEL ADMINISTRATIVO
               </p>
               <h1 className="mt-4 text-4xl font-semibold leading-tight text-foreground">
-                Gestión interna de formularios breves, diagnósticos y asesorías de Konamy Systems.
+                Gestión interna de diagnósticos y asesorías de Konamy Systems.
               </h1>
               <p className="mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground">
                 Este acceso permite revisar prospectos, actualizar estados, agregar notas internas,
@@ -77,7 +77,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
                 <div className="rounded-2xl border border-border/70 bg-background/35 p-4 shadow-inner shadow-black/5">
                   <p className="text-xs font-semibold tracking-[0.18em] text-primary">ALCANCE</p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Dashboard, contactos, diagnósticos, asesorías, estados, notas, historial y exportación CSV.
+                    Dashboard, diagnósticos, asesorías, estados, notas, historial y exportación CSV.
                   </p>
                 </div>
               </div>

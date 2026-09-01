@@ -212,7 +212,7 @@ export default async function AdminDiagnosticDetailPage({
 
           <AdminSectionCard
             title="ACTIVIDAD RELACIONADA"
-            description="Relación comercial detectada con formularios breves, otros diagnósticos o asesorías."
+            description="Relación comercial detectada con otros diagnósticos o asesorías."
           >
             <AdminRelatedActivity items={relatedActivity} />
           </AdminSectionCard>

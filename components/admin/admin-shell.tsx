@@ -13,7 +13,6 @@ import {
   ClipboardList,
   LayoutDashboard,
   LogOut,
-  Mail,
   Menu,
   UserRound,
   X,
@@ -35,11 +34,6 @@ const navigationItems = [
     href: '/admin',
     label: 'Dashboard',
     icon: LayoutDashboard,
-  },
-  {
-    href: '/admin/contactos',
-    label: 'Contactos',
-    icon: Mail,
   },
   {
     href: '/admin/diagnosticos',

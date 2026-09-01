@@ -44,10 +44,6 @@ export const advisoryBookingStatusOptions: AdvisoryBookingStatus[] = [
   'NO_SHOW',
 ]
 
-const contactPendingStatuses: ContactSubmissionStatus[] = ['NEW']
-const contactInProgressStatuses: ContactSubmissionStatus[] = ['IN_REVIEW']
-const contactAttendedStatuses: ContactSubmissionStatus[] = ['CONTACTED', 'CLOSED']
-
 const diagnosticPendingStatuses: DiagnosticSubmissionStatus[] = ['NEW']
 const diagnosticInProgressStatuses: DiagnosticSubmissionStatus[] = [
   'IN_ANALYSIS',
@@ -55,6 +51,10 @@ const diagnosticInProgressStatuses: DiagnosticSubmissionStatus[] = [
   'PROPOSAL_SENT',
 ]
 const diagnosticFinalStatuses: DiagnosticSubmissionStatus[] = ['WON', 'LOST']
+
+const contactPendingStatuses: ContactSubmissionStatus[] = ['NEW']
+const contactInProgressStatuses: ContactSubmissionStatus[] = ['IN_REVIEW', 'CONTACTED']
+const contactAttendedStatuses: ContactSubmissionStatus[] = ['CLOSED']
 
 const bookingActiveStatuses: AdvisoryBookingStatus[] = ['PENDING', 'CONFIRMED']
 
@@ -95,7 +95,7 @@ export type AdminListFilters = {
 
 export type RelatedActivityItem = {
   id: string
-  entity: 'contactos' | 'diagnosticos' | 'reuniones'
+  entity: 'diagnosticos' | 'reuniones'
   href: string
   title: string
   subtitle: string
@@ -533,10 +533,6 @@ export async function getAdminDashboardSnapshot() {
   const db = getDb()
 
   const [
-    totalContacts,
-    pendingContacts,
-    inProgressContacts,
-    attendedContacts,
     totalDiagnostics,
     pendingDiagnostics,
     inProgressDiagnostics,
@@ -546,28 +542,6 @@ export async function getAdminDashboardSnapshot() {
     confirmedBookings,
     completedBookings,
   ] = await Promise.all([
-    db.contactSubmission.count(),
-    db.contactSubmission.count({
-      where: {
-        status: {
-          in: contactPendingStatuses,
-        },
-      },
-    }),
-    db.contactSubmission.count({
-      where: {
-        status: {
-          in: contactInProgressStatuses,
-        },
-      },
-    }),
-    db.contactSubmission.count({
-      where: {
-        status: {
-          in: contactAttendedStatuses,
-        },
-      },
-    }),
     db.diagnosticSubmission.count(),
     db.diagnosticSubmission.count({
       where: {
@@ -610,12 +584,6 @@ export async function getAdminDashboardSnapshot() {
 
   return {
     modules: {
-      contacts: {
-        total: totalContacts,
-        pending: pendingContacts,
-        inProgress: inProgressContacts,
-        attended: attendedContacts,
-      },
       diagnostics: {
         total: totalDiagnostics,
         pending: pendingDiagnostics,
@@ -997,28 +965,20 @@ export async function getRelatedActivityForRecord(input: {
 }) {
   const matchKey = buildRelatedMatchKey(input)
   const db = getDb()
-  const contactOr: Prisma.ContactSubmissionWhereInput[] = []
   const diagnosticOr: Prisma.DiagnosticSubmissionWhereInput[] = []
   const bookingOr: Prisma.AdvisoryBookingWhereInput[] = []
 
   if (matchKey.emailNormalized) {
-    contactOr.push({ emailNormalized: matchKey.emailNormalized })
     diagnosticOr.push({ emailNormalized: matchKey.emailNormalized })
     bookingOr.push({ emailNormalized: matchKey.emailNormalized })
   }
 
   if (matchKey.phoneProbe) {
-    contactOr.push({ phone: { contains: matchKey.phoneProbe } })
     diagnosticOr.push({ phone: { contains: matchKey.phoneProbe } })
     bookingOr.push({ phone: { contains: matchKey.phoneProbe } })
   }
 
   if (matchKey.company) {
-    contactOr.push({
-      company: {
-        equals: matchKey.company,
-      },
-    })
     diagnosticOr.push({
       company: {
         equals: matchKey.company,
@@ -1031,30 +991,11 @@ export async function getRelatedActivityForRecord(input: {
     })
   }
 
-  if (contactOr.length === 0 || diagnosticOr.length === 0 || bookingOr.length === 0) {
+  if (diagnosticOr.length === 0 || bookingOr.length === 0) {
     return [] as RelatedActivityItem[]
   }
 
-  const [contacts, diagnostics, bookings] = await Promise.all([
-    db.contactSubmission.findMany({
-      where: {
-        OR: contactOr,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      take: 12,
-      select: {
-        id: true,
-        status: true,
-        name: true,
-        company: true,
-        emailNormalized: true,
-        phone: true,
-        subject: true,
-        createdAt: true,
-      },
-    }),
+  const [diagnostics, bookings] = await Promise.all([
     db.diagnosticSubmission.findMany({
       where: {
         OR: diagnosticOr,
@@ -1098,30 +1039,6 @@ export async function getRelatedActivityForRecord(input: {
   ])
 
   const relatedItems: RelatedActivityItem[] = []
-
-  for (const item of contacts) {
-    if (input.entity === 'contactos' && item.id === input.id) {
-      continue
-    }
-
-    const matchReasons = collectMatchReasons(matchKey, item)
-
-    if (matchReasons.length === 0 || !hasStrongRelatedMatch(matchReasons)) {
-      continue
-    }
-
-    relatedItems.push({
-      id: item.id,
-      entity: 'contactos',
-      href: `/admin/contactos/${item.id}`,
-      title: item.company,
-      subtitle: item.name,
-      description: item.subject,
-      status: item.status,
-      happenedAt: item.createdAt,
-      matchReasons,
-    })
-  }
 
   for (const item of diagnostics) {
     if (input.entity === 'diagnosticos' && item.id === input.id) {

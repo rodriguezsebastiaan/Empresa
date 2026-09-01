@@ -20,7 +20,6 @@ const moduleToneClasses = {
 } as const
 
 const relatedEntityLabels: Record<RelatedActivityItem['entity'], string> = {
-  contactos: 'Contacto',
   diagnosticos: 'Diagnóstico',
   reuniones: 'Asesoría',
 }

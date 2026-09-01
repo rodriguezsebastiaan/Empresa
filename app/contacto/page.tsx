@@ -9,7 +9,6 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import Link from 'next/link'
-import { ContactForm } from '@/components/contact-form'
 import { PageHero } from '@/components/page-hero'
 import { Reveal } from '@/components/reveal'
 import { SectionHeading } from '@/components/section-heading'
@@ -121,7 +120,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="CONTACTO"
         title="Canales claros para iniciar la conversación con Konamy Systems."
-        description="Esta página reúne asesoría, diagnóstico empresarial y formulario breve de contacto para iniciar la conversación por el canal más adecuado."
+        description="Esta página reúne asesoría, diagnóstico empresarial y canales directos para iniciar la conversación por el camino más adecuado."
         actions={
           <>
             <SiteAction href={siteConfig.routes.advisory}>AGENDAR ASESORÍA</SiteAction>
@@ -224,16 +223,29 @@ export default function ContactPage() {
 
       <section className="border-t border-border/60 bg-primary/[0.03]">
         <div className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)]">
-            <Reveal>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(18rem,1.05fr)]">
+            <Reveal
+              as="aside"
+              className="rounded-[2rem] border border-primary/20 bg-primary/[0.06] px-6 py-8 backdrop-blur-sm"
+            >
               <SectionHeading
-                eyebrow="FORMULARIO BREVE"
-                title="Comparta su necesidad y organizamos el siguiente paso."
-                description="El formulario revisa la información antes de enviarla. Si el canal de recepción aún no está disponible, la plataforma lo informará con claridad sin simular un envío."
+                eyebrow="SIGUIENTE PASO"
+                title="Elija el flujo que mejor encaje con su necesidad."
+                description="Para mantener la atención ordenada, Konamy Systems prioriza dos caminos: diagnóstico empresarial cuando necesita explicar el contexto y asesoría cuando desea coordinar una conversación."
               />
 
-              <div className="mt-8">
-                <ContactForm />
+              <div className="mt-8 grid gap-3">
+                <SiteAction href={siteConfig.routes.diagnostics}>
+                  SOLICITAR DIAGNÓSTICO
+                </SiteAction>
+                <SiteAction href={siteConfig.routes.advisory} variant="secondary">
+                  AGENDAR ASESORÍA
+                </SiteAction>
+                {whatsappHref ? (
+                  <SiteAction href={whatsappHref} external variant="secondary">
+                    HABLAR POR WHATSAPP
+                  </SiteAction>
+                ) : null}
               </div>
             </Reveal>
 
@@ -247,30 +259,18 @@ export default function ContactPage() {
               </p>
               <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
                 <p>
-                  Si ya sabe que necesita una asesoría, el camino más directo es
+                  Si ya sabe que necesita una conversación inicial, el camino más directo es
                   agendar una asesoría.
                 </p>
                 <p>
                   Si todavía necesita explicar mejor el contexto, el diagnóstico le
-                  ayuda a ordenar la información antes del contacto.
+                  ayuda a organizar la información antes del contacto.
                 </p>
                 <p>
                   {hasWhatsApp
                     ? 'WhatsApp queda disponible como acceso rápido solo cuando el número oficial ya está configurado.'
                     : 'Mientras no exista un número oficial configurado, el acceso directo de WhatsApp permanece oculto para evitar enlaces falsos.'}
                 </p>
-              </div>
-
-              <div className="mt-6 flex flex-col gap-3">
-                <SiteAction href={siteConfig.routes.advisory}>AGENDAR ASESORÍA</SiteAction>
-                <SiteAction href={siteConfig.routes.diagnostics} variant="secondary">
-                  SOLICITAR DIAGNÓSTICO
-                </SiteAction>
-                {whatsappHref ? (
-                  <SiteAction href={whatsappHref} external variant="secondary">
-                    HABLAR POR WHATSAPP
-                  </SiteAction>
-                ) : null}
               </div>
             </Reveal>
           </div>

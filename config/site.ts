@@ -118,7 +118,7 @@ const pages = {
     path: routes.contact,
     title: 'Contacto | Konamy Systems',
     description:
-      'Contacte a Konamy Systems mediante asesoría, diagnóstico empresarial, WhatsApp, correo, teléfono y formulario breve validado en cliente y servidor.',
+      'Contacte a Konamy Systems mediante asesoría, diagnóstico empresarial, WhatsApp, correo y teléfono, con canales claros para iniciar la conversación.',
     changeFrequency: 'monthly' as SitemapChangeFrequency,
     priority: 0.8,
   },
