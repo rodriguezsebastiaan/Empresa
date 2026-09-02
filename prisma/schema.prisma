@@ -18,6 +18,30 @@ enum DeliveryStatus {
   SKIPPED
 }
 
+enum EmailDeliveryStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum EmailDeliveryProvider {
+  MOCK
+  RESEND
+}
+
+enum EmailDeliveryType {
+  DIAGNOSTIC_RECEIVED_CUSTOMER
+  DIAGNOSTIC_RECEIVED_ADMIN
+  BOOKING_CONFIRMED_CUSTOMER
+  BOOKING_CONFIRMED_ADMIN
+  DIAGNOSTIC_STATUS_CHANGED
+  BOOKING_RESCHEDULED
+  BOOKING_CANCELLED
+  BOOKING_ONE_HOUR_REMINDER
+}
+
 enum ContactSubmissionStatus {
   NEW
   IN_REVIEW
@@ -387,6 +411,32 @@ model CalendarIntegration {
   updatedAt      DateTime       @updatedAt
 
   @@index([provider, mode, isEnabled])
+}
+
+model EmailDelivery {
+  id                  String                @id @default(uuid()) @db.Char(36)
+  type                EmailDeliveryType
+  entityType          String                @db.VarChar(80)
+  entityId            String                @db.VarChar(120)
+  recipient           String                @db.VarChar(191)
+  status              EmailDeliveryStatus   @default(PENDING)
+  provider            EmailDeliveryProvider @default(MOCK)
+  providerMessageId   String?               @db.VarChar(191)
+  idempotencyKey      String                @unique @db.VarChar(191)
+  attempts            Int                   @default(0)
+  maxAttempts         Int                   @default(3)
+  lastError           String?               @db.Text
+  scheduledFor        DateTime?
+  processingStartedAt DateTime?
+  sentAt              DateTime?
+  failedAt            DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+
+  @@index([status, scheduledFor])
+  @@index([entityType, entityId])
+  @@index([type, status])
+  @@index([provider, status])
 }
 
 model AdminNote {

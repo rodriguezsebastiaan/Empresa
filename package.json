@@ -20,7 +20,8 @@
     "db:check": "node scripts/run-ts.mjs scripts/check-production-db.ts",
     "db:tls:check": "node scripts/run-ts.mjs scripts/check-mysql-tls.ts",
     "smtp:check": "node scripts/run-ts.mjs scripts/check-smtp.ts",
-    "test": "node scripts/run-ts.mjs scripts/test-availability.ts"
+    "test": "node scripts/run-ts.mjs scripts/test-email-delivery.ts",
+    "test:availability": "node scripts/run-ts.mjs scripts/test-availability.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -31,7 +32,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.1",
     "lucide-react": "^1.16.0",
-    "mariadb": "^3.5.3",
+    "mariadb": "^3.5.4",
     "next": "16.3.1",
     "nodemailer": "^9.0.3",
     "react": "^19",
@@ -61,12 +62,19 @@
   },
   "pnpm": {
     "overrides": {
-      "fast-uri": "3.1.5",
-      "hono": "4.12.34"
+      "browserslist": "4.28.8",
+      "deepmerge-ts": "8.0.2",
+      "fast-uri": "3.1.6",
+      "hono": "4.12.34",
+      "mariadb": "3.5.4",
+      "mysql2": "3.24.2"
     }
   },
   "overrides": {
-    "fast-uri": "3.1.5",
-    "hono": "4.12.34"
+    "browserslist": "4.28.8",
+    "deepmerge-ts": "8.0.2",
+    "fast-uri": "3.1.6",
+    "hono": "4.12.34",
+    "mysql2": "3.24.2"
   }
 }

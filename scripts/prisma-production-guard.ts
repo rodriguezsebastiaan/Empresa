@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { basename, resolve } from 'node:path'
 import { config as loadDotenv } from 'dotenv'
 
 const EXPECTED_HOST = '54.84.0.47'
@@ -8,6 +8,7 @@ const EXPECTED_PORT = '3306'
 const EXPECTED_DATABASE = 'rserpler4_empresaa'
 const EXPECTED_USER = 'rserpler4_empresaa'
 const INITIAL_MIGRATION = '20260813163000_mysql_initial'
+const MIGRATION_NAME_PATTERN = /^\d{14}_[a-z0-9_]+$/
 
 type GuardCommand = 'status' | 'resolve' | 'deploy' | 'seed'
 
@@ -97,7 +98,27 @@ function getCommand(): GuardCommand {
   fail('Comando invalido. Use status, resolve, deploy o seed.')
 }
 
-function getProcessArgs(command: GuardCommand) {
+function getMigrationToResolve(command: GuardCommand) {
+  if (command !== 'resolve') {
+    return INITIAL_MIGRATION
+  }
+
+  const migrationName = process.argv[3]?.trim() || INITIAL_MIGRATION
+
+  if (!MIGRATION_NAME_PATTERN.test(migrationName) || basename(migrationName) !== migrationName) {
+    fail('Nombre de migracion invalido.')
+  }
+
+  const migrationPath = resolve(process.cwd(), 'prisma', 'migrations', migrationName)
+
+  if (!existsSync(migrationPath)) {
+    fail(`No existe la migracion local prisma/migrations/${migrationName}.`)
+  }
+
+  return migrationName
+}
+
+function getProcessArgs(command: GuardCommand, migrationToResolve: string) {
   if (command === 'seed') {
     return {
       command: 'node',
@@ -115,7 +136,7 @@ function getProcessArgs(command: GuardCommand) {
   if (command === 'resolve') {
     return {
       command: 'npx',
-      args: ['prisma', 'migrate', 'resolve', '--applied', INITIAL_MIGRATION],
+      args: ['prisma', 'migrate', 'resolve', '--applied', migrationToResolve],
     }
   }
 
@@ -152,13 +173,17 @@ loadLocalEnvironment()
 
 const command = getCommand()
 const { prismaUrl, summary } = parseProductionUrl()
-const processArgs = getProcessArgs(command)
+const migrationToResolve = getMigrationToResolve(command)
+const processArgs = getProcessArgs(command, migrationToResolve)
 
 assertWriteConfirmed(command)
 assertSeedEnvironment(command)
 
 console.log('Prisma production guard')
 console.log(`Comando: ${command}`)
+if (command === 'resolve') {
+  console.log(`Migracion: ${migrationToResolve}`)
+}
 console.log(`Host: ${summary.host}`)
 console.log(`Puerto: ${summary.port}`)
 console.log(`Base: ${summary.database}`)
