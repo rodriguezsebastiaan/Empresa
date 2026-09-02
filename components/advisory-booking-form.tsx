@@ -39,6 +39,8 @@ type BookingConfirmation = {
   meetUrl: string | null
   guestEmail: string
   guestName: string
+  customerEmailQueued?: boolean
+  customerEmailStatus?: string
 }
 
 function todayValue() {
@@ -258,6 +260,10 @@ export function AdvisoryBookingForm() {
         message?: string
         errors?: FieldErrors
         confirmation?: BookingConfirmation
+        emailConfirmation?: {
+          customerEmailQueued: boolean
+          customerEmailStatus: string
+        }
       }
 
       if (!response.ok) {
@@ -268,7 +274,15 @@ export function AdvisoryBookingForm() {
         return
       }
 
-      setConfirmation(payload.confirmation ?? null)
+      setConfirmation(
+        payload.confirmation
+          ? {
+              ...payload.confirmation,
+              customerEmailQueued: payload.emailConfirmation?.customerEmailQueued,
+              customerEmailStatus: payload.emailConfirmation?.customerEmailStatus,
+            }
+          : null,
+      )
       setStatusMessage('')
     } catch {
       setStatusMessage('No fue posible conectar con el servidor.')
@@ -287,6 +301,10 @@ export function AdvisoryBookingForm() {
           <h2 className="mt-4 text-2xl font-medium text-foreground">
             Su asesoría inicial quedó registrada.
           </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            La reserva quedó guardada en el panel administrativo y la confirmación por correo quedó
+            registrada para el invitado.
+          </p>
           <dl className="mt-8 grid gap-4 text-sm">
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
               <dt className="text-xs tracking-[0.18em] text-muted-foreground">Fecha</dt>
@@ -309,6 +327,14 @@ export function AdvisoryBookingForm() {
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
               <dt className="text-xs tracking-[0.18em] text-muted-foreground">Invitado</dt>
               <dd className="mt-1 text-foreground">{confirmation.guestEmail}</dd>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
+              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Correo</dt>
+              <dd className="mt-1 text-foreground">
+                {confirmation.customerEmailQueued
+                  ? 'Confirmación registrada.'
+                  : 'Confirmación pendiente de integración.'}
+              </dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
               <dt className="text-xs tracking-[0.18em] text-muted-foreground">Enlace de reunión</dt>

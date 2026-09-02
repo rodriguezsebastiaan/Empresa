@@ -14,8 +14,15 @@ import { siteConfig } from '@/config/site'
 import {
   validateDiagnosticStep,
   type DiagnosticFormData,
-  type FieldErrors,
+type FieldErrors,
 } from '@/lib/validation'
+
+type DiagnosticConfirmation = {
+  diagnosticId: string
+  email: string
+  customerEmailQueued: boolean
+  clientEmailStatus?: string
+}
 
 const steps = [
   'Datos personales',
@@ -68,6 +75,7 @@ export function DiagnosticWizard() {
     tone: 'neutral' | 'error' | 'success'
     message: string
   }>({ tone: 'neutral', message: '' })
+  const [confirmation, setConfirmation] = useState<DiagnosticConfirmation | null>(null)
 
   const progress = ((step + 1) / steps.length) * 100
 
@@ -127,6 +135,7 @@ export function DiagnosticWizard() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setConfirmation(null)
 
     const result = validateDiagnosticStep(7, form)
     setErrors(result)
@@ -155,6 +164,7 @@ export function DiagnosticWizard() {
         success?: boolean
         message?: string
         errors?: FieldErrors
+        confirmation?: DiagnosticConfirmation
       }
 
       if (!response.ok) {
@@ -173,6 +183,13 @@ export function DiagnosticWizard() {
         message:
           payload.message ?? 'El diagnóstico fue enviado correctamente.',
       })
+      setConfirmation(
+        payload.confirmation ?? {
+          diagnosticId: '',
+          email: form.email,
+          customerEmailQueued: false,
+        },
+      )
       setForm(initialState)
       setStep(0)
     } catch {
@@ -183,6 +200,66 @@ export function DiagnosticWizard() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  if (confirmation) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className={panelClassName}>
+          <p className="text-xs font-semibold tracking-[0.3em] text-primary">
+            DIAGNÓSTICO ENVIADO
+          </p>
+          <h2 className="mt-4 text-2xl font-medium text-foreground">
+            Su diagnóstico fue enviado con éxito.
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            La información quedó guardada en el panel administrativo de Konamy Systems para su
+            revisión y seguimiento.
+          </p>
+
+          <dl className="mt-8 grid gap-4 text-sm sm:grid-cols-2">
+            <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
+              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Correo</dt>
+              <dd className="mt-1 break-words text-foreground">{confirmation.email}</dd>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
+              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Confirmación</dt>
+              <dd className="mt-1 text-foreground">
+                {confirmation.customerEmailQueued
+                  ? 'Correo de confirmación registrado.'
+                  : 'Confirmación pendiente de integración.'}
+              </dd>
+            </div>
+            <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3 sm:col-span-2">
+              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Referencia</dt>
+              <dd className="mt-1 break-words text-foreground">
+                {confirmation.diagnosticId || 'Generada en el sistema'}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <aside className={`${panelClassName} h-fit`}>
+          <p className="text-xs font-semibold tracking-[0.3em] text-primary">
+            SIGUIENTE PASO
+          </p>
+          <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+            Revisaremos el diagnóstico y podremos usarlo como base para una asesoría inicial. Si
+            quiere avanzar de una vez, puede reservar un horario disponible.
+          </p>
+          <div className="mt-6 flex flex-col gap-3">
+            <SiteAction href={siteConfig.routes.advisory}>AGENDAR ASESORÍA</SiteAction>
+            <button
+              type="button"
+              onClick={() => setConfirmation(null)}
+              className="inline-flex items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3.5 text-xs font-semibold tracking-widest text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+            >
+              ENVIAR OTRO DIAGNÓSTICO
+            </button>
+          </div>
+        </aside>
+      </div>
+    )
   }
 
   return (

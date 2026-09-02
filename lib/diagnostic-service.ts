@@ -3,6 +3,8 @@ import { integrationEnvConfig } from '@/config/integrations'
 import { siteConfig } from '@/config/site'
 import { getDb } from '@/lib/db'
 import { isDiagnosticWebhookConfigured, sendDiagnosticWebhook } from '@/lib/diagnostic-webhook'
+import { EmailDeliveryService } from '@/lib/email-delivery'
+import { renderEmailTemplate } from '@/lib/email-templates'
 import {
   buildEmailLayout,
   formatEmailDateTime,
@@ -168,6 +170,65 @@ function buildClientEmail(
   }
 }
 
+async function enqueueDiagnosticEmailDeliveries(input: {
+  diagnosticId: string
+  payload: ReturnType<typeof sanitizeDiagnosticFormData>
+  destinationEmail: string
+}) {
+  const delivery = new EmailDeliveryService()
+  const issues: string[] = []
+  let customerQueued = false
+  let adminQueued = false
+
+  try {
+    renderEmailTemplate({
+      type: 'DIAGNOSTIC_RECEIVED_CUSTOMER',
+      data: {
+        customerName: input.payload.name,
+        company: input.payload.company,
+        diagnosticId: input.diagnosticId,
+      },
+    })
+    await delivery.create({
+      type: 'DIAGNOSTIC_RECEIVED_CUSTOMER',
+      entityType: 'DiagnosticSubmission',
+      entityId: input.diagnosticId,
+      recipient: input.payload.email,
+      idempotencyKey: `diagnostic:${input.diagnosticId}:customer:received`,
+      provider: 'MOCK',
+    })
+    customerQueued = true
+  } catch {
+    issues.push('No fue posible registrar la confirmación por correo del cliente.')
+  }
+
+  if (input.destinationEmail) {
+    try {
+      renderEmailTemplate({
+        type: 'DIAGNOSTIC_RECEIVED_ADMIN',
+        data: {
+          customerName: input.payload.name,
+          company: input.payload.company,
+          diagnosticId: input.diagnosticId,
+        },
+      })
+      await delivery.create({
+        type: 'DIAGNOSTIC_RECEIVED_ADMIN',
+        entityType: 'DiagnosticSubmission',
+        entityId: input.diagnosticId,
+        recipient: input.destinationEmail,
+        idempotencyKey: `diagnostic:${input.diagnosticId}:admin:received`,
+        provider: 'MOCK',
+      })
+      adminQueued = true
+    } catch {
+      issues.push('No fue posible registrar la notificación interna por correo.')
+    }
+  }
+
+  return { customerQueued, adminQueued, issues }
+}
+
 async function findRecentDuplicateDiagnostic(
   input: ReturnType<typeof sanitizeDiagnosticFormData>,
   summary: string,
@@ -311,6 +372,12 @@ export async function submitDiagnosticForm(
 
   const internalEmail = buildInternalEmail(payload, summary, receivedAt)
   const clientEmail = buildClientEmail(payload, summary, receivedAt)
+  const queuedEmails = await enqueueDiagnosticEmailDeliveries({
+    diagnosticId: submission.id,
+    payload,
+    destinationEmail,
+  })
+  notificationIssues.push(...queuedEmails.issues)
 
   if (smtpReady && destinationEmail) {
     try {
@@ -375,10 +442,17 @@ export async function submitDiagnosticForm(
       stored: true,
       partial: notificationIssues.length > 0,
       diagnosticId: submission.id,
+      confirmation: {
+        diagnosticId: submission.id,
+        email: payload.email,
+        customerEmailQueued: queuedEmails.customerQueued,
+        adminEmailQueued: queuedEmails.adminQueued,
+        clientEmailStatus,
+      },
       message:
         notificationIssues.length > 0
-          ? 'El diagnóstico fue registrado correctamente. Algunas notificaciones o automatizaciones quedaron pendientes.'
-          : 'El diagnóstico fue registrado y distribuido correctamente.',
+          ? 'Diagnóstico enviado con éxito. Quedó guardado en el panel; algunas notificaciones automáticas quedaron pendientes.'
+          : 'Diagnóstico enviado con éxito. Quedó guardado en el panel y la confirmación por correo fue registrada.',
     },
   }
 }

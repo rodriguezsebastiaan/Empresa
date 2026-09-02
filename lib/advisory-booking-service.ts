@@ -3,6 +3,9 @@ import { siteConfig } from '@/config/site'
 import { assertSlotAvailable, buildAdvisorySlotKey, uniqueConstraintError } from '@/lib/availability-service'
 import { getCalendarAdapter } from '@/lib/calendar-adapter'
 import { getDb } from '@/lib/db'
+import { EmailDeliveryService } from '@/lib/email-delivery'
+import { renderEmailTemplate } from '@/lib/email-templates'
+import { getAdminNotificationDestination } from '@/lib/mailer'
 import { getRequestMetadata } from '@/lib/request-metadata'
 import { getResendAdapter } from '@/lib/resend-adapter'
 import { normalizeEmail, sanitizeInline, sanitizeMultiline } from '@/lib/security'
@@ -98,6 +101,71 @@ function resolveDeliveryStatus(status: DeliveryStatus) {
 
 function shouldPersistCalendarEventId(status: DeliveryStatus) {
   return status === 'SENT' || status === 'PENDING'
+}
+
+async function enqueueBookingEmailDeliveries(input: {
+  bookingId: string
+  payload: ReturnType<typeof sanitizeAdvisoryBookingData>
+  scheduledAt: string
+  timezone: string
+}) {
+  const delivery = new EmailDeliveryService()
+  const destinationEmail = getAdminNotificationDestination('BOOKING_DESTINATION_EMAIL')
+  const issues: string[] = []
+  let customerQueued = false
+  let adminQueued = false
+
+  try {
+    renderEmailTemplate({
+      type: 'BOOKING_CONFIRMED_CUSTOMER',
+      data: {
+        customerName: input.payload.fullName,
+        company: input.payload.company,
+        bookingId: input.bookingId,
+        scheduledAt: input.scheduledAt,
+        timezone: input.timezone,
+      },
+    })
+    await delivery.create({
+      type: 'BOOKING_CONFIRMED_CUSTOMER',
+      entityType: 'AdvisoryBooking',
+      entityId: input.bookingId,
+      recipient: input.payload.email,
+      idempotencyKey: `booking:${input.bookingId}:customer:confirmed`,
+      provider: 'MOCK',
+    })
+    customerQueued = true
+  } catch {
+    issues.push('No fue posible registrar la confirmación por correo del cliente.')
+  }
+
+  if (destinationEmail) {
+    try {
+      renderEmailTemplate({
+        type: 'BOOKING_CONFIRMED_ADMIN',
+        data: {
+          customerName: input.payload.fullName,
+          company: input.payload.company,
+          bookingId: input.bookingId,
+          scheduledAt: input.scheduledAt,
+          timezone: input.timezone,
+        },
+      })
+      await delivery.create({
+        type: 'BOOKING_CONFIRMED_ADMIN',
+        entityType: 'AdvisoryBooking',
+        entityId: input.bookingId,
+        recipient: destinationEmail,
+        idempotencyKey: `booking:${input.bookingId}:admin:confirmed`,
+        provider: 'MOCK',
+      })
+      adminQueued = true
+    } catch {
+      issues.push('No fue posible registrar la notificación interna por correo.')
+    }
+  }
+
+  return { customerQueued, adminQueued, issues }
 }
 
 export async function submitAdvisoryBooking(
@@ -261,6 +329,12 @@ export async function submitAdvisoryBooking(
     reason: payload.processGoal,
     description: payload.processGoal,
   }
+  const queuedEmails = await enqueueBookingEmailDeliveries({
+    bookingId,
+    payload,
+    scheduledAt: `${confirmation.dateLabel}, ${confirmation.timeLabel}`,
+    timezone: confirmation.timezone,
+  })
   const [customerEmail, companyEmail] = await Promise.all([
     resend.sendCustomerConfirmation(emailPayload),
     resend.sendCompanyNotification(emailPayload),
@@ -277,7 +351,8 @@ export async function submitAdvisoryBooking(
       companyConfirmationEmailStatus: resolveDeliveryStatus(companyEmail.status),
       lastDeliveryAttemptAt: new Date(),
       lastDeliveryError:
-        joinIssues(calendarRecord.syncError, customerEmail.error, companyEmail.error) || null,
+        joinIssues(calendarRecord.syncError, customerEmail.error, companyEmail.error, ...queuedEmails.issues) ||
+        null,
     },
   })
 
@@ -291,14 +366,19 @@ export async function submitAdvisoryBooking(
       calendarPending: calendarRecord.syncStatus === 'PENDING',
       bookingId,
       confirmation,
+      emailConfirmation: {
+        customerEmailQueued: queuedEmails.customerQueued,
+        adminEmailQueued: queuedEmails.adminQueued,
+        customerEmailStatus: customerEmail.status,
+      },
       message:
         calendarRecord.syncStatus === 'PENDING'
-          ? 'La asesoría fue guardada y el evento de Calendar fue creado. Google Meet sigue pendiente de generación.'
+          ? 'Asesoría enviada con éxito. Quedó guardada en el panel y el evento de Calendar fue creado; Google Meet sigue pendiente.'
           : calendarRecord.syncStatus === 'FAILED'
-          ? 'La asesoría fue guardada localmente, pero Calendar falló. El equipo debe revisar la sincronización.'
+          ? 'Asesoría enviada con éxito y guardada en el panel, pero Calendar requiere revisión.'
           : calendarRecord.syncStatus === 'SKIPPED'
-            ? 'La asesoría fue confirmada y guardada localmente. Calendar y correos están simulados en desarrollo.'
-            : 'La asesoría fue confirmada, guardada y sincronizada correctamente.',
+            ? 'Asesoría enviada con éxito. Quedó guardada en el panel y la confirmación por correo fue registrada.'
+            : 'Asesoría enviada con éxito. Quedó guardada, sincronizada y con confirmación por correo registrada.',
     },
   }
 }
