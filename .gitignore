@@ -1,0 +1,51 @@
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.test.example
+
+# Common ignores
+node_modules
+.pnpm-store/
+.next/
+.local/
+.DS_Store
+tsconfig.tsbuildinfo
+
+# Local logs and temporary outputs
+*.log
+.tmp-*.log
+.tmp-browser-audit-profile*/
+.tmp-*/
+
+# Backups and database dumps
+/backup/
+backups/
+*.sql
+!prisma/migrations/**/*.sql
+*.dump
+*.bak
+*.backup
+
+# Credentials and secrets
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*credentials*.json
+*credential*.json
+*service-account*.json
+*private-key*.json
+secrets/
+credentials/

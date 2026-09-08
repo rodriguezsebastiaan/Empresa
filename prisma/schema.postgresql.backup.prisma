@@ -1,0 +1,353 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AdminRole {
+  OWNER
+  ADMIN
+}
+
+enum DeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum ContactSubmissionStatus {
+  NEW
+  IN_REVIEW
+  CONTACTED
+  CLOSED
+}
+
+enum DiagnosticSubmissionStatus {
+  NEW
+  IN_ANALYSIS
+  CONTACTED
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+enum AdvisoryBookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+  NO_SHOW
+}
+
+enum AvailabilityExceptionType {
+  BLOCKED_DAY
+  SPECIAL_HOURS
+}
+
+model AdminUser {
+  id               String         @id @default(uuid()) @db.Uuid
+  email            String         @db.VarChar(191)
+  emailNormalized  String         @unique @db.VarChar(191)
+  name             String         @db.VarChar(120)
+  passwordHash     String         @db.Text
+  role             AdminRole      @default(ADMIN)
+  isActive         Boolean        @default(true)
+  failedLoginCount Int            @default(0)
+  lockedUntil      DateTime?
+  lastLoginAt      DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  sessions         AdminSession[]
+  notes            AdminNote[]
+  statusChanges    StatusHistory[]
+  availabilitySettings AvailabilitySettings[]
+
+  @@index([isActive, createdAt])
+}
+
+model AdminSession {
+  id          String    @id @default(uuid()) @db.Uuid
+  adminUserId String    @db.Uuid
+  tokenHash   String    @unique @db.VarChar(128)
+  expiresAt   DateTime
+  lastSeenAt  DateTime?
+  userAgent   String?   @db.VarChar(500)
+  ipHash      String?   @db.VarChar(128)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, expiresAt])
+}
+
+model ContactSubmission {
+  id                    String                  @id @default(uuid()) @db.Uuid
+  status                ContactSubmissionStatus @default(NEW)
+  name                  String                  @db.VarChar(80)
+  company               String                  @db.VarChar(120)
+  email                 String                  @db.VarChar(191)
+  emailNormalized       String                  @db.VarChar(191)
+  phone                 String                  @db.VarChar(25)
+  subject               String                  @db.VarChar(120)
+  message               String                  @db.Text
+  privacyAcceptedAt     DateTime
+  privacyPolicyVersion  String                  @db.VarChar(120)
+  internalEmailStatus   DeliveryStatus          @default(PENDING)
+  clientEmailStatus     DeliveryStatus          @default(PENDING)
+  lastDeliveryError     String?                 @db.Text
+  lastDeliveryAttemptAt DateTime?
+  requestOrigin         String?                 @db.VarChar(191)
+  requestPath           String?                 @db.VarChar(191)
+  referer               String?                 @db.VarChar(191)
+  userAgent             String?                 @db.VarChar(500)
+  ipHash                String?                 @db.VarChar(128)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  notes                 AdminNote[]             @relation("ContactSubmissionNotes")
+  statusHistory         StatusHistory[]         @relation("ContactSubmissionStatusHistory")
+
+  @@index([status, createdAt])
+  @@index([emailNormalized, createdAt])
+  @@index([company, createdAt])
+}
+
+model DiagnosticSubmission {
+  id                    String                     @id @default(uuid()) @db.Uuid
+  status                DiagnosticSubmissionStatus @default(NEW)
+  name                  String                     @db.VarChar(80)
+  company               String                     @db.VarChar(120)
+  role                  String                     @db.VarChar(80)
+  email                 String                     @db.VarChar(191)
+  emailNormalized       String                     @db.VarChar(191)
+  phone                 String                     @db.VarChar(25)
+  city                  String                     @db.VarChar(80)
+  sector                String                     @db.VarChar(80)
+  teamSize              String                     @db.VarChar(50)
+  processes             String                     @db.Text
+  currentProcess        String                     @db.Text
+  tools                 String                     @db.Text
+  repetitiveTasks       String                     @db.Text
+  mainProblem           String                     @db.Text
+  expectedResult        String                     @db.Text
+  contactPreference     String                     @db.VarChar(40)
+  wantsMeeting          Boolean
+  summary               String                     @db.Text
+  privacyAcceptedAt     DateTime
+  privacyPolicyVersion  String                     @db.VarChar(120)
+  internalEmailStatus   DeliveryStatus             @default(PENDING)
+  clientEmailStatus     DeliveryStatus             @default(PENDING)
+  webhookStatus         DeliveryStatus             @default(PENDING)
+  lastDeliveryError     String?                    @db.Text
+  lastDeliveryAttemptAt DateTime?
+  requestOrigin         String?                    @db.VarChar(191)
+  requestPath           String?                    @db.VarChar(191)
+  referer               String?                    @db.VarChar(191)
+  userAgent             String?                    @db.VarChar(500)
+  ipHash                String?                    @db.VarChar(128)
+  createdAt             DateTime                   @default(now())
+  updatedAt             DateTime                   @updatedAt
+  notes                 AdminNote[]                @relation("DiagnosticSubmissionNotes")
+  statusHistory         StatusHistory[]            @relation("DiagnosticSubmissionStatusHistory")
+
+  @@index([status, createdAt])
+  @@index([emailNormalized, createdAt])
+  @@index([company, createdAt])
+}
+
+model AdvisoryBooking {
+  id                     String                @id @default(uuid()) @db.Uuid
+  requestId              String                @unique @db.VarChar(120)
+  slotKey                String?               @unique @db.VarChar(120)
+  status                 AdvisoryBookingStatus @default(CONFIRMED)
+  fullName               String                @db.VarChar(90)
+  company                String                @db.VarChar(120)
+  email                  String                @db.VarChar(191)
+  emailNormalized        String                @db.VarChar(191)
+  phone                  String                @db.VarChar(25)
+  city                   String                @db.VarChar(80)
+  processGoal            String                @db.Text
+  modality               String                @db.VarChar(60)
+  timezone               String                @db.VarChar(80)
+  scheduledDate          String                @db.VarChar(10)
+  scheduledTime          String                @db.VarChar(5)
+  startAt                DateTime
+  endAt                  DateTime
+  durationMinutes        Int
+  privacyAcceptedAt      DateTime
+  privacyPolicyVersion   String                @db.VarChar(120)
+  calendarEventId        String?               @unique @db.VarChar(191)
+  calendarId             String?               @db.VarChar(191)
+  meetingUrl             String?               @db.Text
+  googleCalendarEventId  String?               @unique @db.VarChar(191)
+  googleCalendarHtmlLink String?               @db.Text
+  googleMeetUrl          String?               @db.Text
+  calendarEventStatus    DeliveryStatus        @default(PENDING)
+  calendarSyncStatus     DeliveryStatus        @default(PENDING)
+  calendarSyncedAt       DateTime?
+  calendarSyncError      String?               @db.Text
+  internalEmailStatus    DeliveryStatus        @default(PENDING)
+  clientEmailStatus      DeliveryStatus        @default(PENDING)
+  companyEmailStatus     DeliveryStatus        @default(PENDING)
+  customerEmailStatus    DeliveryStatus        @default(PENDING)
+  customerConfirmationEmailStatus DeliveryStatus @default(PENDING)
+  companyConfirmationEmailStatus  DeliveryStatus @default(PENDING)
+  customerCancellationEmailStatus DeliveryStatus @default(PENDING)
+  companyCancellationEmailStatus  DeliveryStatus @default(PENDING)
+  lastDeliveryError      String?               @db.Text
+  lastDeliveryAttemptAt  DateTime?
+  cancelledAt            DateTime?
+  cancellationReason     String?               @db.Text
+  requestOrigin          String?               @db.VarChar(191)
+  requestPath            String?               @db.VarChar(191)
+  referer                String?               @db.VarChar(191)
+  userAgent              String?               @db.VarChar(500)
+  ipHash                 String?               @db.VarChar(128)
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  notes                  AdminNote[]           @relation("AdvisoryBookingNotes")
+  statusHistory          StatusHistory[]       @relation("AdvisoryBookingStatusHistory")
+
+  @@index([status, startAt])
+  @@index([emailNormalized, createdAt])
+  @@index([scheduledDate, status])
+}
+
+model AvailabilitySettings {
+  id                 String   @id @default(uuid()) @db.Uuid
+  isEnabled          Boolean  @default(true)
+  timezone           String   @default("America/Bogota") @db.VarChar(80)
+  timezoneLabel      String   @default("America/Bogota") @db.VarChar(80)
+  durationMinutes    Int      @default(45)
+  bufferMinutes      Int      @default(15)
+  minNoticeHours     Int      @default(12)
+  maxDaysAhead       Int      @default(30)
+  defaultModality    String   @default("Virtual") @db.VarChar(80)
+  calendarMockMode   String   @default("none") @db.VarChar(40)
+  updatedByAdminId   String?  @db.Uuid
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  updatedByAdmin     AdminUser? @relation(fields: [updatedByAdminId], references: [id], onDelete: SetNull)
+  rules              AvailabilityRule[]
+  exceptions         AvailabilityException[]
+  blockedPeriods     BlockedPeriod[]
+
+  @@index([isEnabled, updatedAt])
+}
+
+model AvailabilityRule {
+  id         String               @id @default(uuid()) @db.Uuid
+  settingsId String               @db.Uuid
+  weekday    Int
+  startTime  String               @db.VarChar(5)
+  endTime    String               @db.VarChar(5)
+  isEnabled  Boolean              @default(true)
+  sortOrder  Int                  @default(0)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  settings   AvailabilitySettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@index([settingsId, weekday, isEnabled])
+}
+
+model AvailabilityException {
+  id         String                    @id @default(uuid()) @db.Uuid
+  settingsId String                    @db.Uuid
+  date       String                    @db.VarChar(10)
+  type       AvailabilityExceptionType
+  reason     String?                   @db.VarChar(180)
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+  settings   AvailabilitySettings      @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  ranges     AvailabilityExceptionRange[]
+
+  @@index([settingsId, date, type])
+}
+
+model AvailabilityExceptionRange {
+  id          String                @id @default(uuid()) @db.Uuid
+  exceptionId String                @db.Uuid
+  startTime   String                @db.VarChar(5)
+  endTime     String                @db.VarChar(5)
+  sortOrder   Int                   @default(0)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  exception   AvailabilityException @relation(fields: [exceptionId], references: [id], onDelete: Cascade)
+
+  @@index([exceptionId, sortOrder])
+}
+
+model BlockedPeriod {
+  id         String               @id @default(uuid()) @db.Uuid
+  settingsId String               @db.Uuid
+  date       String               @db.VarChar(10)
+  startTime  String               @db.VarChar(5)
+  endTime    String               @db.VarChar(5)
+  reason     String?              @db.VarChar(180)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  settings   AvailabilitySettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+
+  @@index([settingsId, date])
+}
+
+model CalendarIntegration {
+  id             String         @id @default(uuid()) @db.Uuid
+  provider       String         @default("google_calendar") @db.VarChar(80)
+  mode           String         @default("mock") @db.VarChar(40)
+  calendarId     String?        @db.VarChar(191)
+  isEnabled      Boolean        @default(false)
+  syncStatus     DeliveryStatus @default(SKIPPED)
+  lastSyncError  String?        @db.Text
+  lastCheckedAt  DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([provider, mode, isEnabled])
+}
+
+model AdminNote {
+  id                     String                @id @default(uuid()) @db.Uuid
+  adminUserId            String                @db.Uuid
+  contactSubmissionId    String?               @db.Uuid
+  diagnosticSubmissionId String?               @db.Uuid
+  advisoryBookingId      String?               @db.Uuid
+  body                   String                @db.Text
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  adminUser              AdminUser             @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  contactSubmission      ContactSubmission?    @relation("ContactSubmissionNotes", fields: [contactSubmissionId], references: [id], onDelete: Cascade)
+  diagnosticSubmission   DiagnosticSubmission? @relation("DiagnosticSubmissionNotes", fields: [diagnosticSubmissionId], references: [id], onDelete: Cascade)
+  advisoryBooking        AdvisoryBooking?      @relation("AdvisoryBookingNotes", fields: [advisoryBookingId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, createdAt])
+  @@index([contactSubmissionId, createdAt])
+  @@index([diagnosticSubmissionId, createdAt])
+  @@index([advisoryBookingId, createdAt])
+}
+
+model StatusHistory {
+  id                     String                @id @default(uuid()) @db.Uuid
+  adminUserId            String?               @db.Uuid
+  contactSubmissionId    String?               @db.Uuid
+  diagnosticSubmissionId String?               @db.Uuid
+  advisoryBookingId      String?               @db.Uuid
+  fromStatus             String?               @db.VarChar(40)
+  toStatus               String                @db.VarChar(40)
+  note                   String?               @db.Text
+  metadata               Json?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  adminUser              AdminUser?            @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+  contactSubmission      ContactSubmission?    @relation("ContactSubmissionStatusHistory", fields: [contactSubmissionId], references: [id], onDelete: Cascade)
+  diagnosticSubmission   DiagnosticSubmission? @relation("DiagnosticSubmissionStatusHistory", fields: [diagnosticSubmissionId], references: [id], onDelete: Cascade)
+  advisoryBooking        AdvisoryBooking?      @relation("AdvisoryBookingStatusHistory", fields: [advisoryBookingId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, createdAt])
+  @@index([contactSubmissionId, createdAt])
+  @@index([diagnosticSubmissionId, createdAt])
+  @@index([advisoryBookingId, createdAt])
+}

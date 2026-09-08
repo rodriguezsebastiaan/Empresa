@@ -1,0 +1,458 @@
+import { DeliveryStatus } from '@prisma/client'
+import { integrationEnvConfig } from '@/config/integrations'
+import { siteConfig } from '@/config/site'
+import { getDb } from '@/lib/db'
+import { isDiagnosticWebhookConfigured, sendDiagnosticWebhook } from '@/lib/diagnostic-webhook'
+import { EmailDeliveryService } from '@/lib/email-delivery'
+import { renderEmailTemplate } from '@/lib/email-templates'
+import {
+  buildEmailLayout,
+  formatEmailDateTime,
+  getAdminNotificationDestination,
+  getAdminNotificationDestinationLabel,
+  getMissingSmtpEnv,
+  isSmtpConfigured,
+  renderEmailSection,
+  sendEmail,
+} from '@/lib/mailer'
+import { getRequestMetadata } from '@/lib/request-metadata'
+import { normalizeEmail, sanitizeInline, sanitizeMultiline } from '@/lib/security'
+import { buildDiagnosticSummary } from '@/lib/submission-summary'
+import type { DiagnosticFormData } from '@/lib/validation'
+
+type SubmissionResponse = {
+  status: number
+  body: Record<string, unknown>
+}
+
+function sanitizeDiagnosticFormData(data: DiagnosticFormData) {
+  return {
+    name: sanitizeInline(data.name),
+    company: sanitizeInline(data.company),
+    role: sanitizeInline(data.role),
+    email: sanitizeInline(data.email),
+    emailNormalized: normalizeEmail(data.email),
+    phone: sanitizeInline(data.phone),
+    city: sanitizeInline(data.city),
+    sector: sanitizeInline(data.sector),
+    teamSize: sanitizeInline(data.teamSize),
+    processes: sanitizeMultiline(data.processes),
+    currentProcess: sanitizeMultiline(data.currentProcess),
+    tools: sanitizeMultiline(data.tools),
+    repetitiveTasks: sanitizeMultiline(data.repetitiveTasks),
+    mainProblem: sanitizeMultiline(data.mainProblem),
+    expectedResult: sanitizeMultiline(data.expectedResult),
+    contactPreference: sanitizeInline(data.contactPreference),
+    wantsMeeting: sanitizeInline(data.wantsMeeting),
+  }
+}
+
+function wantsMeetingToBoolean(value: string) {
+  return value.toLowerCase().startsWith('s')
+}
+
+function buildInternalEmail(
+  input: ReturnType<typeof sanitizeDiagnosticFormData>,
+  summary: string,
+  receivedAt: Date,
+) {
+  const receivedAtLabel = formatEmailDateTime(receivedAt)
+  const bodyHtml = [
+    renderEmailSection('Contacto', [
+      { label: 'Nombre', value: input.name },
+      { label: 'Empresa', value: input.company },
+      { label: 'Cargo', value: input.role },
+      { label: 'Correo', value: input.email },
+      { label: 'Teléfono', value: input.phone },
+      { label: 'Ciudad', value: input.city },
+      { label: 'Sector', value: input.sector },
+      { label: 'Equipo', value: input.teamSize },
+      { label: 'Fecha', value: receivedAtLabel },
+    ]),
+    renderEmailSection('Proceso y operación', [
+      { label: 'Procesos a mejorar', value: input.processes },
+      { label: 'Cómo opera hoy', value: input.currentProcess },
+      { label: 'Herramientas actuales', value: input.tools },
+      { label: 'Tareas repetitivas', value: input.repetitiveTasks },
+    ]),
+    renderEmailSection('Necesidad y siguiente paso', [
+      { label: 'Problema principal', value: input.mainProblem },
+      { label: 'Resultado esperado', value: input.expectedResult },
+      { label: 'Preferencia de contacto', value: input.contactPreference },
+      { label: 'Interés en asesoría', value: input.wantsMeeting },
+    ]),
+  ].join('')
+
+  return {
+    subject: `[Diagnóstico] ${input.company} · ${input.name}`,
+    text: [
+      'Nuevo diagnóstico empresarial recibido desde Konamy Systems.',
+      '',
+      summary,
+      '',
+      `Nombre: ${input.name}`,
+      `Empresa: ${input.company}`,
+      `Cargo: ${input.role}`,
+      `Correo: ${input.email}`,
+      `Teléfono: ${input.phone}`,
+      `Ciudad: ${input.city}`,
+      `Sector: ${input.sector}`,
+      `Tamaño aproximado: ${input.teamSize}`,
+      `Fecha: ${receivedAtLabel}`,
+      '',
+      `Procesos a mejorar: ${input.processes}`,
+      `Cómo opera hoy: ${input.currentProcess}`,
+      `Herramientas actuales: ${input.tools}`,
+      `Tareas repetitivas: ${input.repetitiveTasks}`,
+      `Problema principal: ${input.mainProblem}`,
+      `Resultado esperado: ${input.expectedResult}`,
+      `Preferencia de contacto: ${input.contactPreference}`,
+      `Interés en asesoría: ${input.wantsMeeting}`,
+    ].join('\n'),
+    html: buildEmailLayout({
+      eyebrow: 'NUEVO DIAGNÓSTICO',
+      title: `${input.company} · ${input.name}`,
+      intro: summary,
+      bodyHtml,
+    }),
+  }
+}
+
+function buildClientEmail(
+  input: ReturnType<typeof sanitizeDiagnosticFormData>,
+  summary: string,
+  receivedAt: Date,
+) {
+  const receivedAtLabel = formatEmailDateTime(receivedAt)
+  const bodyHtml = [
+    renderEmailSection('Resumen recibido', [
+      { label: 'Empresa', value: input.company },
+      { label: 'Fecha', value: receivedAtLabel },
+      { label: 'Procesos a mejorar', value: input.processes },
+      { label: 'Problema principal', value: input.mainProblem },
+      { label: 'Resultado esperado', value: input.expectedResult },
+      { label: 'Contacto preferido', value: input.contactPreference },
+    ]),
+    renderEmailSection('Siguiente paso', [
+      { label: 'Interés en asesoría', value: input.wantsMeeting },
+      { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Konamy Systems.' },
+    ]),
+  ].join('')
+
+  return {
+    subject: 'Recibimos su diagnóstico empresarial · Konamy Systems',
+    text: [
+      `Hola ${input.name},`,
+      '',
+      'Su diagnóstico empresarial quedó registrado correctamente.',
+      'Le compartimos un resumen de la información recibida para que tenga trazabilidad del envío.',
+      '',
+      summary,
+      '',
+      `Procesos a mejorar: ${input.processes}`,
+      `Problema principal: ${input.mainProblem}`,
+      `Resultado esperado: ${input.expectedResult}`,
+      `Preferencia de contacto: ${input.contactPreference}`,
+      `Interés en asesoría: ${input.wantsMeeting}`,
+      '',
+      'Puede responder este correo si desea ampliar contexto antes de la asesoría.',
+      '',
+      'Konamy Systems',
+    ].join('\n'),
+    html: buildEmailLayout({
+      eyebrow: 'DIAGNÓSTICO RECIBIDO',
+      title: `Gracias, ${input.name}`,
+      intro:
+        'Su diagnóstico empresarial ya quedó registrado correctamente. Este resumen le sirve como comprobante de lo que recibimos.',
+      bodyHtml,
+      footer: `${siteConfig.name}<br>Puede continuar con asesoría, WhatsApp o contacto cuando lo necesite.`,
+    }),
+  }
+}
+
+async function enqueueDiagnosticEmailDeliveries(input: {
+  diagnosticId: string
+  payload: ReturnType<typeof sanitizeDiagnosticFormData>
+  destinationEmail: string
+}) {
+  const delivery = new EmailDeliveryService()
+  const issues: string[] = []
+  let customerQueued = false
+  let adminQueued = false
+
+  try {
+    renderEmailTemplate({
+      type: 'DIAGNOSTIC_RECEIVED_CUSTOMER',
+      data: {
+        customerName: input.payload.name,
+        company: input.payload.company,
+        diagnosticId: input.diagnosticId,
+      },
+    })
+    await delivery.create({
+      type: 'DIAGNOSTIC_RECEIVED_CUSTOMER',
+      entityType: 'DiagnosticSubmission',
+      entityId: input.diagnosticId,
+      recipient: input.payload.email,
+      idempotencyKey: `diagnostic:${input.diagnosticId}:customer:received`,
+      provider: 'MOCK',
+    })
+    customerQueued = true
+  } catch {
+    issues.push('No fue posible registrar la confirmación por correo del cliente.')
+  }
+
+  if (input.destinationEmail) {
+    try {
+      renderEmailTemplate({
+        type: 'DIAGNOSTIC_RECEIVED_ADMIN',
+        data: {
+          customerName: input.payload.name,
+          company: input.payload.company,
+          diagnosticId: input.diagnosticId,
+        },
+      })
+      await delivery.create({
+        type: 'DIAGNOSTIC_RECEIVED_ADMIN',
+        entityType: 'DiagnosticSubmission',
+        entityId: input.diagnosticId,
+        recipient: input.destinationEmail,
+        idempotencyKey: `diagnostic:${input.diagnosticId}:admin:received`,
+        provider: 'MOCK',
+      })
+      adminQueued = true
+    } catch {
+      issues.push('No fue posible registrar la notificación interna por correo.')
+    }
+  }
+
+  return { customerQueued, adminQueued, issues }
+}
+
+async function findRecentDuplicateDiagnostic(
+  input: ReturnType<typeof sanitizeDiagnosticFormData>,
+  summary: string,
+) {
+  const db = getDb()
+  const duplicateWindow = new Date(Date.now() - 15 * 60 * 1000)
+
+  return db.diagnosticSubmission.findFirst({
+    where: {
+      emailNormalized: input.emailNormalized,
+      company: input.company,
+      summary,
+      createdAt: {
+        gte: duplicateWindow,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      internalEmailStatus: true,
+      clientEmailStatus: true,
+      webhookStatus: true,
+      lastDeliveryError: true,
+    },
+  })
+}
+
+export async function submitDiagnosticForm(
+  data: DiagnosticFormData,
+  request: Request,
+): Promise<SubmissionResponse> {
+  let db
+
+  try {
+    db = getDb()
+  } catch (error) {
+    if (error instanceof Error && error.message === 'DATABASE_URL_NOT_CONFIGURED') {
+      return {
+        status: 503,
+        body: {
+          success: false,
+          configured: false,
+          message:
+            'El diagnóstico está listo, pero todavía no existe una base de datos configurada para guardar envíos reales.',
+        },
+      }
+    }
+
+    throw error
+  }
+
+  const payload = sanitizeDiagnosticFormData(data)
+  const summary = buildDiagnosticSummary(data)
+  const metadata = getRequestMetadata(request)
+  const receivedAt = new Date()
+  const duplicate = await findRecentDuplicateDiagnostic(payload, summary)
+
+  if (duplicate) {
+    const hasFailedDelivery =
+      duplicate.internalEmailStatus === 'FAILED' ||
+      duplicate.clientEmailStatus === 'FAILED' ||
+      duplicate.webhookStatus === 'FAILED'
+
+    return {
+      status: 200,
+      body: {
+        success: true,
+        stored: true,
+        idempotent: true,
+        partial: Boolean(duplicate.lastDeliveryError) || hasFailedDelivery,
+        diagnosticId: duplicate.id,
+        message:
+          duplicate.lastDeliveryError || hasFailedDelivery
+            ? 'El diagnóstico ya estaba registrado. Algunas notificaciones o automatizaciones quedaron pendientes.'
+            : 'El diagnóstico ya había sido registrado anteriormente.',
+      },
+    }
+  }
+
+  const submission = await db.diagnosticSubmission.create({
+    data: {
+      status: 'NEW',
+      name: payload.name,
+      company: payload.company,
+      role: payload.role,
+      email: payload.email,
+      emailNormalized: payload.emailNormalized,
+      phone: payload.phone,
+      city: payload.city,
+      sector: payload.sector,
+      teamSize: payload.teamSize,
+      processes: payload.processes,
+      currentProcess: payload.currentProcess,
+      tools: payload.tools,
+      repetitiveTasks: payload.repetitiveTasks,
+      mainProblem: payload.mainProblem,
+      expectedResult: payload.expectedResult,
+      contactPreference: payload.contactPreference,
+      wantsMeeting: wantsMeetingToBoolean(payload.wantsMeeting),
+      summary,
+      privacyAcceptedAt: receivedAt,
+      privacyPolicyVersion: siteConfig.legal.privacyPolicyVersionLabel,
+      requestOrigin: metadata.requestOrigin,
+      requestPath: metadata.requestPath,
+      referer: metadata.referer,
+      userAgent: metadata.userAgent,
+      ipHash: metadata.ipHash,
+      statusHistory: {
+        create: {
+          toStatus: 'NEW',
+          note: 'Registro creado desde el diagnóstico multipaso.',
+        },
+      },
+    },
+  })
+
+  const smtpReady = isSmtpConfigured()
+  const webhookReady = isDiagnosticWebhookConfigured()
+  const destinationEmail = getAdminNotificationDestination('DIAGNOSTIC_DESTINATION_EMAIL')
+
+  let internalEmailStatus: DeliveryStatus = smtpReady && destinationEmail ? 'PENDING' : 'SKIPPED'
+  let clientEmailStatus: DeliveryStatus = smtpReady ? 'PENDING' : 'SKIPPED'
+  let webhookStatus: DeliveryStatus = webhookReady ? 'PENDING' : 'SKIPPED'
+  const notificationIssues: string[] = []
+
+  if (!smtpReady) {
+    notificationIssues.push(
+      `SMTP pendiente: ${getMissingSmtpEnv().join(', ') || 'revise SMTP_PORT o el proveedor SMTP'}`,
+    )
+  }
+
+  if (!destinationEmail) {
+    notificationIssues.push(getAdminNotificationDestinationLabel('DIAGNOSTIC_DESTINATION_EMAIL'))
+  }
+
+  if (!webhookReady) {
+    notificationIssues.push(integrationEnvConfig.diagnostics.webhookEnv.join(', '))
+  }
+
+  const internalEmail = buildInternalEmail(payload, summary, receivedAt)
+  const clientEmail = buildClientEmail(payload, summary, receivedAt)
+  const queuedEmails = await enqueueDiagnosticEmailDeliveries({
+    diagnosticId: submission.id,
+    payload,
+    destinationEmail,
+  })
+  notificationIssues.push(...queuedEmails.issues)
+
+  if (smtpReady && destinationEmail) {
+    try {
+      await sendEmail({
+        to: destinationEmail,
+        subject: internalEmail.subject,
+        text: internalEmail.text,
+        html: internalEmail.html,
+        replyTo: payload.email,
+      })
+      internalEmailStatus = 'SENT'
+    } catch {
+      internalEmailStatus = 'FAILED'
+      notificationIssues.push('No fue posible enviar la notificación interna del diagnóstico.')
+    }
+  }
+
+  if (smtpReady) {
+    try {
+      await sendEmail({
+        to: payload.email,
+        subject: clientEmail.subject,
+        text: clientEmail.text,
+        html: clientEmail.html,
+      })
+      clientEmailStatus = 'SENT'
+    } catch {
+      clientEmailStatus = 'FAILED'
+      notificationIssues.push('No fue posible enviar la copia automática al cliente.')
+    }
+  }
+
+  if (webhookReady) {
+    try {
+      await sendDiagnosticWebhook({
+        diagnosticId: submission.id,
+        summary,
+        ...payload,
+      })
+      webhookStatus = 'SENT'
+    } catch {
+      webhookStatus = 'FAILED'
+      notificationIssues.push('No fue posible entregar el diagnóstico al webhook de n8n.')
+    }
+  }
+
+  await db.diagnosticSubmission.update({
+    where: { id: submission.id },
+    data: {
+      internalEmailStatus,
+      clientEmailStatus,
+      webhookStatus,
+      lastDeliveryAttemptAt: new Date(),
+      lastDeliveryError: notificationIssues.length > 0 ? notificationIssues.join(' ') : null,
+    },
+  })
+
+  return {
+    status: 200,
+    body: {
+      success: true,
+      stored: true,
+      partial: notificationIssues.length > 0,
+      diagnosticId: submission.id,
+      confirmation: {
+        diagnosticId: submission.id,
+        email: payload.email,
+        customerEmailQueued: queuedEmails.customerQueued,
+        adminEmailQueued: queuedEmails.adminQueued,
+        clientEmailStatus,
+      },
+      message:
+        notificationIssues.length > 0
+          ? 'Diagnóstico enviado con éxito. Quedó guardado en el panel; algunas notificaciones automáticas quedaron pendientes.'
+          : 'Diagnóstico enviado con éxito. Quedó guardado en el panel y la confirmación por correo fue registrada.',
+    },
+  }
+}
