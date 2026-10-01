@@ -1,12 +1,12 @@
 import { siteConfig } from '@/config/site'
-import { PortalHeroVisual } from '@/components/portal-hero-visual'
 import { SiteAction } from '@/components/site-action'
 
 export function HomeHero() {
   return (
     <section
-      id="inicio"
-      className="relative overflow-hidden pt-32 pb-16 lg:pt-40 lg:pb-24"
+      id="hero"
+      data-scene="hero"
+      className="ks-scene ks-scene--tall overflow-hidden"
     >
       <div
         aria-hidden="true"
@@ -16,12 +16,9 @@ export function HomeHero() {
         <div className="absolute inset-x-[8%] top-12 h-px bg-[linear-gradient(90deg,transparent_0%,color-mix(in_oklch,var(--primary)_52%,transparent)_50%,transparent_100%)] opacity-70" />
       </div>
 
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-10">
+      <div className="ks-scene-content mx-auto w-full max-w-7xl px-6 lg:px-10">
         <div className="max-w-xl">
-          <p className="ks-enter mb-6 text-xs font-semibold tracking-[0.3em] text-primary [--enter-delay:120ms]">
-            KONAMY SYSTEMS
-          </p>
-          <h1 className="text-balance text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl">
+          <h1 className="ks-type-hero font-semibold">
             <span className="ks-enter block [--enter-delay:220ms]">
               Transformamos problemas empresariales en{' '}
             </span>
@@ -29,12 +26,13 @@ export function HomeHero() {
               soluciones digitales.
             </span>
           </h1>
-          <p className="ks-enter mt-6 max-w-md text-pretty leading-relaxed text-muted-foreground [--enter-delay:480ms]">
-            Diseñamos plataformas, sistemas y automatizaciones para organizar
-            procesos, ahorrar tiempo y ayudar a las empresas a crecer.
+          <p className="ks-copy-primary ks-enter mt-7 max-w-xl [--enter-delay:480ms]">
+            Desde Manizales, desarrollamos sitios web, software a medida y
+            aplicaciones web que simplifican procesos y conectan la operación
+            de empresas en Colombia.
           </p>
-          <p className="ks-enter mt-6 text-xs font-semibold tracking-[0.2em] text-primary [--enter-delay:560ms]">
-            DIGITALIZAR PARA SIMPLIFICAR. AUTOMATIZAR PARA CRECER.
+          <p className="ks-type-statement ks-enter mt-7 max-w-xl font-semibold tracking-[0.02em] text-primary [--enter-delay:560ms]">
+            Digitalizar para simplificar. Automatizar para crecer.
           </p>
 
           <div className="ks-enter mt-10 flex flex-wrap items-center gap-4 [--enter-delay:660ms]">
@@ -55,9 +53,6 @@ export function HomeHero() {
           </SiteAction>
         </div>
 
-        <div className="ks-enter-fade relative [--enter-delay:820ms]">
-          <PortalHeroVisual />
-        </div>
       </div>
     </section>
   )

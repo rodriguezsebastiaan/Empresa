@@ -5,7 +5,7 @@ type JsonRequestBodyResult =
     }
   | {
       success: false
-      status: 400 | 415
+      status: 400 | 413 | 415
       message: string
     }
 
@@ -29,29 +29,66 @@ export async function readJsonRequestBody(
     }
   }
 
+  const textResult = await readLimitedRequestText(request, maxBytes)
+  if (!textResult.success) return textResult
+
   try {
-    const text = await request.text()
-    const size = new TextEncoder().encode(text).byteLength
+    const data = JSON.parse(textResult.text) as unknown
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      return { success: false, status: 400, message: 'La solicitud debe contener un objeto JSON.' }
+    }
+    return { success: true, data }
+  } catch {
+    return { success: false, status: 400, message: 'El cuerpo de la solicitud no contiene JSON válido.' }
+  }
+}
 
-    if (size > maxBytes) {
-      return {
-        success: false,
-        status: 400,
-        message: 'La solicitud supera el tamaÃ±o permitido.',
+export async function readLimitedRequestText(request: Request, maxBytes: number): Promise<
+  | { success: true; text: string }
+  | { success: false; status: 400 | 413; message: string }
+> {
+  try {
+    const tooLarge = () => ({
+      success: false as const,
+      status: 413 as const,
+      message: 'La solicitud supera el tamaño permitido.',
+    })
+    const declaredSize = request.headers.get('content-length')
+    if (declaredSize && Number(declaredSize) > maxBytes) {
+      await request.body?.cancel()
+      return tooLarge()
+    }
+    const reader = request.body?.getReader()
+    if (!reader) throw new Error('EMPTY_BODY')
+    const chunks: Uint8Array[] = []
+    let size = 0
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        size += value.byteLength
+        if (size > maxBytes) {
+          await reader.cancel()
+          return tooLarge()
+        }
+        chunks.push(value)
       }
+    } finally {
+      reader.releaseLock()
     }
-
-    const data = JSON.parse(text) as unknown
-
-    return {
-      success: true,
-      data,
+    const bytes = new Uint8Array(size)
+    let offset = 0
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset)
+      offset += chunk.byteLength
     }
+    const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+    return { success: true, text }
   } catch {
     return {
       success: false,
       status: 400,
-      message: 'El cuerpo de la solicitud no contiene JSON válido.',
+      message: 'No fue posible leer el cuerpo de la solicitud.',
     }
   }
 }

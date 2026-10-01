@@ -38,7 +38,7 @@ function buildInternalEmail(input: ReturnType<typeof sanitizeContactFormData>, r
   return {
     subject: `[Contacto] ${input.subject} · ${input.company}`,
     text: [
-      'Nuevo contacto desde Konamy Systems.',
+      'Nuevo contacto desde Conexacod.',
       '',
       `Nombre: ${input.name}`,
       `Empresa: ${input.company}`,
@@ -71,7 +71,7 @@ function buildClientEmail(input: ReturnType<typeof sanitizeContactFormData>, rec
   const receivedAtLabel = formatEmailDateTime(receivedAt)
 
   return {
-    subject: 'Recibimos su solicitud de contacto · Konamy Systems',
+    subject: 'Recibimos su solicitud de contacto · Conexacod',
     text: [
       `Hola ${input.name},`,
       '',
@@ -85,19 +85,19 @@ function buildClientEmail(input: ReturnType<typeof sanitizeContactFormData>, rec
       'Mensaje recibido:',
       input.message,
       '',
-      'Konamy Systems',
+      'Conexacod',
     ].join('\n'),
     html: buildEmailLayout({
       eyebrow: 'CONTACTO RECIBIDO',
       title: `Gracias, ${input.name}`,
       intro:
-        'Su solicitud ya quedó registrada correctamente en Konamy Systems. Revisaremos el contexto para responderle por el canal más adecuado.',
+        'Su solicitud ya quedó registrada correctamente en Conexacod. Revisaremos el contexto para responderle por el canal más adecuado.',
       bodyHtml: renderDefinitionList([
         { label: 'Empresa', value: input.company },
         { label: 'Asunto', value: input.subject },
         { label: 'Fecha', value: receivedAtLabel },
         { label: 'Canal siguiente', value: 'Correo, WhatsApp o asesoría según el caso.' },
-        { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Konamy Systems.' },
+      { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Conexacod.' },
       ]),
     }),
   }

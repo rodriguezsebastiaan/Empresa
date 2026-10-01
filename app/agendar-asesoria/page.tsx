@@ -46,7 +46,7 @@ export const metadata = buildPageMetadata('advisory')
 
 export default function AdvisoryPage() {
   return (
-    <SiteShell>
+    <SiteShell seoPage="advisory">
       <PageHero
         eyebrow="AGENDAR ASESORÍA"
         title="Programe una asesoría inicial para revisar qué proceso conviene ordenar o automatizar."
@@ -60,7 +60,7 @@ export default function AdvisoryPage() {
           </>
         }
         aside={
-          <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+          <div className="ks-copy-secondary space-y-4">
             <p>
               La agenda está preparada para consultar disponibilidad real, evitar
               cruces y confirmar asesorías de forma controlada.
@@ -91,8 +91,8 @@ export default function AdvisoryPage() {
                 <p className="mt-5 text-xs font-semibold tracking-[0.24em] text-primary">
                   {item.title}
                 </p>
-                <h2 className="mt-3 text-lg font-medium text-foreground">{item.value}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                <h2 className="ks-type-card-title mt-3 font-semibold">{item.value}</h2>
+                <p className="ks-card-copy mt-3">
                   {item.description}
                 </p>
               </Reveal>
@@ -106,7 +106,7 @@ export default function AdvisoryPage() {
           <SectionHeading
             eyebrow="RESERVA"
             title="Elija fecha, hora y comparta el contexto de la asesoría."
-            description="La disponibilidad visible responde a la agenda actual de Konamy Systems y a la zona horaria mostrada en la interfaz."
+            description="La disponibilidad visible responde a la agenda actual de ConexaCod y a la zona horaria mostrada en la interfaz."
           />
 
           <Reveal className="mt-8">
@@ -132,7 +132,7 @@ export default function AdvisoryPage() {
                 as="li"
                 key={item}
                 delay={index * 90}
-                className="rounded-2xl border border-border/70 bg-background/55 px-5 py-5 text-sm text-muted-foreground"
+                className="ks-card-copy rounded-2xl border border-border/70 bg-background/55 px-5 py-5"
               >
                 <p className="text-xs font-semibold tracking-[0.24em] text-primary">
                   0{index + 1}

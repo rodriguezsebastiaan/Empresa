@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { BrandWordmark } from '@/components/logo'
 import { PortalHeroVisual } from '@/components/portal-hero-visual'
 
 export function Hero() {
@@ -18,9 +19,10 @@ export function Hero() {
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-10">
         {/* Copy — staggered entrance via CSS (reduced-motion safe) */}
         <div className="max-w-xl">
-          <p className="ks-enter mb-6 text-xs font-semibold tracking-[0.3em] text-primary [--enter-delay:120ms]">
-            KONAMY SYSTEMS
-          </p>
+          <BrandWordmark
+            accessibleLabel
+            className="ks-enter mb-6 text-xs [--enter-delay:120ms]"
+          />
           <h1 className="text-balance text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl">
             <span className="ks-enter block [--enter-delay:220ms]">
               Transformamos problemas empresariales en{' '}

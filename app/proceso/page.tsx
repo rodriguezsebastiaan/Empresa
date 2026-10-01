@@ -69,11 +69,15 @@ export const metadata = buildPageMetadata('process')
 
 export default function ProcessPage() {
   return (
-    <SiteShell>
+    <SiteShell seoPage="process" cinematicPage="process">
       <PageHero
-        eyebrow="PROCESO"
-        title="Una metodología pensada para convertir desorden operativo en estructura digital útil."
-        description="Konamy Systems trabaja por etapas claras para que el cliente entienda qué ocurre, qué debe validar y qué entrega recibe en cada momento del proyecto."
+        title="Lo que ves es el resultado. El proceso ocurre mucho más profundo."
+        description="Diagnóstico, diseño, desarrollo, integración y validación se conectan para convertir una idea en un sistema que realmente funcione."
+        aside={
+          <p className="ks-type-statement font-medium">
+            Cada capa importa. Cada decisión sostiene lo que finalmente llega al usuario.
+          </p>
+        }
         actions={
           <>
             <SiteAction href={siteConfig.routes.diagnostics}>
@@ -106,17 +110,17 @@ export default function ProcessPage() {
                   <p className="text-xs font-semibold tracking-[0.3em] text-primary">
                     0{index + 1}
                   </p>
-                  <h2 className="mt-4 text-2xl font-medium text-foreground">
+                  <h2 className="ks-type-card-title mt-4 font-semibold">
                     {step.title}
                   </h2>
                 </div>
 
-                <dl className="grid gap-5 text-sm">
+                <dl className="grid gap-5">
                   <div>
                     <dt className="text-xs font-semibold tracking-[0.24em] text-primary">
                       QUÉ OCURRE
                     </dt>
-                    <dd className="mt-2 leading-relaxed text-foreground/85">
+                    <dd className="ks-card-copy mt-2">
                       {step.whatHappens}
                     </dd>
                   </div>
@@ -124,15 +128,15 @@ export default function ProcessPage() {
                     <dt className="text-xs font-semibold tracking-[0.24em] text-primary">
                       PARTICIPACIÓN DEL CLIENTE
                     </dt>
-                    <dd className="mt-2 leading-relaxed text-foreground/85">
+                    <dd className="ks-card-copy mt-2">
                       {step.clientRole}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-xs font-semibold tracking-[0.24em] text-primary">
-                      ENTREGA DE KONAMY SYSTEMS
+                      ENTREGA DE CONEXACOD
                     </dt>
-                    <dd className="mt-2 leading-relaxed text-foreground/85">
+                    <dd className="ks-card-copy mt-2">
                       {step.deliverable}
                     </dd>
                   </div>
@@ -140,7 +144,7 @@ export default function ProcessPage() {
                     <dt className="text-xs font-semibold tracking-[0.24em] text-primary">
                       VALIDACIÓN
                     </dt>
-                    <dd className="mt-2 leading-relaxed text-foreground/85">
+                    <dd className="ks-card-copy mt-2">
                       {step.validation}
                     </dd>
                   </div>

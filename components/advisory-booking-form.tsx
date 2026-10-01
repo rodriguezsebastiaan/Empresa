@@ -298,38 +298,38 @@ export function AdvisoryBookingForm() {
           <p className="text-xs font-semibold tracking-[0.3em] text-primary">
             ASESORÍA CONFIRMADA
           </p>
-          <h2 className="mt-4 text-2xl font-medium text-foreground">
+          <h2 className="ks-type-card-title mt-4 font-semibold">
             Su asesoría inicial quedó registrada.
           </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          <p className="ks-copy-secondary mt-4 max-w-2xl">
             La reserva quedó guardada en el panel administrativo y la confirmación por correo quedó
             registrada para el invitado.
           </p>
           <dl className="mt-8 grid gap-4 text-sm">
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Fecha</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Fecha</dt>
               <dd className="mt-1 text-foreground">{confirmation.dateLabel}</dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Hora</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Hora</dt>
               <dd className="mt-1 text-foreground">{confirmation.timeLabel}</dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Zona horaria</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Zona horaria</dt>
               <dd className="mt-1 text-foreground">{confirmation.timezone}</dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Duración</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Duración</dt>
               <dd className="mt-1 text-foreground">
                 {confirmation.durationMinutes} minutos
               </dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Invitado</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Invitado</dt>
               <dd className="mt-1 text-foreground">{confirmation.guestEmail}</dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Correo</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Correo</dt>
               <dd className="mt-1 text-foreground">
                 {confirmation.customerEmailQueued
                   ? 'Confirmación registrada.'
@@ -337,7 +337,7 @@ export function AdvisoryBookingForm() {
               </dd>
             </div>
             <div className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">Enlace de reunión</dt>
+              <dt className="ks-form-support tracking-[0.12em]">Enlace de reunión</dt>
               <dd className="mt-1 text-foreground">
                 {confirmation.meetUrl ? (
                   <a
@@ -357,7 +357,7 @@ export function AdvisoryBookingForm() {
         </div>
 
         <div className={`${panelClassName} h-fit`}>
-          <p className="text-sm leading-relaxed text-muted-foreground">
+          <p className="ks-copy-secondary">
             La reserva queda guardada en el sistema local. Las invitaciones automáticas se activarán
             cuando retomemos las integraciones externas.
           </p>
@@ -470,13 +470,13 @@ export function AdvisoryBookingForm() {
         <div className="mt-5 rounded-2xl border border-border/70 bg-background/40 p-4">
           <div className="flex items-center justify-between gap-4" aria-live="polite">
             <div>
-              <p className="text-sm font-medium text-foreground">Horas disponibles</p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="ks-form-label">Horas disponibles</p>
+              <p className="ks-form-support mt-1">
                 {availabilityMessage}
               </p>
             </div>
             {loadingSlots ? (
-              <span className="text-xs text-primary">Consultando...</span>
+              <span className="ks-form-support text-primary">Consultando...</span>
             ) : null}
           </div>
 
@@ -488,8 +488,8 @@ export function AdvisoryBookingForm() {
                 onClick={() => updateField('time', slot.value)}
                 className={
                   form.time === slot.value
-                    ? 'rounded-full border border-primary bg-primary/15 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-primary shadow-[0_0_16px_-10px_var(--primary)]'
-                    : 'rounded-full border border-border bg-background/70 px-4 py-2 text-xs font-semibold tracking-[0.18em] text-foreground transition-colors hover:border-primary/50 hover:text-primary'
+                    ? 'min-h-11 rounded-full border border-primary bg-primary/15 px-4 py-2 text-[0.9rem] font-semibold tracking-[0.12em] text-primary shadow-[0_0_16px_-10px_var(--primary)]'
+                    : 'min-h-11 rounded-full border border-border bg-background/70 px-4 py-2 text-[0.9rem] font-semibold tracking-[0.12em] text-foreground transition-colors hover:border-primary/50 hover:text-primary'
                 }
               >
                 {slot.label}
@@ -498,7 +498,7 @@ export function AdvisoryBookingForm() {
           </div>
 
           {errors.time ? (
-            <p className="mt-3 text-xs text-destructive">{errors.time}</p>
+            <p className="ks-form-feedback mt-3 text-destructive">{errors.time}</p>
           ) : null}
         </div>
 
@@ -524,7 +524,7 @@ export function AdvisoryBookingForm() {
           />
         </div>
 
-        <div aria-live="polite" className="mt-5 min-h-6 text-sm">
+        <div aria-live="polite" className="ks-form-feedback mt-5 min-h-6">
           {statusMessage ? <p className="text-destructive">{statusMessage}</p> : null}
         </div>
 
@@ -532,7 +532,7 @@ export function AdvisoryBookingForm() {
           <button
             type="submit"
             disabled={submitting || !availabilityConfigured}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 text-xs font-semibold tracking-widest text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            className="ks-form-action inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? 'CONFIRMANDO...' : 'CONFIRMAR ASESORÍA'}
           </button>
@@ -549,13 +549,13 @@ export function AdvisoryBookingForm() {
         <dl className="mt-5 space-y-4 text-sm">
           {summary.map(([label, value]) => (
             <div key={label} className="rounded-xl border border-border/70 bg-background/40 px-4 py-3">
-              <dt className="text-xs tracking-[0.18em] text-muted-foreground">{label}</dt>
+              <dt className="ks-form-support tracking-[0.12em]">{label}</dt>
               <dd className="mt-1 text-foreground">{value}</dd>
             </div>
           ))}
         </dl>
 
-        <div className="mt-5 rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm text-muted-foreground">
+        <div className="ks-card-copy mt-5 rounded-xl border border-border/70 bg-background/40 px-4 py-3">
           <p>Duración predeterminada: {availabilitySettings.durationMinutes} minutos.</p>
           <p className="mt-2">{availabilitySettings.timezoneLabel}</p>
           <p className="mt-2">

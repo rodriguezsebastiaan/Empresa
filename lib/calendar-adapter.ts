@@ -57,7 +57,7 @@ function isConferencePending(event: GoogleCalendarEventPayload) {
 
 function buildDescription(input: CalendarBookingInput) {
   return [
-    'Reserva generada desde Konamy Systems.',
+    'Reserva generada desde Conexacod.',
     '',
     `Nombre: ${input.fullName}`,
     `Empresa: ${input.company}`,

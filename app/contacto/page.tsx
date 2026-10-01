@@ -9,6 +9,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import Link from 'next/link'
+import { ContactForm } from '@/components/contact-form'
 import { PageHero } from '@/components/page-hero'
 import { Reveal } from '@/components/reveal'
 import { SectionHeading } from '@/components/section-heading'
@@ -73,8 +74,12 @@ export default function ContactPage() {
     },
     {
       title: 'Correo',
-      value: siteConfig.contact.email,
-      note: 'Puede compartir contexto, dudas o necesidades con más detalle.',
+      value: siteConfig.contact.emailIsProvisional
+        ? 'PENDIENTE · correo de contacto'
+        : siteConfig.contact.email,
+      note: siteConfig.contact.emailIsProvisional
+        ? 'El correo directo se publicará cuando exista una dirección oficial configurada.'
+        : 'Puede compartir contexto, dudas o necesidades con más detalle.',
       href: emailHref,
       icon: Mail,
       external: false,
@@ -116,11 +121,15 @@ export default function ContactPage() {
   ]
 
   return (
-    <SiteShell>
+    <SiteShell seoPage="contact" cinematicPage="contact">
       <PageHero
-        eyebrow="CONTACTO"
-        title="Canales claros para iniciar la conversación con Konamy Systems."
-        description="Esta página reúne asesoría, diagnóstico empresarial y canales directos para iniciar la conversación por el camino más adecuado."
+        title="Veamos el panorama completo y construyamos lo que sigue."
+        description="Cuéntanos qué necesitas resolver. Empecemos por entender el problema y diseñar juntos una solución preparada para crecer."
+        aside={
+          <p className="ks-type-statement font-medium">
+            Una buena solución empieza por una conversación clara.
+          </p>
+        }
         actions={
           <>
             <SiteAction href={siteConfig.routes.advisory}>AGENDAR ASESORÍA</SiteAction>
@@ -140,7 +149,7 @@ export default function ContactPage() {
         <SectionHeading
           eyebrow="CANALES DISPONIBLES"
           title="Una ruta distinta según la forma en que prefiera avanzar."
-          description="Puede agendar una conversación inicial, solicitar diagnóstico o escribir por los canales directos de Konamy Systems."
+          description="Puede agendar una conversación inicial, solicitar diagnóstico o escribir por los canales directos de ConexaCod."
         />
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -177,34 +186,48 @@ export default function ContactPage() {
                     href={channel.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 block text-base font-medium text-foreground transition-colors hover:text-primary"
+                    className="ks-type-card-title mt-3 block font-semibold transition-colors hover:text-primary"
                   >
                     {channel.value}
                   </a>
                 ) : channel.href && isProtocolLink ? (
                   <a
                     href={channel.href}
-                    className="mt-3 block text-base font-medium text-foreground transition-colors hover:text-primary"
+                    className="ks-type-card-title mt-3 block font-semibold transition-colors hover:text-primary"
                   >
                     {channel.value}
                   </a>
                 ) : channel.href ? (
                   <Link
                     href={channel.href}
-                    className="mt-3 block text-base font-medium text-foreground transition-colors hover:text-primary"
+                    className="ks-type-card-title mt-3 block font-semibold transition-colors hover:text-primary"
                   >
                     {channel.value}
                   </Link>
                 ) : (
-                  <p className="mt-3 text-base font-medium text-foreground">{channel.value}</p>
+                  <p className="ks-type-card-title mt-3 font-semibold">{channel.value}</p>
                 )}
 
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                <p className="ks-card-copy mt-3">
                   {channel.note}
                 </p>
               </Reveal>
             )
           })}
+        </div>
+      </section>
+
+      <section className="border-t border-border/60">
+        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-18 lg:grid-cols-[minmax(0,0.8fr)_minmax(22rem,1.2fr)] lg:px-10 lg:py-24">
+          <SectionHeading
+            eyebrow="CUÉNTANOS QUÉ QUIERES RESOLVER"
+            title="Convirtamos el contexto de tu empresa en un siguiente paso concreto."
+            description="Comparte la necesidad, el proceso que quieres mejorar o la idea que necesitas aterrizar. Revisaremos el contexto antes de responder."
+          />
+
+          <Reveal delay={100}>
+            <ContactForm className="bg-background/78 shadow-[0_24px_90px_-54px_rgba(0,0,0,0.95)] backdrop-blur-md" />
+          </Reveal>
         </div>
       </section>
 
@@ -218,7 +241,7 @@ export default function ContactPage() {
               <SectionHeading
                 eyebrow="SIGUIENTE PASO"
                 title="Elija el flujo que mejor encaje con su necesidad."
-                description="Para mantener la atención ordenada, Konamy Systems prioriza dos caminos: diagnóstico empresarial cuando necesita explicar el contexto y asesoría cuando desea coordinar una conversación."
+                description="Para mantener la atención ordenada, ConexaCod prioriza dos caminos: diagnóstico empresarial cuando necesita explicar el contexto y asesoría cuando desea coordinar una conversación."
               />
 
               <div className="mt-8 grid gap-3">
@@ -244,7 +267,7 @@ export default function ContactPage() {
               <p className="text-xs font-semibold tracking-[0.3em] text-primary">
                 ANTES DE ESCRIBIR
               </p>
-              <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
+              <div className="ks-copy-secondary mt-6 space-y-4">
                 <p>
                   Si ya sabe que necesita una conversación inicial, el camino más directo es
                   agendar una asesoría.

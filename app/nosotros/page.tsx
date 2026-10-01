@@ -1,4 +1,5 @@
 import { PageHero } from '@/components/page-hero'
+import { PortfolioSection } from '@/components/portfolio/portfolio-section'
 import { Reveal } from '@/components/reveal'
 import { SectionHeading } from '@/components/section-heading'
 import { SiteAction } from '@/components/site-action'
@@ -6,11 +7,23 @@ import { SiteShell } from '@/components/site-shell'
 import { siteConfig } from '@/config/site'
 import { buildPageMetadata } from '@/lib/metadata'
 
-const philosophy = [
-  'Digitalizar procesos para que la operación no dependa de improvisación.',
-  'Simplificar la forma de trabajar sin perder control administrativo.',
-  'Automatizar tareas repetitivas para liberar tiempo y reducir errores.',
-  'Crecer con una estructura tecnológica que pueda evolucionar junto con la empresa.',
+const workingPrinciples = [
+  {
+    title: 'Digitalizar',
+    description: 'Procesos claros que no dependan de la improvisación.',
+  },
+  {
+    title: 'Simplificar',
+    description: 'Menos fricción para trabajar sin perder control administrativo.',
+  },
+  {
+    title: 'Automatizar',
+    description: 'Menos tareas repetitivas, errores y tiempo sin valor.',
+  },
+  {
+    title: 'Crecer',
+    description: 'Tecnología capaz de evolucionar junto con la empresa.',
+  },
 ] as const
 
 const values = [
@@ -23,185 +36,100 @@ const values = [
   'Calidad',
 ] as const
 
-const differentiators = [
-  'No partimos de paquetes rígidos, sino del problema operativo que la empresa necesita resolver.',
-  'Unimos procesos, sistemas, automatización e integraciones dentro de una misma lógica de trabajo.',
-  'Diseñamos soluciones administrables que puedan mejorar progresivamente sin rehacerlo todo.',
-] as const
-
 export const metadata = buildPageMetadata('about')
 
 export default function AboutPage() {
   return (
-    <SiteShell>
+    <SiteShell seoPage="about" cinematicPage="about">
       <PageHero
-        eyebrow="NOSOTROS"
-        title="Konamy Systems existe para convertir desorden operativo en claridad digital."
-        description="Diseñamos plataformas, sistemas y automatizaciones para empresas que necesitan organizar procesos, centralizar información y crecer con una estructura tecnológica más clara."
+        title="Pensamos en grande. Construimos desde lo cercano."
+        description="Con base en Manizales, creamos soluciones digitales para empresas que quieren transformar su operación y crecer dentro y fuera de Colombia."
         actions={
           <>
-            <SiteAction href={siteConfig.routes.process}>CONOCER PROCESO</SiteAction>
+            <SiteAction href="#proyectos">VER PROYECTOS</SiteAction>
             <SiteAction href={siteConfig.routes.advisory} variant="secondary">
               AGENDAR ASESORÍA
-            </SiteAction>
-            <SiteAction href={siteConfig.routes.diagnostics} variant="secondary">
-              SOLICITAR DIAGNÓSTICO
             </SiteAction>
           </>
         }
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <Reveal className="rounded-[2rem] border border-border/70 bg-background/45 px-6 py-8 backdrop-blur-sm lg:px-8">
-            <SectionHeading
-              eyebrow="QUÉ ES KONAMY SYSTEMS"
-              title="Una propuesta enfocada en resolver problemas empresariales reales."
-              description="Konamy Systems busca que la tecnología deje de ser un conjunto de herramientas dispersas y se convierta en una estructura clara para operar, administrar y crecer."
-            />
+      <PortfolioSection />
 
-            <div className="mt-8 space-y-5 text-sm leading-relaxed text-muted-foreground">
-              <p>
-                Trabajamos donde la operación se vuelve lenta, la información se
-                duplica, los equipos dependen de demasiados pasos manuales o un
-                proceso importante ya no cabe en hojas de cálculo, chats o tareas
-                improvisadas.
-              </p>
-              <p>
-                Nuestro propósito es ayudar a las empresas a digitalizar con
-                criterio, simplificar su forma de trabajo y automatizar lo que hoy
-                consume demasiado tiempo sin aportar valor.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal
-            delay={120}
-            className="rounded-[2rem] border border-border/70 bg-primary/[0.04] px-6 py-8 backdrop-blur-sm lg:px-8"
-          >
-            <p className="text-xs font-semibold tracking-[0.3em] text-primary">
-              PROPUESTA DE VALOR
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-20">
+          <SectionHeading title="Una propuesta enfocada en resolver problemas empresariales reales." />
+          <Reveal delay={100} className="ks-copy-secondary space-y-5 lg:pt-2">
+            <p>
+              Diseñamos soluciones digitales conectadas con la operación real de
+              cada empresa. No partimos de paquetes rígidos, sino del problema que
+              necesita resolverse.
             </p>
-            <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
-              <p>
-                Diseñamos soluciones digitales adaptadas al ritmo, complejidad y
-                prioridades de cada empresa.
-              </p>
-              <p>
-                No ofrecemos tecnología separada del negocio. Construimos sistemas,
-                automatizaciones e integraciones que se conectan con la operación
-                real.
-              </p>
-              <p>
-                La meta es que cada avance sea útil desde el principio y pueda
-                sostener mejoras futuras sin perder claridad.
-              </p>
-            </div>
+            <p>
+              Trabajamos cuando la información se duplica, los pasos manuales frenan
+              al equipo o un proceso importante ya no cabe en hojas de cálculo y
+              tareas improvisadas. Unimos sistemas, automatización e integraciones
+              en una estructura administrable que puede evolucionar sin rehacerlo todo.
+            </p>
           </Reveal>
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-primary/[0.03]">
-        <div className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
+      <section className="border-y border-border/60 bg-background/35">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <SectionHeading
-            eyebrow="FILOSOFÍA"
             title="Digitalizar, simplificar, automatizar y crecer."
-            description="Estas cuatro ideas resumen la forma de trabajo de Konamy Systems y la intención detrás de cada solución."
+            description="Trabajamos con claridad, validación y evolución continua para que cada solución pueda crecer junto con el negocio."
           />
 
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            {philosophy.map((item, index) => (
+          <ol className="mt-12 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+            {workingPrinciples.map((principle, index) => (
               <Reveal
-                as="article"
-                key={item}
-                delay={index * 90}
-                className="rounded-3xl border border-border/70 bg-background/50 px-6 py-6 backdrop-blur-sm"
+                as="li"
+                key={principle.title}
+                delay={index * 80}
+                className="border-t border-primary/35 pt-5"
               >
-                <p className="text-sm leading-relaxed text-foreground/90">{item}</p>
+                <h3 className="text-xl font-semibold text-foreground">
+                  {principle.title}
+                </h3>
+                <p className="ks-card-copy mt-3">{principle.description}</p>
               </Reveal>
             ))}
-          </div>
-        </div>
-      </section>
+          </ol>
 
-      <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          <Reveal className="rounded-[2rem] border border-border/70 bg-background/45 px-6 py-8 backdrop-blur-sm lg:px-8">
-            <SectionHeading
-              eyebrow="FORMA DE TRABAJO"
-              title="Claridad, validación y evolución continua."
-              description="Trabajamos por etapas para entender el problema, definir la arquitectura adecuada y validar avances sin esconder el proceso detrás de tecnicismos."
-            />
-
-            <div className="mt-8 space-y-4 text-sm leading-relaxed text-muted-foreground">
-              <p>
-                Cada solución se aterriza según la necesidad del negocio, se
-                construye con lógica administrable y se revisa por utilidad real en
-                la operación.
-              </p>
-              <p>
-                Después de la entrega seguimos contemplando ajustes, mejoras e
-                integración progresiva para acompañar el crecimiento.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal
-            delay={120}
-            className="rounded-[2rem] border border-border/70 bg-background/45 px-6 py-8 backdrop-blur-sm lg:px-8"
-          >
-            <p className="text-xs font-semibold tracking-[0.3em] text-primary">
-              VALORES
-            </p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {values.map((value, index) => (
-                <Reveal
-                  as="div"
-                  key={value}
-                  delay={index * 60}
-                  className="rounded-2xl border border-border/70 bg-background/50 px-4 py-4 text-sm text-foreground/90"
-                >
+          <Reveal delay={180} variant="fade" className="mt-14 border-t border-border/60 pt-8">
+            <p className="sr-only">Valores de ConexaCod</p>
+            <ul className="flex flex-wrap gap-x-6 gap-y-3" aria-label="Valores de ConexaCod">
+              {values.map((value) => (
+                <li key={value} className="text-sm font-medium tracking-[0.08em] text-foreground/82">
                   {value}
-                </Reveal>
+                </li>
               ))}
-            </div>
+            </ul>
           </Reveal>
         </div>
       </section>
 
-      <section className="border-t border-border/60">
-        <div className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
-          <SectionHeading
-            eyebrow="DIFERENCIA KONAMY"
-            title="Una base local en Manizales. Soluciones digitales preparadas para operar en Colombia y el mundo."
-            description="Konamy Systems trabaja desde Manizales con soluciones digitales pensadas para empresas que necesitan orden, trazabilidad y automatización, dentro y fuera de Colombia."
-          />
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+        <div className="grid gap-10 border-y border-primary/25 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.65fr)] lg:items-end lg:py-16">
+          <SectionHeading title="Desde Manizales, construyendo para cualquier lugar." />
+          <Reveal delay={100} as="p" className="ks-copy-primary">
+            Una base local, una forma cercana de trabajar y soluciones digitales
+            preparadas para operar en Colombia y el mundo.
+          </Reveal>
+        </div>
+      </section>
 
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {differentiators.map((item, index) => (
-              <Reveal
-                as="article"
-                key={item}
-                delay={index * 90}
-                className="rounded-3xl border border-border/70 bg-background/50 px-6 py-6 backdrop-blur-sm"
-              >
-                <p className="text-sm leading-relaxed text-muted-foreground">{item}</p>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal
-            variant="fade"
-            className="mt-12 rounded-[2rem] border border-border/70 bg-secondary/20 px-6 py-10 lg:px-10"
-          >
+      <section className="border-t border-border/60 bg-background/50">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-24">
+          <Reveal>
             <SectionHeading
-              eyebrow="SIGUIENTE PASO"
-              title="Si quiere conocer cómo trabajamos con su caso, podemos avanzar."
-              description="Puede revisar el proceso completo, solicitar un diagnóstico empresarial o programar una asesoría inicial."
+              title="Tu proyecto podría ser el siguiente."
+              description="Cuéntanos qué necesitas resolver y veamos cómo convertirlo en una solución digital."
               actions={
                 <>
-                  <SiteAction href={siteConfig.routes.process}>CONOCER PROCESO</SiteAction>
-                  <SiteAction href={siteConfig.routes.advisory} variant="secondary">
+                  <SiteAction href={siteConfig.routes.advisory}>
                     AGENDAR ASESORÍA
                   </SiteAction>
                   <SiteAction href={siteConfig.routes.diagnostics} variant="secondary">

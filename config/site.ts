@@ -1,19 +1,10 @@
-type SitemapChangeFrequency =
-  | 'always'
-  | 'hourly'
-  | 'daily'
-  | 'weekly'
-  | 'monthly'
-  | 'yearly'
-  | 'never'
-
 function trimText(value?: string) {
   return value?.trim() ?? ''
 }
 
 function normalizeSiteUrl(value?: string) {
   const trimmed = trimText(value).replace(/\/$/, '')
-  return trimmed || 'https://pendiente-dominio-konamysystems.invalid'
+  return trimmed || 'https://conexacod.com'
 }
 
 function normalizeExternalUrl(value?: string) {
@@ -25,6 +16,7 @@ function normalizeExternalUrl(value?: string) {
 
   try {
     const url = new URL(trimmed)
+    if (!['https:', 'http:'].includes(url.protocol)) return ''
     return url.toString()
   } catch {
     return ''
@@ -67,7 +59,7 @@ const routes = {
 
 const rawSiteUrl = trimText(process.env.NEXT_PUBLIC_SITE_URL)
 const siteUrl = normalizeSiteUrl(rawSiteUrl)
-const domainIsPlaceholder = isPlaceholderSiteUrl(rawSiteUrl)
+const domainIsPlaceholder = isPlaceholderSiteUrl(siteUrl)
 const rawWhatsAppNumber = trimText(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)
 const whatsappDigits = rawWhatsAppNumber.replace(/\D/g, '')
 const whatsappConfigured = whatsappDigits.length >= 8
@@ -76,83 +68,66 @@ const instagramUrl = normalizeExternalUrl(process.env.NEXT_PUBLIC_INSTAGRAM_URL)
 const pages = {
   home: {
     path: routes.home,
-    title: 'Konamy Systems | Transformamos problemas en soluciones digitales',
+    title: 'Desarrollo web y software en Manizales | ConexaCod',
     description:
-      'Konamy Systems diseña plataformas, sistemas y automatizaciones para organizar procesos, ahorrar tiempo y ayudar a las empresas a crecer.',
-    changeFrequency: 'weekly' as SitemapChangeFrequency,
-    priority: 1,
+      'Desde Manizales, desarrollamos sitios web, software a medida y aplicaciones web para empresas en Colombia. Conozca nuestros proyectos y soluciones.',
   },
   solutions: {
     path: routes.solutions,
-    title: 'Soluciones | Konamy Systems',
+    title: 'Digitalización de procesos empresariales | ConexaCod',
     description:
-      'Conozca los tipos de problemas empresariales que Konamy Systems puede resolver y cómo se construye una solución digital adaptada a cada empresa.',
-    changeFrequency: 'monthly' as SitemapChangeFrequency,
-    priority: 0.9,
+      'Organice información, conecte herramientas y reduzca tareas manuales. Explore soluciones digitales adaptadas a los procesos de su empresa.',
   },
   services: {
     path: routes.services,
-    title: 'Servicios | Konamy Systems',
+    title: 'Software a medida, desarrollo web e integraciones | ConexaCod',
     description:
-      'Explore todos los servicios de Konamy Systems: diagnóstico, plataformas empresariales, automatización, integraciones, WhatsApp, reportes y evolución continua.',
-    changeFrequency: 'monthly' as SitemapChangeFrequency,
-    priority: 0.9,
+      'Explore desarrollo web, plataformas empresariales, software a medida, automatización e integraciones. Defina el alcance que necesita su operación.',
   },
   process: {
     path: routes.process,
-    title: 'Proceso | Konamy Systems',
+    title: 'Cómo desarrollamos su solución digital | ConexaCod',
     description:
-      'Conozca cómo trabaja Konamy Systems: entendemos, diagnosticamos, diseñamos, desarrollamos, integramos, implementamos y mejoramos.',
-    changeFrequency: 'monthly' as SitemapChangeFrequency,
-    priority: 0.8,
+      'Conozca las siete etapas de ConexaCod: comprensión, diagnóstico, diseño, desarrollo, integración, implementación y mejora de su solución digital.',
   },
   about: {
     path: routes.about,
-    title: 'Nosotros | Konamy Systems',
+    title: 'ConexaCod: quiénes somos y qué hemos construido',
     description:
-      'Conozca qué es Konamy Systems, su propósito, filosofía de trabajo, valores y enfoque para construir soluciones digitales empresariales preparadas para operar en Colombia y el mundo.',
-    changeFrequency: 'monthly' as SitemapChangeFrequency,
-    priority: 0.8,
+      'Conozca ConexaCod, nuestra base en Manizales y forma de trabajar. Explore cinco proyectos de desarrollo web, plataformas y comercio electrónico.',
   },
   contact: {
     path: routes.contact,
-    title: 'Contacto | Konamy Systems',
+    title: 'Contacte a ConexaCod para su proyecto digital',
     description:
-      'Contacte a Konamy Systems mediante asesoría, diagnóstico empresarial, WhatsApp, correo y teléfono, con canales claros para iniciar la conversación.',
-    changeFrequency: 'monthly' as SitemapChangeFrequency,
-    priority: 0.8,
+      'Cuéntenos qué necesita resolver su empresa. Contacte a ConexaCod desde Manizales o elija una asesoría virtual o un diagnóstico de procesos.',
   },
   advisory: {
     path: routes.advisory,
-    title: 'Agendar asesoría | Konamy Systems',
+    title: 'Agende una asesoría sobre sus procesos | ConexaCod',
     description:
-      'Programe una asesoría inicial con Konamy Systems mediante disponibilidad real, validación y arquitectura preparada para Google Calendar y Google Meet.',
-    changeFrequency: 'weekly' as SitemapChangeFrequency,
-    priority: 0.8,
+      'Solicite una asesoría virtual de 30 minutos para revisar su necesidad de software o automatización. Consulte los horarios disponibles en la agenda.',
   },
   diagnostics: {
     path: routes.diagnostics,
-    title: 'Diagnóstico empresarial | Konamy Systems',
+    title: 'Diagnóstico de procesos empresariales | ConexaCod',
     description:
-      'Explique el proceso que su empresa desea mejorar mediante un diagnóstico empresarial guiado, con validación, progreso y resumen previo.',
-    changeFrequency: 'weekly' as SitemapChangeFrequency,
-    priority: 0.8,
+      'Describa sus procesos, herramientas y tareas repetitivas en el diagnóstico guiado de ConexaCod. Comparta el contexto para definir el siguiente paso.',
   },
   privacy: {
     path: routes.privacy,
-    title: 'Privacidad | Konamy Systems',
+    title: 'Privacidad | ConexaCod',
     description:
-      'Revise la versión provisional de la política de privacidad de Konamy Systems y los datos pendientes de validación legal antes del despliegue final.',
-    changeFrequency: 'yearly' as SitemapChangeFrequency,
-    priority: 0.4,
+      'Revise la versión provisional de la política de privacidad de ConexaCod y los datos pendientes de validación legal antes del despliegue final.',
+    indexable: false,
   },
 } as const
 
 export type SitePageKey = keyof typeof pages
 
 export const siteConfig = {
-  name: 'Konamy Systems',
-  shortName: 'Konamy',
+  name: 'ConexaCod',
+  shortName: 'ConexaCod',
   slogan: 'Digitalizar para simplificar. Automatizar para crecer.',
   description: pages.home.description,
   url: siteUrl,
@@ -162,15 +137,12 @@ export const siteConfig = {
   seo: {
     defaultTitle: pages.home.title,
     defaultDescription: pages.home.description,
-    siteName: 'Konamy Systems',
+    siteName: 'ConexaCod',
     locale: 'es_CO',
     twitterCard: 'summary_large_image' as const,
-    openGraphImagePath: '/hero-monument.png',
-    openGraphImageAlt: 'Ilustración principal de Konamy Systems',
-    faviconIcoPath: '/favicon.ico',
+    openGraphImagePath: '/hero-monument-conexacod.png',
+    openGraphImageAlt: 'Ilustración principal de ConexaCod',
     faviconSvgPath: '/icon.svg',
-    faviconPngPath: '/icon-light-32x32.png',
-    appleTouchIconPath: '/apple-icon.png',
     manifestPath: '/manifest.webmanifest',
   },
   contact: {
@@ -185,7 +157,7 @@ export const siteConfig = {
     whatsappNumber: rawWhatsAppNumber,
     whatsappIsProvisional: !whatsappConfigured,
     whatsappMessage:
-      'Hola, quiero conocer más sobre las soluciones de Konamy Systems y recibir una asesoría.',
+      'Hola, quiero conocer más sobre las soluciones de ConexaCod y recibir una asesoría.',
     city: 'Manizales, Caldas',
     country: 'Colombia',
     coverage:
@@ -200,7 +172,7 @@ export const siteConfig = {
     privacyPolicyOwnerAddress: 'PENDIENTE · dirección legal',
     privacyPolicyOwnerPhone: 'PENDIENTE · línea legal de contacto',
     privacyPolicyUpdatedAt: 'Pendiente de confirmación',
-    copyrightNotice: `© ${new Date().getFullYear()} Konamy Systems. Todos los derechos reservados.`,
+    copyrightNotice: `© ${new Date().getFullYear()} ConexaCod. Todos los derechos reservados.`,
     privacyPolicyNotice:
       'Este documento es una base provisional para la versión 1.0 y debe reemplazarse por el texto legal definitivo antes del despliegue público final.',
   },
@@ -238,9 +210,9 @@ export const siteConfig = {
 
 export const mainNav = [
   { label: 'Inicio', href: siteConfig.routes.home },
+  { label: 'Nosotros', href: siteConfig.routes.about },
   { label: 'Soluciones', href: siteConfig.routes.solutions },
   { label: 'Servicios', href: siteConfig.routes.services },
-  { label: 'Proceso', href: siteConfig.routes.process },
-  { label: 'Nosotros', href: siteConfig.routes.about },
+  { label: 'Procesos', href: siteConfig.routes.process },
   { label: 'Contacto', href: siteConfig.routes.contact },
 ] as const

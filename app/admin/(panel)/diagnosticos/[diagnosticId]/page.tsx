@@ -21,7 +21,7 @@ import { buildAdminDetailHref, buildAdminListHref } from '@/lib/admin-routes'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Detalle de diagnóstico | Konamy Systems',
+  title: 'Detalle de diagnóstico | Conexacod',
   robots: {
     index: false,
     follow: false,
@@ -80,7 +80,7 @@ export default async function AdminDiagnosticDetailPage({
           kind: 'link',
           value: buildAdminWhatsApp(
             detail.phone,
-            `Hola ${detail.name}, gracias por completar el diagnóstico empresarial de Konamy Systems.`,
+            `Hola ${detail.name}, gracias por completar el diagnóstico empresarial de Conexacod.`,
           ),
           icon: 'whatsapp',
           external: true,

@@ -86,7 +86,7 @@ function buildInternalEmail(
   return {
     subject: `[Diagnóstico] ${input.company} · ${input.name}`,
     text: [
-      'Nuevo diagnóstico empresarial recibido desde Konamy Systems.',
+      'Nuevo diagnóstico empresarial recibido desde Conexacod.',
       '',
       summary,
       '',
@@ -135,12 +135,12 @@ function buildClientEmail(
     ]),
     renderEmailSection('Siguiente paso', [
       { label: 'Interés en asesoría', value: input.wantsMeeting },
-      { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Konamy Systems.' },
+      { label: 'Privacidad', value: 'La información será tratada según la política de privacidad vigente de Conexacod.' },
     ]),
   ].join('')
 
   return {
-    subject: 'Recibimos su diagnóstico empresarial · Konamy Systems',
+    subject: 'Recibimos su diagnóstico empresarial · Conexacod',
     text: [
       `Hola ${input.name},`,
       '',
@@ -157,7 +157,7 @@ function buildClientEmail(
       '',
       'Puede responder este correo si desea ampliar contexto antes de la asesoría.',
       '',
-      'Konamy Systems',
+      'Conexacod',
     ].join('\n'),
     html: buildEmailLayout({
       eyebrow: 'DIAGNÓSTICO RECIBIDO',

@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-09-28T21:42:07.311747+00:00",
+  "nodes": {
+    "app_page_page": {
+      "code_fingerprint": "d56f31833e3a383b5744d756e74986aa7f8bc593b3c97d8362c81485d7f14a67",
+      "label": "Page()",
+      "last": "2026-09-08T19:28:39.601463+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-08T19:28:39.601463+00:00",
+          "outcome": "useful",
+          "q": "Locate the landing hierarchy, cinematic integration points, LogoLoop, and the preserved iceberg visual."
+        }
+      ],
+      "score": 0.628612968,
+      "source_file": "app/page.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "components_home_projects_homeprojects": {
+      "code_fingerprint": "f240c8376f87747a6063a914c68c3f3932c0a251c26a40951ab5e8ca46f97a77",
+      "label": "HomeProjects()",
+      "last": "2026-09-08T19:28:39.601463+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-08T19:28:39.601463+00:00",
+          "outcome": "useful",
+          "q": "Locate the landing hierarchy, cinematic integration points, LogoLoop, and the preserved iceberg visual."
+        }
+      ],
+      "score": 0.628612968,
+      "source_file": "components/home-projects.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "components_iceberg_mark_icebergmark": {
+      "code_fingerprint": "bd7ae847a7f1d3fc90534020e33ea0a7a7f64c5d1cf39963c5931afc13e2be51",
+      "label": "IcebergMark()",
+      "last": "2026-09-08T19:28:39.601463+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-08T19:28:39.601463+00:00",
+          "outcome": "useful",
+          "q": "Locate the landing hierarchy, cinematic integration points, LogoLoop, and the preserved iceberg visual."
+        }
+      ],
+      "score": 0.628612968,
+      "source_file": "components/iceberg-mark.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "components_portal_hero_visual_portalherovisual": {
+      "code_fingerprint": "3c2e6cb8315db0662be78080c2be93abac359a141482f2eeb46e22aa96501f70",
+      "label": "PortalHeroVisual()",
+      "last": "2026-09-08T19:28:39.601463+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-08T19:28:39.601463+00:00",
+          "outcome": "useful",
+          "q": "Locate the landing hierarchy, cinematic integration points, LogoLoop, and the preserved iceberg visual."
+        }
+      ],
+      "score": 0.628612968,
+      "source_file": "components/portal-hero-visual.tsx",
+      "status": "tentative",
+      "uses": 1
+    }
+  },
+  "version": 1
+}

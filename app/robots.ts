@@ -1,9 +1,8 @@
 import type { MetadataRoute } from 'next'
-import { siteConfig } from '@/config/site'
-import { absoluteUrl } from '@/lib/site'
+import { seoIndexingEnabled, seoOrigin, seoUrl } from '@/config/seo'
 
 export default function robots(): MetadataRoute.Robots {
-  if (siteConfig.domainIsPlaceholder) {
+  if (!seoIndexingEnabled) {
     return {
       rules: [
         {
@@ -19,10 +18,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/'],
+        disallow: ['/admin$', '/admin/', '/api$', '/api/'],
       },
     ],
-    sitemap: absoluteUrl('/sitemap.xml'),
-    host: siteConfig.url,
+    sitemap: seoUrl('/sitemap.xml'),
+    host: seoOrigin,
   }
 }

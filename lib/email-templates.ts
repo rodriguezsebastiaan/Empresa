@@ -65,7 +65,7 @@ function layout(title: string, body: string) {
     '<body style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.5;">',
     `<h1>${escapeHtml(title)}</h1>`,
     body,
-    '<p>Konamy Systems</p>',
+    '<p>Conexacod</p>',
     '</body>',
     '</html>',
   ].join('')
@@ -100,7 +100,7 @@ function diagnosticTemplate(type: EmailTemplateInput['type'], data: DiagnosticTe
     `Empresa: ${company}`,
     `Estado: ${status}`,
     `Referencia: ${diagnosticId}`,
-    'Konamy Systems',
+    'Conexacod',
   ].join('\n')
 
   return { subject: cleanLine(subject), html: layout(title, body), text }
@@ -149,7 +149,7 @@ function bookingTemplate(type: EmailTemplateInput['type'], data: BookingTemplate
     `Fecha y hora: ${scheduledAt}`,
     `Zona horaria: ${timezone}`,
     `Referencia: ${bookingId}`,
-    'Konamy Systems',
+    'Conexacod',
   ].join('\n')
 
   return { subject: cleanLine(label.subject), html: layout(label.title, body), text }

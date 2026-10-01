@@ -20,22 +20,29 @@ export async function GET(request: Request) {
     )
   }
 
-  const snapshot = await getAvailabilitySnapshot()
+  try {
+    const snapshot = await getAvailabilitySnapshot()
 
-  return applyRateLimitHeaders(
-    NextResponse.json({
-      success: true,
-      settings: {
-        isEnabled: snapshot.settings.isEnabled,
-        timezoneLabel: snapshot.settings.timezoneLabel,
-        durationMinutes: snapshot.settings.durationMinutes,
-        bufferMinutes: snapshot.settings.bufferMinutes,
-        minNoticeHours: snapshot.settings.minNoticeHours,
-        maxDaysAhead: snapshot.settings.maxDaysAhead,
-        defaultModality: snapshot.settings.defaultModality,
-        calendarMode: process.env.GOOGLE_CALENDAR_MODE === 'real' ? 'real' : 'mock-development',
-      },
-    }),
-    rateLimit,
-  )
+    return applyRateLimitHeaders(
+      NextResponse.json({
+        success: true,
+        settings: {
+          isEnabled: snapshot.settings.isEnabled,
+          timezoneLabel: snapshot.settings.timezoneLabel,
+          durationMinutes: snapshot.settings.durationMinutes,
+          bufferMinutes: snapshot.settings.bufferMinutes,
+          minNoticeHours: snapshot.settings.minNoticeHours,
+          maxDaysAhead: snapshot.settings.maxDaysAhead,
+          defaultModality: snapshot.settings.defaultModality,
+          calendarMode: process.env.GOOGLE_CALENDAR_MODE === 'real' ? 'real' : 'mock-development',
+        },
+      }),
+      rateLimit,
+    )
+  } catch {
+    return applyRateLimitHeaders(
+      NextResponse.json({ success: false, message: 'No fue posible consultar la disponibilidad.' }, { status: 502 }),
+      rateLimit,
+    )
+  }
 }

@@ -3,6 +3,7 @@ import { AdminRole, Prisma } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
+import { siteConfig } from '@/config/site'
 import { getDb } from '@/lib/db'
 import { getRequestMetadata } from '@/lib/request-metadata'
 import { createSessionToken, normalizeEmail, verifyPassword } from '@/lib/security'
@@ -182,11 +183,15 @@ export function getSafeAdminReturnTo(value?: string | null) {
     return '/admin'
   }
 
-  if (!value.startsWith('/admin') || value.startsWith('//')) {
+  try {
+    if (!value.startsWith('/') || value.startsWith('//') || /[\\\u0000-\u001f\u007f]/.test(value)) return '/admin'
+    const url = new URL(value, 'https://admin.invalid')
+    if (url.origin !== 'https://admin.invalid' ||
+      !(url.pathname === '/admin' || url.pathname.startsWith('/admin/'))) return '/admin'
+    return `${url.pathname}${url.search}${url.hash}`
+  } catch {
     return '/admin'
   }
-
-  return value
 }
 
 export function buildAdminLoginUrl(returnTo = '/admin', error?: string) {
@@ -221,14 +226,27 @@ export function getAdminLoginErrorMessage(code?: string | null) {
 }
 
 export function isAdminActionOriginValid(request: Request) {
-  const origin = request.headers.get('origin')
+  const origin = request.headers.get('origin') ?? request.headers.get('referer')
 
   if (!origin) {
-    return true
+    return false
   }
 
   try {
-    return new URL(origin).origin === new URL(request.url).origin
+    const trustedOrigins = new Set([new URL(siteConfig.url).origin])
+    const target = new URL(request.url)
+    const loopbackHosts = ['localhost', '127.0.0.1', '[::1]']
+    // Next may normalize request.url to localhost. Only trust loopback Host
+    // aliases for local verification, never an arbitrary forwarded host.
+    if (loopbackHosts.includes(target.hostname)) {
+      const host = request.headers.get('host') ?? target.host
+      const localTarget = new URL(`${target.protocol}//${host}`)
+      if (loopbackHosts.includes(localTarget.hostname)) {
+        trustedOrigins.add(target.origin)
+        trustedOrigins.add(localTarget.origin)
+      }
+    }
+    return trustedOrigins.has(new URL(origin).origin)
   } catch {
     return false
   }

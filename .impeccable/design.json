@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-28T11:35:32.8241441-05:00",
+  "title": "Design System: Conexacod",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Azul abisal",
+        "canonical": "oklch(0.16 0.02 240)",
+        "tonalRamp": ["oklch(0.15 0.02 240)", "oklch(0.25 0.02 240)", "oklch(0.35 0.02 240)", "oklch(0.47 0.02 240)", "oklch(0.59 0.02 240)", "oklch(0.71 0.02 240)", "oklch(0.83 0.02 240)", "oklch(0.95 0.02 240)"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Blanco glaciar",
+        "canonical": "oklch(0.95 0.005 240)",
+        "tonalRamp": ["oklch(0.15 0.005 240)", "oklch(0.25 0.005 240)", "oklch(0.35 0.005 240)", "oklch(0.47 0.005 240)", "oklch(0.59 0.005 240)", "oklch(0.71 0.005 240)", "oklch(0.83 0.005 240)", "oklch(0.95 0.005 240)"]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Azul de cámara",
+        "canonical": "oklch(0.2 0.025 240)",
+        "tonalRamp": ["oklch(0.15 0.025 240)", "oklch(0.25 0.025 240)", "oklch(0.35 0.025 240)", "oklch(0.47 0.025 240)", "oklch(0.59 0.025 240)", "oklch(0.71 0.025 240)", "oklch(0.83 0.025 240)", "oklch(0.95 0.025 240)"]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Cian señal",
+        "canonical": "oklch(0.82 0.13 190)",
+        "tonalRamp": ["oklch(0.15 0.13 190)", "oklch(0.25 0.13 190)", "oklch(0.35 0.13 190)", "oklch(0.47 0.13 190)", "oklch(0.59 0.13 190)", "oklch(0.71 0.13 190)", "oklch(0.83 0.13 190)", "oklch(0.95 0.13 190)"]
+      },
+      "primary-foreground": {
+        "role": "neutral",
+        "displayName": "Tinta sobre cian",
+        "canonical": "oklch(0.16 0.02 240)",
+        "tonalRamp": ["oklch(0.15 0.02 240)", "oklch(0.25 0.02 240)", "oklch(0.35 0.02 240)", "oklch(0.47 0.02 240)", "oklch(0.59 0.02 240)", "oklch(0.71 0.02 240)", "oklch(0.83 0.02 240)", "oklch(0.95 0.02 240)"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Azul estrato",
+        "canonical": "oklch(0.24 0.03 240)",
+        "tonalRamp": ["oklch(0.15 0.03 240)", "oklch(0.25 0.03 240)", "oklch(0.35 0.03 240)", "oklch(0.47 0.03 240)", "oklch(0.59 0.03 240)", "oklch(0.71 0.03 240)", "oklch(0.83 0.03 240)", "oklch(0.95 0.03 240)"]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Niebla técnica",
+        "canonical": "oklch(0.78 0.018 235)",
+        "tonalRamp": ["oklch(0.15 0.018 235)", "oklch(0.25 0.018 235)", "oklch(0.35 0.018 235)", "oklch(0.47 0.018 235)", "oklch(0.59 0.018 235)", "oklch(0.71 0.018 235)", "oklch(0.83 0.018 235)", "oklch(0.95 0.018 235)"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Línea batimétrica",
+        "canonical": "oklch(0.3 0.03 235)",
+        "tonalRamp": ["oklch(0.15 0.03 235)", "oklch(0.25 0.03 235)", "oklch(0.35 0.03 235)", "oklch(0.47 0.03 235)", "oklch(0.59 0.03 235)", "oklch(0.71 0.03 235)", "oklch(0.83 0.03 235)", "oklch(0.95 0.03 235)"]
+      },
+      "destructive": {
+        "role": "tertiary",
+        "displayName": "Rojo de alerta",
+        "canonical": "oklch(0.6 0.2 25)",
+        "tonalRamp": ["oklch(0.15 0.2 25)", "oklch(0.25 0.2 25)", "oklch(0.35 0.2 25)", "oklch(0.47 0.2 25)", "oklch(0.59 0.2 25)", "oklch(0.71 0.2 25)", "oklch(0.83 0.2 25)", "oklch(0.95 0.2 25)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display cinematográfico", "purpose": "Declaraciones principales del hero." },
+      "headline": { "displayName": "Titular editorial", "purpose": "Encabezados de sección y cambios de capítulo." },
+      "title": { "displayName": "Título operativo", "purpose": "Tarjetas, conceptos y subtítulos breves." },
+      "body": { "displayName": "Lectura principal", "purpose": "Explicaciones con ancho controlado y ritmo abierto." },
+      "label": { "displayName": "Señal de acción", "purpose": "Botones, navegación y microjerarquías." },
+      "mono": { "displayName": "Dato técnico", "purpose": "Diagnóstico y lecturas técnicas puntuales." }
+    },
+    "shadows": [
+      { "name": "action-halo", "value": "0 0 24px -8px var(--primary)", "purpose": "Halo de reposo de la acción primaria." },
+      { "name": "action-halo-hover", "value": "0 0 30px -6px var(--primary)", "purpose": "Respuesta hover de la acción primaria." },
+      { "name": "header-float", "value": "0 8px 30px -18px var(--primary)", "purpose": "Separación de la cabecera después del scroll." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Entradas y revelados que terminan con suavidad." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.77, 0, 0.175, 1)", "purpose": "Transiciones cinematográficas con aceleración y desaceleración marcadas." },
+      { "name": "state-standard", "value": "300ms", "purpose": "Hover, foco y expansión de controles públicos." },
+      { "name": "header-transition", "value": "500ms", "purpose": "Cambio de fondo, blur, borde, sombra y padding de la cabecera." },
+      { "name": "reduced-motion", "value": "0.001ms", "purpose": "Duración aplicada bajo prefers-reduced-motion para eliminar movimiento perceptible." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción de conversión principal con cian sólido, halo controlado y flecha final.",
+      "html": "<a class=\"ds-action-primary\" href=\"/agendar-asesoria\">AGENDAR ASESORÍA <span aria-hidden=\"true\">→</span></a>",
+      "css": ".ds-action-primary { display:inline-flex; min-height:44px; align-items:center; gap:8px; border:0; border-radius:4px; background:var(--primary, oklch(0.82 0.13 190)); color:var(--primary-foreground, oklch(0.16 0.02 240)); padding:14px 24px; font:600 0.95rem/1.4 var(--font-sans, sans-serif); letter-spacing:.08em; text-decoration:none; box-shadow:0 0 24px -8px var(--primary, oklch(0.82 0.13 190)); transition:filter 300ms, transform 300ms, box-shadow 300ms; } .ds-action-primary:hover { filter:brightness(1.1); box-shadow:0 0 30px -6px var(--primary, oklch(0.82 0.13 190)); } .ds-action-primary:focus-visible { outline:2px solid color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 60%, transparent); outline-offset:2px; } .ds-action-primary:active { transform:translateY(1px); }"
+    },
+    {
+      "name": "Secondary Action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Ruta secundaria transparente para acciones que no deben competir con la conversión principal.",
+      "html": "<a class=\"ds-action-secondary\" href=\"/diagnostico\">SOLICITAR DIAGNÓSTICO <span aria-hidden=\"true\">→</span></a>",
+      "css": ".ds-action-secondary { display:inline-flex; min-height:44px; align-items:center; gap:8px; border:1px solid var(--border, oklch(0.3 0.03 235)); border-radius:4px; background:color-mix(in oklch, var(--secondary, oklch(0.24 0.03 240)) 40%, transparent); color:var(--foreground, oklch(0.95 0.005 240)); padding:14px 24px; font:600 0.95rem/1.4 var(--font-sans, sans-serif); letter-spacing:.08em; text-decoration:none; transition:border-color 300ms, color 300ms, background 300ms; } .ds-action-secondary:hover { border-color:color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 50%, transparent); color:var(--primary, oklch(0.82 0.13 190)); } .ds-action-secondary:focus-visible { outline:2px solid color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 60%, transparent); outline-offset:2px; } .ds-action-secondary:active { background:color-mix(in oklch, var(--secondary, oklch(0.24 0.03 240)) 68%, transparent); }"
+    },
+    {
+      "name": "Text Action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Enlace de baja masa visual para conectar secciones sin añadir otro botón dominante.",
+      "html": "<a class=\"ds-action-text\" href=\"/nosotros#proyectos\">CONOCE LOS PROYECTOS <span aria-hidden=\"true\">→</span></a>",
+      "css": ".ds-action-text { display:inline-flex; min-height:44px; align-items:center; gap:8px; border-radius:2px; color:var(--primary, oklch(0.82 0.13 190)); font:500 .98rem/1.5 var(--font-sans, sans-serif); text-decoration:none; transition:opacity 200ms; } .ds-action-text:hover { opacity:.8; } .ds-action-text:focus-visible { outline:2px solid color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 60%, transparent); outline-offset:2px; } .ds-action-text:active { opacity:.65; }"
+    },
+    {
+      "name": "Desktop Navigation",
+      "kind": "nav",
+      "description": "Navegación pública con estado activo cian y subrayado luminoso en hover.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navegación principal\"><a href=\"/\">Inicio</a><a class=\"is-active\" href=\"/nosotros\" aria-current=\"page\">Nosotros</a><a href=\"/soluciones\">Soluciones</a><a href=\"/servicios\">Servicios</a><a href=\"/proceso\">Procesos</a><a href=\"/contacto\">Contacto</a></nav>",
+      "css": ".ds-nav { display:flex; align-items:center; gap:36px; font:500 .95rem/1.4 var(--font-sans, sans-serif); letter-spacing:.025em; } .ds-nav a { position:relative; border-radius:2px; color:color-mix(in oklch, var(--foreground, oklch(0.95 0.005 240)) 90%, transparent); text-decoration:none; transition:color 300ms; } .ds-nav a::after { content:\"\"; position:absolute; left:0; right:0; bottom:-8px; height:1px; background:color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 80%, transparent); transform:scaleX(0); transition:transform 300ms; } .ds-nav a:hover, .ds-nav a.is-active { color:var(--primary, oklch(0.82 0.13 190)); } .ds-nav a:hover::after { transform:scaleX(1); } .ds-nav a.is-active::after { left:50%; right:auto; width:4px; height:4px; border-radius:999px; transform:translateX(-50%); box-shadow:0 0 8px var(--primary, oklch(0.82 0.13 190)); } .ds-nav a:focus-visible { outline:2px solid color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 60%, transparent); outline-offset:4px; }"
+    },
+    {
+      "name": "Section Heading",
+      "kind": "custom",
+      "description": "Titular editorial compartido con copy de lectura controlada.",
+      "html": "<section class=\"ds-section-heading\"><h2>Digitalizar, simplificar, automatizar y crecer.</h2><p>Trabajamos con claridad, validación y evolución continua para que cada solución pueda crecer junto con el negocio.</p></section>",
+      "css": ".ds-section-heading { max-width:768px; color:var(--foreground, oklch(0.95 0.005 240)); font-family:var(--font-sans, sans-serif); } .ds-section-heading h2 { margin:0; max-width:18ch; font-size:clamp(2.25rem, 3.2vw, 3.6rem); font-weight:600; line-height:1.1; letter-spacing:-.028em; text-wrap:balance; } .ds-section-heading p { margin:24px 0 0; max-width:62ch; color:color-mix(in oklch, var(--foreground, oklch(0.95 0.005 240)) 90%, transparent); font-size:clamp(1.05rem, 1.12vw, 1.2rem); line-height:1.65; }"
+    },
+    {
+      "name": "Portfolio Empty State",
+      "kind": "card",
+      "description": "Estado público factual mientras no existan casos completos y verificados.",
+      "html": "<div class=\"ds-portfolio-empty\"><p>Los casos se publicarán aquí únicamente cuando cuenten con información real, enlaces activos y resultados validados.</p></div>",
+      "css": ".ds-portfolio-empty { border-top:1px solid color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 25%, transparent); border-bottom:1px solid color-mix(in oklch, var(--primary, oklch(0.82 0.13 190)) 25%, transparent); padding:32px 0; color:color-mix(in oklch, var(--foreground, oklch(0.95 0.005 240)) 88%, transparent); font-family:var(--font-sans, sans-serif); } .ds-portfolio-empty p { max-width:768px; margin:0; font-size:clamp(1.15rem, 1.65vw, 1.55rem); line-height:1.625; }"
+    },
+    {
+      "name": "Values Rail",
+      "kind": "chip",
+      "description": "Fila compacta que evita convertir los valores en otra sección de tarjetas.",
+      "html": "<ul class=\"ds-values\" aria-label=\"Valores de Conexacod\"><li>Confianza</li><li>Organización</li><li>Innovación</li><li>Crecimiento</li><li>Compromiso</li><li>Claridad</li><li>Calidad</li></ul>",
+      "css": ".ds-values { display:flex; flex-wrap:wrap; gap:12px 24px; margin:0; padding:32px 0 0; border-top:1px solid color-mix(in oklch, var(--border, oklch(0.3 0.03 235)) 60%, transparent); list-style:none; color:color-mix(in oklch, var(--foreground, oklch(0.95 0.005 240)) 82%, transparent); font:500 1rem/1.5 var(--font-sans, sans-serif); letter-spacing:.08em; } .ds-values li { transition:color 200ms; } .ds-values li:hover { color:var(--primary, oklch(0.82 0.13 190)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El iceberg operativo",
+    "overview": "La interfaz muestra una capa visible clara —titulares, decisiones y rutas de acción— sobre un sistema profundo de procesos, integraciones y automatización. El iceberg no es decoración aislada: el símbolo de marca, el fondo cinematográfico y las capas oscuras hacen legible la relación entre lo que una empresa ve y la infraestructura que sostiene su operación.\n\nEl mundo visual es oscuro, técnico y espacial, con una sola señal cian para orientar. Las páginas públicas usan vídeo o gradientes profundos como atmósfera continua; el contenido se apoya en overlays localizados, líneas finas y superficies translúcidas para conservar legibilidad sin tapar la escena. La composición alterna grandes declaraciones editoriales con bloques operativos más compactos.",
+    "keyCharacteristics": [
+      "Fondo azul marino casi negro, texto glaciar y cian reservado para orientación y acción.",
+      "Un relato cinematográfico continuo por página, no una colección de fondos inconexos.",
+      "Titulares grandes, compactos y balanceados frente a copy de lectura con ancho controlado.",
+      "Líneas, bordes y brillos ligeros que sugieren capas técnicas sin convertir la interfaz en glassmorphism.",
+      "La identidad del iceberg y la procedencia desde Manizales permanecen visibles en los puntos de marca."
+    ],
+    "rules": [
+      { "name": "The Cyan Signal Rule", "body": "El cian aparece en acciones, foco, estado activo y líneas de lectura; su rareza mantiene clara la prioridad.", "section": "colors" },
+      { "name": "The Local Contrast Rule", "body": "El contraste se resuelve con overlays y superficies locales sobre el fondo cinematográfico, no ocultando la escena con paneles opacos de gran tamaño.", "section": "colors" },
+      { "name": "The Compression Rule", "body": "Los titulares reducen interletrado y altura de línea para sostener masas compactas; el cuerpo abre la altura de línea y limita el ancho para recuperar calma.", "section": "typography" },
+      { "name": "The One Film Rule", "body": "Cada página cinematográfica recorre una sola película a través del scroll; una sección nueva no reinicia el vídeo ni rompe su continuidad.", "section": "layout" },
+      { "name": "The Mobile Stack Rule", "body": "En móvil la jerarquía se preserva apilando, no encogiendo: títulos, copy, acciones y columnas cambian de orden espacial sin perder tamaño legible.", "section": "layout" },
+      { "name": "The Flat-Until-Interactive Rule", "body": "Las superficies descansan en capas tonales y bordes; el brillo aparece como respuesta o señal, no como textura universal.", "section": "elevation" },
+      { "name": "The Edge Hierarchy Rule", "body": "Cuanto más estructural es el elemento, menos depende de la curva: secciones con líneas, controles con radios pequeños y sólo contenedores de información compleja con radios amplios.", "section": "shapes" },
+      { "name": "The Verified Work Rule", "body": "Una tarjeta de proyecto sólo existe visualmente cuando hay nombre, logo, descripción, necesidad, solución, resultado y URL reales; el estado vacío es parte oficial del sistema.", "section": "components" }
+    ],
+    "dos": [
+      "Do usar el cian para guiar: acción primaria, estado activo, foco, iconos y separadores importantes.",
+      "Do mantener el vídeo o gradiente profundo como atmósfera continua y añadir contraste de forma localizada.",
+      "Do sostener titulares compactos y copy respirado con anchos de lectura controlados.",
+      "Do conservar foco visible, objetivos de al menos 44px y una experiencia estática completa con movimiento reducido.",
+      "Do publicar proyectos únicamente cuando los datos y enlaces hayan sido verificados."
+    ],
+    "donts": [
+      "Don't introducir colores de acento competidores ni convertir el cian en relleno indiscriminado.",
+      "Don't cubrir el fondo cinematográfico con grandes tarjetas opacas o capas uniformes de glassmorphism.",
+      "Don't reiniciar el vídeo por sección, usar animaciones llamativas o depender del movimiento para comprender contenido.",
+      "Don't convertir cada sección en una cuadrícula uniforme de tarjetas; la jerarquía editorial debe seguir visible.",
+      "Don't inventar casos, clientes, logos, métricas, tecnologías, resultados o testimonios para llenar el portfolio."
+    ]
+  }
+}

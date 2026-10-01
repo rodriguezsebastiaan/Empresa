@@ -25,7 +25,7 @@ import { buildAdminDetailHref, buildAdminListHref } from '@/lib/admin-routes'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Detalle de asesoría | Konamy Systems',
+  title: 'Detalle de asesoría | Conexacod',
   robots: {
     index: false,
     follow: false,
@@ -103,7 +103,7 @@ export default async function AdminBookingDetailPage({
           kind: 'link',
           value: buildAdminWhatsApp(
             detail.phone,
-            `Hola ${detail.fullName}, seguimos atentos a su asesoría con Konamy Systems.`,
+            `Hola ${detail.fullName}, seguimos atentos a su asesoría con Conexacod.`,
           ),
           icon: 'whatsapp',
           external: true,

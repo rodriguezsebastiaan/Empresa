@@ -7,19 +7,19 @@ export function HomeCallToAction() {
   const whatsappHref = buildWhatsAppUrl()
 
   return (
-    <section className="relative border-t border-border/60 bg-secondary/20">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div className="max-w-lg">
-            <p className="mb-6 text-xs font-semibold tracking-[0.3em] text-primary">
-              HABLEMOS SOBRE SU EMPRESA
-            </p>
-            <h2 className="text-balance text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl">
-              Conversemos sobre el proceso que quiere mejorar.
+    <section id="contact" data-scene="contact" className="ks-scene ks-scene--tall border-t border-border/60 bg-secondary/20">
+      <div className="ks-scene-content mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="max-w-xl">
+            <h2 className="ks-type-section font-semibold">
+              Ahora construyamos lo que sigue.
             </h2>
-            <p className="mt-6 text-pretty leading-relaxed text-muted-foreground">
-              No necesita saber qué tecnología requiere. Empezamos entendiendo su
-              necesidad y diseñamos el siguiente paso.
+            <p className="ks-copy-primary mt-7">
+              Cuéntanos qué quieres resolver. Te ayudamos a convertirlo en una
+              solución digital clara, funcional y preparada para crecer.
+            </p>
+            <p className="ks-type-statement mt-10 max-w-md font-medium">
+              Una buena solución empieza por entender el problema correcto.
             </p>
           </div>
 

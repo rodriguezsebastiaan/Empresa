@@ -1,0 +1,4981 @@
+{
+  "baselineTrials": [
+    {
+      "width": 1440,
+      "transition": "1→2",
+      "events": [
+        {
+          "activeIndex": 1,
+          "at": 73440.5,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.5600000246606692,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4"
+        },
+        {
+          "activeIndex": 1,
+          "at": 73464,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.5600000246606692,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 1,
+          "at": 73529.90000000002,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.5600000246606692,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 73530.19999999995,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.5600000246606692,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 73544.19999999995,
+          "currentTime": 0,
+          "encodedBytes": 9423353,
+          "end": 73543,
+          "index": 2,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.5600000246606692,
+          "readyState": 4,
+          "start": 73443.69999999995,
+          "transferBytes": 9423653
+        },
+        {
+          "activeIndex": 1,
+          "at": 73959.79999999993,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.9802020448626894,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":1,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 74257.90000000002,
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.010101010101010102,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 74288,
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "observed-frame",
+          "presentedTime": 0.041667,
+          "progress": 0.010101010101010102,
+          "readyState": 4
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "transition": "2→3",
+      "events": [
+        {
+          "activeIndex": 2,
+          "at": 75210.69999999995,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.5604040897253788,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4"
+        },
+        {
+          "activeIndex": 2,
+          "at": 75232.29999999993,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.5604040897253788,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 2,
+          "at": 75294.29999999993,
+          "currentTime": 0,
+          "encodedBytes": 6376509,
+          "end": 75292.5,
+          "index": 3,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.5604040897253788,
+          "readyState": 1,
+          "start": 75216,
+          "transferBytes": 6376809
+        },
+        {
+          "activeIndex": 2,
+          "at": 75313.90000000002,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.5604040897253788,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 75314.19999999995,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.5604040897253788,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 75757.90000000002,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.9806061099273988,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":1,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 3,
+          "at": 76050.59999999998,
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.010444822691418469,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 76077.19999999995,
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "observed-frame",
+          "presentedTime": 0.041667,
+          "progress": 0.010444822691418469,
+          "readyState": 4
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "transition": "5→6",
+      "events": [
+        {
+          "activeIndex": 5,
+          "at": 77016.40000000002,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.5596719144570707,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4"
+        },
+        {
+          "activeIndex": 5,
+          "at": 77040.09999999998,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.5596719144570707,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 5,
+          "at": 77092.29999999993,
+          "currentTime": 0,
+          "encodedBytes": 5725638,
+          "end": 77090.90000000002,
+          "index": 6,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.5596719144570707,
+          "readyState": 1,
+          "start": 77019.5,
+          "transferBytes": 5725938
+        },
+        {
+          "activeIndex": 5,
+          "at": 77098.79999999993,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.5596719144570707,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 77099,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.5596719144570707,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 77294,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.9653280855429291,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":1,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 6,
+          "at": 77818.40000000002,
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.009772529987373735,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 77858,
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "observed-frame",
+          "presentedTime": 0.041667,
+          "progress": 0.009772529987373735,
+          "readyState": 4
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "transition": "1→2",
+      "events": [
+        {
+          "activeIndex": 1,
+          "at": 8233.999999999884,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.5604755532003437,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4"
+        },
+        {
+          "activeIndex": 1,
+          "at": 8252.099999999977,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.5604755532003437,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 1,
+          "at": 8267.400000000023,
+          "currentTime": 0,
+          "encodedBytes": 2972502,
+          "end": 8266.29999999993,
+          "index": 2,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.5604755532003437,
+          "readyState": 1,
+          "start": 8236.999999999884,
+          "transferBytes": 2972802
+        },
+        {
+          "activeIndex": 1,
+          "at": 8281.29999999993,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.5604755532003437,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 8281.499999999884,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.5604755532003437,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 8759.599999999977,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.980192399287032,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":1,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9039.900000000023,
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.010151795034431216,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9049.900000000023,
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "observed-frame",
+          "presentedTime": 0.041667,
+          "progress": 0.010151795034431216,
+          "readyState": 4
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "transition": "2→3",
+      "events": [
+        {
+          "activeIndex": 2,
+          "at": 9903.400000000023,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.55991497153424,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4"
+        },
+        {
+          "activeIndex": 2,
+          "at": 9924.70000000007,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.55991497153424,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 2,
+          "at": 9937.900000000023,
+          "currentTime": 0,
+          "encodedBytes": 2257654,
+          "end": 9936.400000000023,
+          "index": 3,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.55991497153424,
+          "readyState": 1,
+          "start": 9907.29999999993,
+          "transferBytes": 2257954
+        },
+        {
+          "activeIndex": 2,
+          "at": 9956.599999999977,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.55991497153424,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9956.79999999993,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.55991497153424,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 10446.70000000007,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.9804232568395336,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":1,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 3,
+          "at": 10736.79999999993,
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.006723900276879321,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 10744.400000000023,
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "observed-frame",
+          "presentedTime": 0,
+          "progress": 0.006723900276879321,
+          "readyState": 4
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "transition": "5→6",
+      "events": [
+        {
+          "activeIndex": 5,
+          "at": 11588.900000000023,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.5600817528906687,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4"
+        },
+        {
+          "activeIndex": 5,
+          "at": 11609.999999999884,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.5600817528906687,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 5,
+          "at": 11628.79999999993,
+          "currentTime": 0,
+          "encodedBytes": 1877782,
+          "end": 11627.70000000007,
+          "index": 6,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.5600817528906687,
+          "readyState": 1,
+          "start": 11592.70000000007,
+          "transferBytes": 1878082
+        },
+        {
+          "activeIndex": 5,
+          "at": 11649.29999999993,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.5600817528906687,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 11649.599999999977,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.5600817528906687,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 12099.70000000007,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.979991676493505,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":1,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 6,
+          "at": 12360.400000000023,
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.01499871210827284,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 12369.70000000007,
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "observed-frame",
+          "presentedTime": 0.083333,
+          "progress": 0.01499871210827284,
+          "readyState": 4
+        }
+      ]
+    }
+  ],
+  "baselineCounts": [
+    {
+      "width": 1440,
+      "renders": 41,
+      "styleWrites": 574
+    },
+    {
+      "width": 390,
+      "renders": 43,
+      "styleWrites": 602
+    }
+  ],
+  "afterTrials": [
+    {
+      "width": 1440,
+      "transition": "1→2",
+      "events": [
+        {
+          "activeIndex": 1,
+          "at": 8038.299999999814,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "incoming-target",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 1,
+          "at": 8038.5,
+          "confirmation": "pending",
+          "currentTime": 0,
+          "index": 2,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 1,
+          "at": 8053.100000000093,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4"
+        },
+        {
+          "activeIndex": 1,
+          "at": 8085.700000000186,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 1,
+          "at": 8111.100000000093,
+          "currentTime": 0,
+          "encodedBytes": 9423353,
+          "end": 8110,
+          "index": 2,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 1,
+          "start": 8071.899999999907,
+          "transferBytes": 9423653
+        },
+        {
+          "activeIndex": 1,
+          "at": 8122.899999999907,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 8123,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.4501009854403409,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 8405.799999999814,
+          "confirmation": "fallback",
+          "currentTime": 0,
+          "index": 2,
+          "kind": "frame-ready",
+          "presentedTime": null,
+          "progress": 0.539798004458649,
+          "readyState": 4,
+          "target": 0
+        },
+        {
+          "activeIndex": 1,
+          "at": 9109,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.9802020448626894,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":9,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":12,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9386.899999999909,
+          "confirmation": "pending",
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.010101010101010102,
+          "readyState": 1,
+          "target": 0.06060606060606061
+        },
+        {
+          "activeIndex": 2,
+          "at": 9387,
+          "currentTime": 0.060606,
+          "heldIndex": 1,
+          "index": 2,
+          "kind": "transition-delayed",
+          "presentedTime": null,
+          "progress": 0.010101010101010102,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 2,
+          "at": 9429,
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "seeked",
+          "presentedTime": null,
+          "progress": 0.010101010101010102,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9429.200000000186,
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.010101010101010102,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9464.600000000091,
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "observed-frame",
+          "presentedTime": 0.041667,
+          "progress": 0.010101010101010102,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9465.899999999909,
+          "confirmation": "presented",
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "frame-ready",
+          "presentedTime": 0.041667,
+          "progress": 0.010101010101010102,
+          "readyState": 4,
+          "target": 0.06060606060606061
+        },
+        {
+          "activeIndex": 2,
+          "at": 9466.100000000091,
+          "currentTime": 0.060606,
+          "index": 2,
+          "kind": "visible",
+          "presentedTime": 0.041667,
+          "progress": 0.010101010101010102,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":2,\"assignments\":1,\"coalesced\":0,\"equivalent\":11,\"frameConfirmations\":1,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":15,\"targetTime\":0.06060606060606061,\"requestedTime\":0.06060606060606061,\"presentedTime\":0.041667,\"seekInFlight\":false}",
+          "target": 0.06060606060606061
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "transition": "2→3",
+      "events": [
+        {
+          "activeIndex": 2,
+          "at": 9730.899999999909,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "incoming-target",
+          "presentedTime": null,
+          "progress": 0.4496969203756313,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9731.200000000186,
+          "confirmation": "pending",
+          "currentTime": 0,
+          "index": 3,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.4496969203756313,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9748.899999999909,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.4496969203756313,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4"
+        },
+        {
+          "activeIndex": 2,
+          "at": 10031.700000000186,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.4496969203756313,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 2,
+          "at": 10037.700000000186,
+          "currentTime": 0,
+          "encodedBytes": 6376509,
+          "end": 10035.5,
+          "index": 3,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.4496969203756313,
+          "readyState": 1,
+          "start": 9753.299999999814,
+          "transferBytes": 6376809
+        },
+        {
+          "activeIndex": 2,
+          "at": 10073,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.4496969203756313,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 10074.100000000091,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "observed-frame",
+          "presentedTime": 0,
+          "progress": 0.4496969203756313,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 10074.700000000186,
+          "confirmation": "presented",
+          "currentTime": 0,
+          "index": 3,
+          "kind": "frame-ready",
+          "presentedTime": 0,
+          "progress": 0.4496969203756313,
+          "readyState": 4,
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 10077.799999999814,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": 0,
+          "progress": 0.4496969203756313,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 11004.100000000091,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "visible",
+          "presentedTime": 0,
+          "progress": 0.9806061099273988,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":11,\"frameConfirmations\":1,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":15,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":0,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 3,
+          "at": 11284.799999999814,
+          "confirmation": "pending",
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "frame-pending",
+          "presentedTime": 0,
+          "progress": 0.010444822691418469,
+          "readyState": 1,
+          "target": 0.06266893614851081
+        },
+        {
+          "activeIndex": 3,
+          "at": 11284.899999999909,
+          "currentTime": 0.062668,
+          "heldIndex": 2,
+          "index": 3,
+          "kind": "transition-delayed",
+          "presentedTime": 0,
+          "progress": 0.010444822691418469,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 3,
+          "at": 11336.5,
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "seeked",
+          "presentedTime": 0,
+          "progress": 0.010444822691418469,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 11336.899999999909,
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": 0,
+          "progress": 0.010444822691418469,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 11389.600000000091,
+          "confirmation": "presented",
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "frame-ready",
+          "presentedTime": 0,
+          "progress": 0.010444822691418469,
+          "readyState": 4,
+          "target": 0.06266893614851081
+        },
+        {
+          "activeIndex": 3,
+          "at": 11389.899999999909,
+          "currentTime": 0.062668,
+          "index": 3,
+          "kind": "visible",
+          "presentedTime": 0,
+          "progress": 0.010444822691418469,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":2,\"assignments\":1,\"coalesced\":0,\"equivalent\":13,\"frameConfirmations\":2,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":18,\"targetTime\":0.06266893614851081,\"requestedTime\":0.06266893614851081,\"presentedTime\":0.041667,\"seekInFlight\":false}",
+          "target": 0.06266893614851081
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "transition": "5→6",
+      "events": [
+        {
+          "activeIndex": 5,
+          "at": 11686.700000000186,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "incoming-target",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 5,
+          "at": 11687.100000000091,
+          "confirmation": "pending",
+          "currentTime": 0,
+          "index": 6,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 5,
+          "at": 11703.200000000186,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4"
+        },
+        {
+          "activeIndex": 5,
+          "at": 11760.299999999814,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 5,
+          "at": 11800.600000000091,
+          "currentTime": 0,
+          "encodedBytes": 5725638,
+          "end": 11798.100000000091,
+          "index": 6,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 1,
+          "start": 11708.799999999814,
+          "transferBytes": 5725938
+        },
+        {
+          "activeIndex": 5,
+          "at": 11881.899999999909,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 11882.100000000091,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.4497726286300505,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 11890.5,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "observed-frame",
+          "presentedTime": 0,
+          "progress": 0.4497726286300505,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 11891.299999999814,
+          "confirmation": "presented",
+          "currentTime": 0,
+          "index": 6,
+          "kind": "frame-ready",
+          "presentedTime": 0,
+          "progress": 0.4497726286300505,
+          "readyState": 4,
+          "target": 0
+        },
+        {
+          "activeIndex": 5,
+          "at": 12564.600000000091,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "visible",
+          "presentedTime": 0,
+          "progress": 0.9653280855429291,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":9,\"frameConfirmations\":1,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":10,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":0,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 6,
+          "at": 13086,
+          "confirmation": "pending",
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "frame-pending",
+          "presentedTime": 0,
+          "progress": 0.009772529987373735,
+          "readyState": 1,
+          "target": 0.05863517992424242
+        },
+        {
+          "activeIndex": 6,
+          "at": 13086.200000000186,
+          "currentTime": 0.058635,
+          "heldIndex": 5,
+          "index": 6,
+          "kind": "transition-delayed",
+          "presentedTime": 0,
+          "progress": 0.009772529987373735,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 6,
+          "at": 13106.600000000091,
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "seeked",
+          "presentedTime": 0,
+          "progress": 0.009772529987373735,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 13107,
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": 0,
+          "progress": 0.009772529987373735,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 13128.299999999814,
+          "confirmation": "presented",
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "frame-ready",
+          "presentedTime": 0,
+          "progress": 0.009772529987373735,
+          "readyState": 4,
+          "target": 0.05863517992424242
+        },
+        {
+          "activeIndex": 6,
+          "at": 13128.600000000091,
+          "currentTime": 0.058635,
+          "index": 6,
+          "kind": "visible",
+          "presentedTime": 0,
+          "progress": 0.009772529987373735,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":2,\"assignments\":1,\"coalesced\":0,\"equivalent\":13,\"frameConfirmations\":2,\"fallbackConfirmations\":0,\"sourceResets\":2,\"flushes\":15,\"targetTime\":0.05863517992424242,\"requestedTime\":0.05863517992424242,\"presentedTime\":0.041667,\"seekInFlight\":false}",
+          "target": 0.05863517992424242
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "transition": "1→2",
+      "events": [
+        {
+          "activeIndex": 1,
+          "at": 7981.299999999814,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "incoming-target",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 1,
+          "at": 7981.600000000093,
+          "confirmation": "pending",
+          "currentTime": 0,
+          "index": 2,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 1,
+          "at": 7996.399999999907,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4"
+        },
+        {
+          "activeIndex": 1,
+          "at": 8035.299999999814,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 1,
+          "at": 8039.100000000093,
+          "currentTime": 0,
+          "encodedBytes": 2972502,
+          "end": 8037.299999999814,
+          "index": 2,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 1,
+          "start": 8016.399999999907,
+          "transferBytes": 2972802
+        },
+        {
+          "activeIndex": 1,
+          "at": 8067.899999999907,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 8068.100000000093,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.4495747536562516,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 1,
+          "at": 8340.299999999814,
+          "confirmation": "fallback",
+          "currentTime": 0,
+          "index": 2,
+          "kind": "frame-ready",
+          "presentedTime": null,
+          "progress": 0.5400016115064161,
+          "readyState": 4,
+          "target": 0
+        },
+        {
+          "activeIndex": 1,
+          "at": 9034.5,
+          "currentTime": 0,
+          "index": 2,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.980192399287032,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":9,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":12,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9309.700000000186,
+          "confirmation": "pending",
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.010151795034431216,
+          "readyState": 1,
+          "target": 0.0609107702065873
+        },
+        {
+          "activeIndex": 2,
+          "at": 9309.799999999814,
+          "currentTime": 0.06091,
+          "heldIndex": 1,
+          "index": 2,
+          "kind": "transition-delayed",
+          "presentedTime": null,
+          "progress": 0.010151795034431216,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 2,
+          "at": 9353.600000000091,
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "seeked",
+          "presentedTime": null,
+          "progress": 0.010151795034431216,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9354,
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.010151795034431216,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9381.100000000091,
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "observed-frame",
+          "presentedTime": 0.041667,
+          "progress": 0.010151795034431216,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9382.100000000091,
+          "confirmation": "presented",
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "frame-ready",
+          "presentedTime": 0.041667,
+          "progress": 0.010151795034431216,
+          "readyState": 4,
+          "target": 0.0609107702065873
+        },
+        {
+          "activeIndex": 2,
+          "at": 9382.299999999814,
+          "currentTime": 0.06091,
+          "index": 2,
+          "kind": "visible",
+          "presentedTime": 0.041667,
+          "progress": 0.010151795034431216,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":2,\"assignments\":1,\"coalesced\":0,\"equivalent\":11,\"frameConfirmations\":1,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":15,\"targetTime\":0.0609107702065873,\"requestedTime\":0.0609107702065873,\"presentedTime\":0.041667,\"seekInFlight\":false}",
+          "target": 0.0609107702065873
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "transition": "2→3",
+      "events": [
+        {
+          "activeIndex": 2,
+          "at": 9619.899999999909,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "incoming-target",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9620.200000000186,
+          "confirmation": "pending",
+          "currentTime": 0,
+          "index": 3,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 9637.299999999814,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4"
+        },
+        {
+          "activeIndex": 2,
+          "at": 9653.299999999814,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 2,
+          "at": 9659.700000000186,
+          "currentTime": 0,
+          "encodedBytes": 2257654,
+          "end": 9658.399999999909,
+          "index": 3,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 1,
+          "start": 9641.299999999814,
+          "transferBytes": 2257954
+        },
+        {
+          "activeIndex": 2,
+          "at": 9679,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9679.200000000186,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.44961753100045454,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 2,
+          "at": 9986,
+          "confirmation": "fallback",
+          "currentTime": 0,
+          "index": 3,
+          "kind": "frame-ready",
+          "presentedTime": null,
+          "progress": 0.5400957707581652,
+          "readyState": 4,
+          "target": 0
+        },
+        {
+          "activeIndex": 2,
+          "at": 10709.700000000186,
+          "currentTime": 0,
+          "index": 3,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.9804232568395336,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":9,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":10,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 3,
+          "at": 10979.899999999909,
+          "confirmation": "pending",
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.006723900276879321,
+          "readyState": 1,
+          "target": 0.04034340166127592
+        },
+        {
+          "activeIndex": 3,
+          "at": 10979.899999999909,
+          "currentTime": 0.040343,
+          "heldIndex": 2,
+          "index": 3,
+          "kind": "transition-delayed",
+          "presentedTime": null,
+          "progress": 0.006723900276879321,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 3,
+          "at": 11011.700000000186,
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "seeked",
+          "presentedTime": null,
+          "progress": 0.006723900276879321,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 11012,
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.006723900276879321,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 11032.600000000091,
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "observed-frame",
+          "presentedTime": 0,
+          "progress": 0.006723900276879321,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 3,
+          "at": 11033.700000000186,
+          "confirmation": "presented",
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "frame-ready",
+          "presentedTime": 0,
+          "progress": 0.006723900276879321,
+          "readyState": 4,
+          "target": 0.04034340166127592
+        },
+        {
+          "activeIndex": 3,
+          "at": 11033.799999999814,
+          "currentTime": 0.040343,
+          "index": 3,
+          "kind": "visible",
+          "presentedTime": 0,
+          "progress": 0.006723900276879321,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":2,\"assignments\":1,\"coalesced\":0,\"equivalent\":11,\"frameConfirmations\":1,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":13,\"targetTime\":0.040343401661275924,\"requestedTime\":0.040343401661275924,\"presentedTime\":0,\"seekInFlight\":false}",
+          "target": 0.04034340166127592
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "transition": "5→6",
+      "events": [
+        {
+          "activeIndex": 5,
+          "at": 11322.299999999814,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "incoming-target",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 5,
+          "at": 11322.600000000091,
+          "confirmation": "pending",
+          "currentTime": 0,
+          "index": 6,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 0,
+          "target": 0
+        },
+        {
+          "activeIndex": 5,
+          "at": 11339.200000000186,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "source-attached",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 0,
+          "src": "/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4"
+        },
+        {
+          "activeIndex": 5,
+          "at": 11373.899999999909,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadedmetadata",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 5,
+          "at": 11374.299999999814,
+          "currentTime": 0,
+          "encodedBytes": 1877782,
+          "end": 11372,
+          "index": 6,
+          "kind": "network",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 1,
+          "start": 11344.399999999909,
+          "transferBytes": 1878082
+        },
+        {
+          "activeIndex": 5,
+          "at": 11448.700000000186,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "loadeddata",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 11449,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.4499047394238116,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 5,
+          "at": 11748.799999999814,
+          "confirmation": "fallback",
+          "currentTime": 0,
+          "index": 6,
+          "kind": "frame-ready",
+          "presentedTime": null,
+          "progress": 0.5404072616933087,
+          "readyState": 4,
+          "target": 0
+        },
+        {
+          "activeIndex": 5,
+          "at": 12388.299999999814,
+          "currentTime": 0,
+          "index": 6,
+          "kind": "visible",
+          "presentedTime": null,
+          "progress": 0.979991676493505,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":11,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":13,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "target": 0
+        },
+        {
+          "activeIndex": 6,
+          "at": 12637.899999999909,
+          "confirmation": "pending",
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "frame-pending",
+          "presentedTime": null,
+          "progress": 0.01499871210827284,
+          "readyState": 1,
+          "target": 0.08999227264963705
+        },
+        {
+          "activeIndex": 6,
+          "at": 12638,
+          "currentTime": 0.089992,
+          "heldIndex": 5,
+          "index": 6,
+          "kind": "transition-delayed",
+          "presentedTime": null,
+          "progress": 0.01499871210827284,
+          "readyState": 1
+        },
+        {
+          "activeIndex": 6,
+          "at": 12663.100000000091,
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "seeked",
+          "presentedTime": null,
+          "progress": 0.01499871210827284,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 12663.399999999909,
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "canplay",
+          "presentedTime": null,
+          "progress": 0.01499871210827284,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 12671.899999999909,
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "observed-frame",
+          "presentedTime": 0.083333,
+          "progress": 0.01499871210827284,
+          "readyState": 4
+        },
+        {
+          "activeIndex": 6,
+          "at": 12672.899999999909,
+          "confirmation": "presented",
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "frame-ready",
+          "presentedTime": 0.083333,
+          "progress": 0.01499871210827284,
+          "readyState": 4,
+          "target": 0.08999227264963705
+        },
+        {
+          "activeIndex": 6,
+          "at": 12673,
+          "currentTime": 0.089992,
+          "index": 6,
+          "kind": "visible",
+          "presentedTime": 0.083333,
+          "progress": 0.01499871210827284,
+          "readyState": 4,
+          "seek": "{\"targetUpdates\":2,\"assignments\":1,\"coalesced\":0,\"equivalent\":13,\"frameConfirmations\":1,\"fallbackConfirmations\":1,\"sourceResets\":2,\"flushes\":16,\"targetTime\":0.08999227264963705,\"requestedTime\":0.08999227264963705,\"presentedTime\":0.083333,\"seekInFlight\":false}",
+          "target": 0.08999227264963705
+        }
+      ]
+    }
+  ],
+  "afterCounts": [
+    {
+      "width": 1440,
+      "renders": 48,
+      "styleWrites": 42,
+      "avoided": 630,
+      "hints": 9,
+      "emptyAfterVisible": 0,
+      "heapStart": 18708169,
+      "heapEnd": 20418074
+    },
+    {
+      "width": 390,
+      "renders": 44,
+      "styleWrites": 40,
+      "avoided": 576,
+      "hints": 9,
+      "emptyAfterVisible": 0,
+      "heapStart": 18260519,
+      "heapEnd": 21484503
+    }
+  ],
+  "initial": [
+    {
+      "width": 1440,
+      "diag": {
+        "activeIndex": 1,
+        "avoidedStyleWrites": 4515,
+        "emptyAfterVisible": 0,
+        "events": [
+          {
+            "activeIndex": 0,
+            "at": 1151.6000000000931,
+            "currentTime": 0,
+            "index": 0,
+            "kind": "source-already-attached",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4"
+          },
+          {
+            "activeIndex": 0,
+            "at": 1151.7999999998135,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "source-already-attached",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4"
+          },
+          {
+            "activeIndex": 0,
+            "at": 1157,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "incoming-target",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1157.2000000001865,
+            "confirmation": "pending",
+            "currentTime": 0,
+            "index": 0,
+            "kind": "frame-pending",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1157.2000000001865,
+            "confirmation": "pending",
+            "currentTime": 0,
+            "index": 1,
+            "kind": "frame-pending",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1157.3999999999069,
+            "currentTime": 0,
+            "heldIndex": null,
+            "index": 0,
+            "kind": "transition-delayed",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1244.8999999999069,
+            "currentTime": 0,
+            "encodedBytes": 3662874,
+            "end": 1213.2000000001865,
+            "index": 0,
+            "kind": "network",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 1,
+            "start": 1181.2000000001865,
+            "transferBytes": 3663174
+          },
+          {
+            "activeIndex": 0,
+            "at": 1245.1000000000931,
+            "currentTime": 0,
+            "encodedBytes": 5088201,
+            "end": 1218.6000000000931,
+            "index": 1,
+            "kind": "network",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 1,
+            "start": 1182.2999999998135,
+            "transferBytes": 5088501
+          },
+          {
+            "activeIndex": 0,
+            "at": 1246.2000000001865,
+            "currentTime": 0,
+            "index": 0,
+            "kind": "loadedmetadata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 1
+          },
+          {
+            "activeIndex": 0,
+            "at": 1246.5,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "loadedmetadata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 1
+          },
+          {
+            "activeIndex": 0,
+            "at": 1299.2999999998135,
+            "currentTime": 0.000539,
+            "index": 0,
+            "kind": "loadeddata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1299.5,
+            "currentTime": 0.000723,
+            "index": 0,
+            "kind": "canplay",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1311.7000000001865,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "loadeddata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1312,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "canplay",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1331.2999999998135,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "observed-frame",
+            "presentedTime": 0,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1332.8999999999069,
+            "confirmation": "playback",
+            "currentTime": 0.034115,
+            "index": 0,
+            "kind": "frame-ready",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1333.1000000000931,
+            "confirmation": "presented",
+            "currentTime": 0,
+            "index": 1,
+            "kind": "frame-ready",
+            "presentedTime": 0,
+            "progress": 0,
+            "readyState": 4,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1333.2999999998135,
+            "currentTime": 0.034115,
+            "index": 0,
+            "kind": "visible",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4,
+            "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":0,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":1,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1396.6000000000931,
+            "currentTime": 0.097861,
+            "index": 0,
+            "kind": "observed-frame",
+            "presentedTime": 0.125,
+            "progress": 0.010666667090521918,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 7108.399999999907,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "visible",
+            "presentedTime": 0,
+            "progress": 0.9653333197699652,
+            "readyState": 4,
+            "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":308,\"frameConfirmations\":1,\"fallbackConfirmations\":0,\"sourceResets\":1,\"flushes\":312,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":0,\"seekInFlight\":false}",
+            "target": 0
+          },
+          {
+            "activeIndex": 1,
+            "at": 7315.399999999907,
+            "currentTime": 6,
+            "index": 0,
+            "kind": "incoming-target",
+            "presentedTime": 0.125,
+            "progress": 0,
+            "readyState": 4,
+            "target": 6
+          },
+          {
+            "activeIndex": 1,
+            "at": 7315.5,
+            "confirmation": "pending",
+            "currentTime": 6,
+            "index": 0,
+            "kind": "frame-pending",
+            "presentedTime": 0.125,
+            "progress": 0,
+            "readyState": 4,
+            "target": 6
+          },
+          {
+            "activeIndex": 1,
+            "at": 7315.600000000093,
+            "currentTime": 6,
+            "heldIndex": 1,
+            "index": 0,
+            "kind": "transition-delayed",
+            "presentedTime": 0.125,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 1,
+            "at": 7578.100000000093,
+            "confirmation": "fallback",
+            "currentTime": 6,
+            "index": 0,
+            "kind": "frame-ready",
+            "presentedTime": 0.125,
+            "progress": 0,
+            "readyState": 4,
+            "target": 6
+          },
+          {
+            "activeIndex": 1,
+            "at": 7578.399999999907,
+            "currentTime": 6,
+            "index": 0,
+            "kind": "visible",
+            "presentedTime": 0.125,
+            "progress": 0,
+            "readyState": 4,
+            "seek": "{\"targetUpdates\":2,\"assignments\":0,\"coalesced\":0,\"equivalent\":2,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":1,\"flushes\":3,\"targetTime\":6,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+            "target": 6
+          }
+        ],
+        "hintWrites": 3,
+        "jsHeapBytes": 18708169,
+        "progress": 0,
+        "renders": 325,
+        "styleWrites": 35
+      },
+      "videos": [
+        {
+          "opacity": "0.18",
+          "seek": "{\"targetUpdates\":2,\"assignments\":0,\"coalesced\":0,\"equivalent\":2,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":1,\"flushes\":3,\"targetTime\":6,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "opacity": "0.82",
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":321,\"frameConfirmations\":1,\"fallbackConfirmations\":0,\"sourceResets\":1,\"flushes\":325,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":0,\"seekInFlight\":false}",
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "diag": {
+        "activeIndex": 1,
+        "avoidedStyleWrites": 4475,
+        "emptyAfterVisible": 0,
+        "events": [
+          {
+            "activeIndex": 0,
+            "at": 1036.5,
+            "currentTime": 0,
+            "index": 0,
+            "kind": "source-already-attached",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4"
+          },
+          {
+            "activeIndex": 0,
+            "at": 1036.6000000000931,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "source-already-attached",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4"
+          },
+          {
+            "activeIndex": 0,
+            "at": 1040.7000000001865,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "incoming-target",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1041,
+            "confirmation": "pending",
+            "currentTime": 0,
+            "index": 0,
+            "kind": "frame-pending",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1041.1000000000931,
+            "confirmation": "pending",
+            "currentTime": 0,
+            "index": 1,
+            "kind": "frame-pending",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1041.2999999998135,
+            "currentTime": 0,
+            "heldIndex": null,
+            "index": 0,
+            "kind": "transition-delayed",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1102.3999999999069,
+            "currentTime": 0,
+            "encodedBytes": 1184291,
+            "end": 1090.8999999999069,
+            "index": 0,
+            "kind": "network",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "start": 1070.7000000001865,
+            "transferBytes": 1184591
+          },
+          {
+            "activeIndex": 0,
+            "at": 1102.6000000000931,
+            "currentTime": 0,
+            "encodedBytes": 1662001,
+            "end": 1092.7999999998135,
+            "index": 1,
+            "kind": "network",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 0,
+            "start": 1071.6000000000931,
+            "transferBytes": 1662301
+          },
+          {
+            "activeIndex": 0,
+            "at": 1118.8999999999069,
+            "currentTime": 0,
+            "index": 0,
+            "kind": "loadedmetadata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 1
+          },
+          {
+            "activeIndex": 0,
+            "at": 1119.2999999998135,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "loadedmetadata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 1
+          },
+          {
+            "activeIndex": 0,
+            "at": 1166.5,
+            "currentTime": 0.000535,
+            "index": 0,
+            "kind": "loadeddata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1166.7000000001865,
+            "currentTime": 0.000776,
+            "index": 0,
+            "kind": "canplay",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1167.6000000000931,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "loadeddata",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1167.7000000001865,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "canplay",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1176.6000000000931,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "observed-frame",
+            "presentedTime": 0,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 1177.7000000001865,
+            "confirmation": "playback",
+            "currentTime": 0.011761,
+            "index": 0,
+            "kind": "frame-ready",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1177.8999999999069,
+            "confirmation": "presented",
+            "currentTime": 0,
+            "index": 1,
+            "kind": "frame-ready",
+            "presentedTime": 0,
+            "progress": 0,
+            "readyState": 4,
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1178.2000000001865,
+            "currentTime": 0.011761,
+            "index": 0,
+            "kind": "visible",
+            "presentedTime": null,
+            "progress": 0,
+            "readyState": 4,
+            "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":0,\"frameConfirmations\":0,\"fallbackConfirmations\":0,\"sourceResets\":1,\"flushes\":1,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+            "target": 0
+          },
+          {
+            "activeIndex": 0,
+            "at": 1229.5,
+            "currentTime": 0.063518,
+            "index": 0,
+            "kind": "observed-frame",
+            "presentedTime": 0.041667,
+            "progress": 0.0037914692508100897,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 0,
+            "at": 6983.700000000186,
+            "currentTime": 0,
+            "index": 1,
+            "kind": "visible",
+            "presentedTime": 0,
+            "progress": 0.966824644549763,
+            "readyState": 4,
+            "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":306,\"frameConfirmations\":1,\"fallbackConfirmations\":0,\"sourceResets\":1,\"flushes\":310,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":0,\"seekInFlight\":false}",
+            "target": 0
+          },
+          {
+            "activeIndex": 1,
+            "at": 7194.799999999814,
+            "currentTime": 6,
+            "index": 0,
+            "kind": "incoming-target",
+            "presentedTime": 0.041667,
+            "progress": 0,
+            "readyState": 4,
+            "target": 6
+          },
+          {
+            "activeIndex": 1,
+            "at": 7195,
+            "confirmation": "pending",
+            "currentTime": 6,
+            "index": 0,
+            "kind": "frame-pending",
+            "presentedTime": 0.041667,
+            "progress": 0,
+            "readyState": 4,
+            "target": 6
+          },
+          {
+            "activeIndex": 1,
+            "at": 7195,
+            "currentTime": 6,
+            "heldIndex": 1,
+            "index": 0,
+            "kind": "transition-delayed",
+            "presentedTime": 0.041667,
+            "progress": 0,
+            "readyState": 4
+          },
+          {
+            "activeIndex": 1,
+            "at": 7456.5,
+            "confirmation": "fallback",
+            "currentTime": 6,
+            "index": 0,
+            "kind": "frame-ready",
+            "presentedTime": 0.041667,
+            "progress": 0,
+            "readyState": 4,
+            "target": 6
+          },
+          {
+            "activeIndex": 1,
+            "at": 7456.700000000186,
+            "currentTime": 6,
+            "index": 0,
+            "kind": "visible",
+            "presentedTime": 0.041667,
+            "progress": 0,
+            "readyState": 4,
+            "seek": "{\"targetUpdates\":2,\"assignments\":0,\"coalesced\":0,\"equivalent\":2,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":1,\"flushes\":3,\"targetTime\":6,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+            "target": 6
+          }
+        ],
+        "hintWrites": 3,
+        "jsHeapBytes": 18260519,
+        "progress": 0,
+        "renders": 322,
+        "styleWrites": 33
+      },
+      "videos": [
+        {
+          "opacity": "0.18",
+          "seek": "{\"targetUpdates\":2,\"assignments\":0,\"coalesced\":0,\"equivalent\":2,\"frameConfirmations\":0,\"fallbackConfirmations\":1,\"sourceResets\":1,\"flushes\":3,\"targetTime\":6,\"requestedTime\":null,\"presentedTime\":null,\"seekInFlight\":false}",
+          "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+          "time": 6
+        },
+        {
+          "opacity": "0.82",
+          "seek": "{\"targetUpdates\":1,\"assignments\":0,\"coalesced\":0,\"equivalent\":318,\"frameConfirmations\":1,\"fallbackConfirmations\":0,\"sourceResets\":1,\"flushes\":322,\"targetTime\":0,\"requestedTime\":null,\"presentedTime\":0,\"seekInFlight\":false}",
+          "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        },
+        {
+          "opacity": "0",
+          "src": null,
+          "time": 0
+        }
+      ]
+    }
+  ],
+  "stress": [
+    {
+      "width": 1440,
+      "states": [
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.202424
+            }
+          ],
+          "y": 1098.4000244140625
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 5.999
+            }
+          ],
+          "y": 2088
+        },
+        {
+          "active": 3,
+          "visible": [
+            {
+              "index": "3",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.201142
+            }
+          ],
+          "y": 3064
+        },
+        {
+          "active": 4,
+          "visible": [
+            {
+              "index": "4",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.19803
+            }
+          ],
+          "y": 3996.800048828125
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.200455
+            }
+          ],
+          "y": 4987.2001953125
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.198029
+            }
+          ],
+          "y": 5976.7998046875
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.6515",
+              "ready": 4,
+              "time": 5.879243
+            },
+            {
+              "index": "6",
+              "opacity": "0.3485",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 5759.2001953125
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.1256",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "6",
+              "opacity": "0.8744",
+              "ready": 4,
+              "time": 0.063485
+            }
+          ],
+          "y": 5789.60009765625
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.6515",
+              "ready": 4,
+              "time": 5.879243
+            },
+            {
+              "index": "6",
+              "opacity": "0.3485",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 5759.2001953125
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.1297",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "6",
+              "opacity": "0.8703",
+              "ready": 4,
+              "time": 0.058635
+            }
+          ],
+          "y": 5788.7998046875
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.8787",
+              "ready": 4,
+              "time": 5.821061
+            },
+            {
+              "index": "6",
+              "opacity": "0.1213",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 5749.60009765625
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.1048",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "6",
+              "opacity": "0.8952",
+              "ready": 4,
+              "time": 0.087727
+            }
+          ],
+          "y": 5793.60009765625
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 0.087727
+            }
+          ],
+          "y": 2860.800048828125
+        },
+        {
+          "active": 3,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.0994",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "3",
+              "opacity": "0.9006",
+              "ready": 4,
+              "time": 0.094001
+            }
+          ],
+          "y": 2894.39990234375
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.4072",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "3",
+              "opacity": "0.5928",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 2870.39990234375
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.6533",
+              "ready": 4,
+              "time": 5.878787
+            },
+            {
+              "index": "3",
+              "opacity": "0.3467",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 2860
+        },
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 0.121212
+            }
+          ],
+          "y": 920
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 4.199242
+            }
+          ],
+          "y": 6472
+        },
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 4.199242
+            }
+          ],
+          "y": 1296
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.799242
+            }
+          ],
+          "y": 6076
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.801666
+            }
+          ],
+          "y": 5086.39990234375
+        },
+        {
+          "active": 4,
+          "visible": [
+            {
+              "index": "4",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.799242
+            }
+          ],
+          "y": 4096
+        },
+        {
+          "active": 3,
+          "visible": [
+            {
+              "index": "3",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.801713
+            }
+          ],
+          "y": 3156
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.796363
+            }
+          ],
+          "y": 2186.39990234375
+        },
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.803636
+            }
+          ],
+          "y": 1197.5999755859375
+        }
+      ],
+      "blank": 0,
+      "rendersAfterSettle": 438,
+      "rendersAfterIdle": 438,
+      "opacityStable": true,
+      "heapBytes": 21369219,
+      "sources": [
+        "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+        "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+        "/videos/cinematic/optimized/desktop/video4_PuntaIceberg_h264.mp4",
+        "/videos/cinematic/optimized/desktop/video5_IcebergAbajo_h264.mp4",
+        "/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4"
+      ]
+    },
+    {
+      "width": 390,
+      "states": [
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.202847
+            }
+          ],
+          "y": 1032
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.198351
+            }
+          ],
+          "y": 1967.199951171875
+        },
+        {
+          "active": 3,
+          "visible": [
+            {
+              "index": "3",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.199027
+            }
+          ],
+          "y": 2978.39990234375
+        },
+        {
+          "active": 4,
+          "visible": [
+            {
+              "index": "4",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.200807
+            }
+          ],
+          "y": 4391.2001953125
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.198545
+            }
+          ],
+          "y": 6029.60009765625
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.201582
+            }
+          ],
+          "y": 7354.39990234375
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.6488",
+              "ready": 4,
+              "time": 5.87995
+            },
+            {
+              "index": "6",
+              "opacity": "0.3512",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 7140
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.0984",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "6",
+              "opacity": "0.9016",
+              "ready": 4,
+              "time": 0.095164
+            }
+          ],
+          "y": 7183.2001953125
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.6488",
+              "ready": 4,
+              "time": 5.87995
+            },
+            {
+              "index": "6",
+              "opacity": "0.3512",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 7140
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.1029",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "6",
+              "opacity": "0.8971",
+              "ready": 4,
+              "time": 0.089992
+            }
+          ],
+          "y": 7182.39990234375
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.8858",
+              "ready": 4,
+              "time": 5.81924
+            },
+            {
+              "index": "6",
+              "opacity": "0.1142",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 7125.60009765625
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "0.063",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "6",
+              "opacity": "0.937",
+              "ready": 4,
+              "time": 0.136525
+            }
+          ],
+          "y": 7189.60009765625
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.6387",
+              "ready": 4,
+              "time": 5.882539
+            },
+            {
+              "index": "3",
+              "opacity": "0.3613",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 2692
+        },
+        {
+          "active": 3,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.127",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "3",
+              "opacity": "0.873",
+              "ready": 4,
+              "time": 0.0618
+            }
+          ],
+          "y": 2724
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.4166",
+              "ready": 4,
+              "time": 5.999
+            },
+            {
+              "index": "3",
+              "opacity": "0.5834",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 2700.800048828125
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "0.6387",
+              "ready": 4,
+              "time": 5.882539
+            },
+            {
+              "index": "3",
+              "opacity": "0.3613",
+              "ready": 4,
+              "time": 0
+            }
+          ],
+          "y": 2692
+        },
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 0.117725
+            }
+          ],
+          "y": 862.4000244140625
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 4.200289
+            }
+          ],
+          "y": 7818.39990234375
+        },
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 2.400575
+            }
+          ],
+          "y": 1219.199951171875
+        },
+        {
+          "active": 6,
+          "visible": [
+            {
+              "index": "6",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.801325
+            }
+          ],
+          "y": 7447.2001953125
+        },
+        {
+          "active": 5,
+          "visible": [
+            {
+              "index": "5",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.798898
+            }
+          ],
+          "y": 6172
+        },
+        {
+          "active": 4,
+          "visible": [
+            {
+              "index": "4",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.79906
+            }
+          ],
+          "y": 4560
+        },
+        {
+          "active": 3,
+          "visible": [
+            {
+              "index": "3",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.799826
+            }
+          ],
+          "y": 3112.800048828125
+        },
+        {
+          "active": 2,
+          "visible": [
+            {
+              "index": "2",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.803263
+            }
+          ],
+          "y": 2060.800048828125
+        },
+        {
+          "active": 1,
+          "visible": [
+            {
+              "index": "1",
+              "opacity": "1",
+              "ready": 4,
+              "time": 1.796593
+            }
+          ],
+          "y": 1124.800048828125
+        }
+      ],
+      "blank": 0,
+      "rendersAfterSettle": 426,
+      "rendersAfterIdle": 426,
+      "opacityStable": true,
+      "heapBytes": 21352440,
+      "sources": [
+        "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+        "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+        "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+        "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4",
+        "/videos/cinematic/optimized/mobile/video4_PuntaIceberg_720p_h264.mp4",
+        "/videos/cinematic/optimized/mobile/video5_IcebergAbajo_720p_h264.mp4",
+        "/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4"
+      ]
+    }
+  ],
+  "slowNetwork": [
+    {
+      "label": "before threshold .39",
+      "at": 1790799377230,
+      "root": {
+        "introState": "complete"
+      },
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 2.341818
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1286.4000244140625
+    },
+    {
+      "label": "source attached .401",
+      "at": 1790799377433,
+      "root": {
+        "introState": "complete"
+      },
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 2.404848
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1296.800048828125
+    },
+    {
+      "label": "stopped inside crossfade while delayed",
+      "at": 1790799377734,
+      "root": {
+        "introState": "complete"
+      },
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.881212
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1870.4000244140625
+    },
+    {
+      "label": "still delayed",
+      "at": 1790799378347,
+      "root": {
+        "introState": "complete"
+      },
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.881212
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1870.4000244140625
+    },
+    {
+      "label": "settled inside same crossfade",
+      "at": 1790799384907,
+      "root": {
+        "introState": "complete"
+      },
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "0.6438",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.881212
+        },
+        {
+          "index": "2",
+          "opacity": "0.3562",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1870.4000244140625
+    },
+    {
+      "label": "idle same blend",
+      "at": 1790799385555,
+      "root": {
+        "introState": "complete"
+      },
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "0.6438",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.881212
+        },
+        {
+          "index": "2",
+          "opacity": "0.3562",
+          "paused": true,
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "paused": true,
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1870.4000244140625
+    }
+  ],
+  "productionRoutes": [
+    {
+      "width": 1440,
+      "route": "/nosotros",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+            "time": 0.492907
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 1440,
+      "route": "/soluciones",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+            "time": 0.787607
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 1440,
+      "route": "/servicios",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video4_PuntaIceberg_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video4_PuntaIceberg_h264.mp4",
+            "time": 0.443123
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 1440,
+      "route": "/proceso",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video5_IcebergAbajo_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video5_IcebergAbajo_h264.mp4",
+            "time": 0.610885
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 1440,
+      "route": "/contacto",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4",
+            "time": 0.824207
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 390,
+      "route": "/nosotros",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+            "time": 0.326925
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 390,
+      "route": "/soluciones",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4",
+            "time": 0.415541
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 390,
+      "route": "/servicios",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video4_PuntaIceberg_720p_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/mobile/video4_PuntaIceberg_720p_h264.mp4",
+            "time": 0.248863
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 390,
+      "route": "/proceso",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video5_IcebergAbajo_720p_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/mobile/video5_IcebergAbajo_720p_h264.mp4",
+            "time": 0.380356
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    },
+    {
+      "width": 390,
+      "route": "/contacto",
+      "start": {
+        "debug": 0,
+        "video": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4",
+            "time": 0
+          }
+        ],
+        "y": 0
+      },
+      "end": {
+        "video": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4",
+            "time": 0.374179
+          }
+        ],
+        "y": 350.3999938964844
+      },
+      "logs": []
+    }
+  ],
+  "productionIntro": [
+    {
+      "phase": "native running",
+      "attached": 2,
+      "state": "running",
+      "video": [
+        {
+          "opacity": "1",
+          "paused": false,
+          "time": 0.231484
+        },
+        {
+          "opacity": "0",
+          "paused": true,
+          "time": 0
+        }
+      ],
+      "y": 30.399999618530273
+    },
+    {
+      "phase": "complete",
+      "debug": 0,
+      "state": "complete",
+      "video": [
+        {
+          "opacity": "0.18",
+          "paused": true,
+          "time": 6
+        },
+        {
+          "opacity": "0.82",
+          "paused": true,
+          "time": 0
+        }
+      ],
+      "y": 900
+    },
+    {
+      "phase": "completed rebound",
+      "heroTop": 900,
+      "paused": true,
+      "state": "complete",
+      "video0time": 5.999,
+      "y": 900
+    }
+  ],
+  "productionTraversal": [
+    {
+      "attached": 3,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 3.001211
+        }
+      ],
+      "y": 1395.199951171875
+    },
+    {
+      "attached": 4,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 1,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.999
+        }
+      ],
+      "y": 2384.800048828125
+    },
+    {
+      "attached": 5,
+      "hints": 4,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.999
+        }
+      ],
+      "y": 3339.199951171875
+    },
+    {
+      "attached": 6,
+      "hints": 4,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.999
+        }
+      ],
+      "y": 4294.39990234375
+    },
+    {
+      "attached": 7,
+      "hints": 4,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.999
+        }
+      ],
+      "y": 5284
+    },
+    {
+      "attached": 7,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 5.999
+        }
+      ],
+      "y": 6274.39990234375
+    },
+    {
+      "attached": 7,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "5",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video5_IcebergAbajo_h264.mp4",
+          "time": 2.999242
+        }
+      ],
+      "y": 5284
+    },
+    {
+      "attached": 7,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "4",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video4_PuntaIceberg_h264.mp4",
+          "time": 3.001666
+        }
+      ],
+      "y": 4294.39990234375
+    },
+    {
+      "attached": 7,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "3",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+          "time": 2.997633
+        }
+      ],
+      "y": 3339.199951171875
+    },
+    {
+      "attached": 7,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "3",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+          "time": 0
+        }
+      ],
+      "y": 2384.800048828125
+    },
+    {
+      "attached": 7,
+      "hints": 3,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+          "time": 3.001211
+        }
+      ],
+      "y": 1395.199951171875
+    }
+  ],
+  "breakpointMobile": {
+    "debug": 0,
+    "videos": [
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+        "time": 5.999
+      },
+      {
+        "opacity": "1",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+        "time": 3.526645
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video4_PuntaIceberg_720p_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video5_IcebergAbajo_720p_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4",
+        "time": 0
+      }
+    ],
+    "y": 1395.199951171875
+  },
+  "breakpointDesktop": {
+    "videos": [
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "time": 5.999
+      },
+      {
+        "opacity": "0",
+        "ready": 1,
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "time": 3.001212
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/desktop/video4_PuntaIceberg_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/desktop/video5_IcebergAbajo_h264.mp4",
+        "time": 0
+      },
+      {
+        "opacity": "0",
+        "ready": 4,
+        "src": "/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4",
+        "time": 0
+      }
+    ],
+    "y": 1395.199951171875
+  },
+  "productionInterrupt": {
+    "srcs": [
+      "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+      "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "state": "interrupted",
+    "video0": {
+      "paused": true,
+      "time": 5.999
+    },
+    "y": 994.4000244140624
+  },
+  "productionInterruptIdle": {
+    "paused": true,
+    "time": 5.999,
+    "y": 994.4000244140624
+  },
+  "productionDesktopResources": [
+    {
+      "id": "7e23098cd67305bb",
+      "kind": "video",
+      "name": "video0_Galaxia_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 12,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4"
+    },
+    {
+      "id": "7d0790908e8cdff7",
+      "kind": "video",
+      "name": "video1_SistemaSolar_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 13,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4"
+    },
+    {
+      "id": "8756adafa53f485b",
+      "kind": "video",
+      "name": "video2_Colombia_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 125,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4"
+    },
+    {
+      "id": "ced4c7568d67d7a3",
+      "kind": "video",
+      "name": "video3_Col_Iceberg_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 126,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4"
+    },
+    {
+      "id": "c29ae2e3068ff739",
+      "kind": "video",
+      "name": "video4_PuntaIceberg_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 127,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video4_PuntaIceberg_h264.mp4"
+    },
+    {
+      "id": "74343c2d5f209e33",
+      "kind": "video",
+      "name": "video5_IcebergAbajo_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 128,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video5_IcebergAbajo_h264.mp4"
+    },
+    {
+      "id": "211bde1549211cf1",
+      "kind": "video",
+      "name": "video6_IcebergCompleto_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 129,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/desktop/video6_IcebergCompleto_h264.mp4"
+    }
+  ],
+  "prodSettledTraversal": [
+    {
+      "expected": 2,
+      "visible": [
+        {
+          "index": "2",
+          "ready": 4,
+          "time": 1.801211
+        }
+      ],
+      "y": 2187.199951171875
+    },
+    {
+      "expected": 3,
+      "visible": [
+        {
+          "index": "3",
+          "ready": 4,
+          "time": 1.801713
+        }
+      ],
+      "y": 3156
+    },
+    {
+      "expected": 4,
+      "visible": [
+        {
+          "index": "4",
+          "ready": 4,
+          "time": 1.799242
+        }
+      ],
+      "y": 4096
+    },
+    {
+      "expected": 5,
+      "visible": [
+        {
+          "index": "5",
+          "ready": 4,
+          "time": 1.796818
+        }
+      ],
+      "y": 5085.60009765625
+    },
+    {
+      "expected": 6,
+      "visible": [
+        {
+          "index": "6",
+          "ready": 4,
+          "time": 1.804088
+        }
+      ],
+      "y": 6076.7998046875
+    },
+    {
+      "expected": 5,
+      "visible": [
+        {
+          "index": "5",
+          "ready": 4,
+          "time": 1.796818
+        }
+      ],
+      "y": 5085.60009765625
+    },
+    {
+      "expected": 4,
+      "visible": [
+        {
+          "index": "4",
+          "ready": 4,
+          "time": 1.799242
+        }
+      ],
+      "y": 4096
+    },
+    {
+      "expected": 3,
+      "visible": [
+        {
+          "index": "3",
+          "ready": 4,
+          "time": 1.801713
+        }
+      ],
+      "y": 3156
+    },
+    {
+      "expected": 2,
+      "visible": [
+        {
+          "index": "2",
+          "ready": 4,
+          "time": 1.801211
+        }
+      ],
+      "y": 2187.199951171875
+    },
+    {
+      "expected": 1,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "time": 1.798788
+        }
+      ],
+      "y": 1196.800048828125
+    }
+  ],
+  "productionMobileInitialResources": [
+    {
+      "id": "9be48244b9d15944",
+      "kind": "video",
+      "name": "video0_Galaxia_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 12,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4"
+    },
+    {
+      "id": "5a248aaeab590d19",
+      "kind": "video",
+      "name": "video1_SistemaSolar_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 13,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4"
+    }
+  ],
+  "delayedMobileReverse": [
+    {
+      "requestedProgress": 0.401,
+      "at": 1790799829625,
+      "heroHeight": 937.7750244140624,
+      "heroTop": 844,
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+          "time": 2.405694
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1220
+    },
+    {
+      "requestedProgress": 0.98,
+      "at": 1790799829968,
+      "heroHeight": 937.7750244140624,
+      "heroTop": 843.9999389648438,
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "ready": 1,
+          "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+          "time": 5.881154
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1763.199951171875
+    },
+    {
+      "requestedProgress": 1.01,
+      "at": 1790799830422,
+      "heroHeight": 937.7750244140624,
+      "heroTop": 843.9999389648438,
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+          "time": 5.999
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1791.199951171875
+    },
+    {
+      "requestedProgress": 0.99,
+      "at": 1790799830741,
+      "heroHeight": 937.7750244140624,
+      "heroTop": 844,
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "1",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+          "time": 5.937458
+        },
+        {
+          "index": "2",
+          "opacity": "0",
+          "ready": 0,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1772
+    },
+    {
+      "requestedProgress": "settled",
+      "at": 1790799834794,
+      "video": [
+        {
+          "index": "0",
+          "opacity": "0",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+          "time": 6
+        },
+        {
+          "index": "1",
+          "opacity": "0.4242",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+          "time": 5.937458
+        },
+        {
+          "index": "2",
+          "opacity": "0.5758",
+          "ready": 4,
+          "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+          "time": 0
+        },
+        {
+          "index": "3",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "4",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "5",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        },
+        {
+          "index": "6",
+          "opacity": "0",
+          "ready": 0,
+          "src": null,
+          "time": 0
+        }
+      ],
+      "y": 1772
+    }
+  ],
+  "mobileProdStates": [
+    {
+      "expected": 1,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "time": 2.697448
+        }
+      ]
+    },
+    {
+      "expected": 2,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "2",
+          "ready": 4,
+          "time": 2.702875
+        }
+      ]
+    },
+    {
+      "expected": 3,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "3",
+          "ready": 4,
+          "time": 2.701024
+        }
+      ]
+    },
+    {
+      "expected": 4,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "4",
+          "ready": 4,
+          "time": 2.69786
+        }
+      ]
+    },
+    {
+      "expected": 5,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "5",
+          "ready": 4,
+          "time": 2.7028
+        }
+      ]
+    },
+    {
+      "expected": 6,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "6",
+          "ready": 4,
+          "time": 2.695766
+        }
+      ]
+    },
+    {
+      "expected": 5,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "5",
+          "ready": 4,
+          "time": 2.7028
+        }
+      ]
+    },
+    {
+      "expected": 4,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "4",
+          "ready": 4,
+          "time": 2.69786
+        }
+      ]
+    },
+    {
+      "expected": 3,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "3",
+          "ready": 4,
+          "time": 2.701024
+        }
+      ]
+    },
+    {
+      "expected": 2,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "2",
+          "ready": 4,
+          "time": 2.697705
+        }
+      ]
+    },
+    {
+      "expected": 1,
+      "debug": 0,
+      "visible": [
+        {
+          "index": "1",
+          "ready": 4,
+          "time": 2.702567
+        }
+      ]
+    }
+  ],
+  "mobileProductionResources": [
+    {
+      "id": "9be48244b9d15944",
+      "kind": "video",
+      "name": "video0_Galaxia_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 12,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4"
+    },
+    {
+      "id": "5a248aaeab590d19",
+      "kind": "video",
+      "name": "video1_SistemaSolar_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 13,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4"
+    },
+    {
+      "id": "e88b178c5a4d4e46",
+      "kind": "video",
+      "name": "video2_Colombia_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 26,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4"
+    },
+    {
+      "id": "d3203d0db6495937",
+      "kind": "video",
+      "name": "video3_Col_Iceberg_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 28,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4"
+    },
+    {
+      "id": "3d4ed599540a5c83",
+      "kind": "video",
+      "name": "video4_PuntaIceberg_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 30,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video4_PuntaIceberg_720p_h264.mp4"
+    },
+    {
+      "id": "9b8fcadfd03cbb16",
+      "kind": "video",
+      "name": "video5_IcebergAbajo_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 32,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video5_IcebergAbajo_720p_h264.mp4"
+    },
+    {
+      "id": "cdeedfb8c2b8883c",
+      "kind": "video",
+      "name": "video6_IcebergCompleto_720p_h264.mp4",
+      "sources": [
+        {
+          "kind": "resource",
+          "property": "video"
+        },
+        {
+          "kind": "attribute",
+          "nodeId": 38,
+          "property": "src"
+        }
+      ],
+      "url": "http://localhost:3001/videos/cinematic/optimized/mobile/video6_IcebergCompleto_720p_h264.mp4"
+    }
+  ],
+  "freshDevelopment": [
+    {
+      "path": "/",
+      "root": {
+        "landing": "running",
+        "videos": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4"
+          },
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4"
+          },
+          {
+            "ready": 0,
+            "src": null
+          },
+          {
+            "ready": 0,
+            "src": null
+          },
+          {
+            "ready": 0,
+            "src": null
+          },
+          {
+            "ready": 0,
+            "src": null
+          },
+          {
+            "ready": 0,
+            "src": null
+          }
+        ]
+      },
+      "logs": [
+        {
+          "level": "warn",
+          "message": "Image with src \"/_next/static/media/LogoConexacodIce.1_x4sd0fk7eov.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading",
+          "timestamp": "2026-09-30T20:33:16.309Z",
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js"
+        }
+      ]
+    },
+    {
+      "path": "/nosotros",
+      "root": {
+        "videos": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "level": "warn",
+          "message": "Image with src \"/_next/static/media/LogoConexacodIce.1_x4sd0fk7eov.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading",
+          "timestamp": "2026-09-30T20:33:16.309Z",
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js"
+        }
+      ]
+    },
+    {
+      "path": "/soluciones",
+      "root": {
+        "videos": [
+          {
+            "ready": 4,
+            "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "level": "warn",
+          "message": "Image with src \"/_next/static/media/LogoConexacodIce.1_x4sd0fk7eov.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading",
+          "timestamp": "2026-09-30T20:33:16.309Z",
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js"
+        }
+      ]
+    }
+  ]
+}

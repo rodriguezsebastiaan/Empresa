@@ -182,7 +182,7 @@ function sanitizeDiagnosticFormData(data: DiagnosticFormData): SanitizedDiagnost
 
 function buildContactEmailText(data: SanitizedContactFormData) {
   return [
-    'Nuevo contacto desde el sitio web de Konamy Systems.',
+    'Nuevo contacto desde el sitio web de Conexacod.',
     '',
     `Nombre: ${data.name}`,
     `Empresa: ${data.company}`,
@@ -197,7 +197,7 @@ function buildContactEmailText(data: SanitizedContactFormData) {
 
 function buildDiagnosticEmailText(data: SanitizedDiagnosticFormData) {
   return [
-    'Nuevo diagnóstico recibido desde el sitio web de Konamy Systems.',
+    'Nuevo diagnóstico recibido desde el sitio web de Conexacod.',
     '',
     `Nombre: ${data.name}`,
     `Empresa: ${data.company}`,

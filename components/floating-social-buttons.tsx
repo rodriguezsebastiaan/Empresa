@@ -29,7 +29,7 @@ export function FloatingSocialButtons() {
     if (whatsappUrl) {
       nextLinks.push({
         href: whatsappUrl,
-        label: 'Abrir WhatsApp oficial de Konamy Systems',
+        label: 'Abrir WhatsApp oficial de ConexaCod',
         icon: MessageCircle,
       })
     }
@@ -37,7 +37,7 @@ export function FloatingSocialButtons() {
     if (instagramUrl) {
       nextLinks.push({
         href: instagramUrl,
-        label: 'Abrir Instagram oficial de Konamy Systems',
+        label: 'Abrir Instagram oficial de ConexaCod',
         icon: InstagramIcon,
       })
     }

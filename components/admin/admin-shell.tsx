@@ -95,7 +95,7 @@ export function AdminShell({ children, admin }: AdminShellProps) {
       <div className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl lg:hidden">
         <div className="mx-auto flex max-w-[1640px] items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
-            <p className="text-[0.62rem] font-semibold tracking-[0.24em] text-primary">KONAMY ADMIN</p>
+            <p className="text-[0.62rem] font-semibold tracking-[0.24em] text-primary">CONEXACOD ADMIN</p>
             <p className="truncate text-sm text-foreground">{currentSection}</p>
           </div>
           <div className="flex items-center gap-2">

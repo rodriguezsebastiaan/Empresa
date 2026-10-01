@@ -14,6 +14,7 @@ interface RevealProps {
   /** Stagger delay in milliseconds. */
   delay?: number
   className?: string
+  id?: string
   /** Fraction of the element that must be visible before revealing. */
   threshold?: number
 }
@@ -29,6 +30,7 @@ export function Reveal({
   variant = 'up',
   delay = 0,
   className,
+  id,
   threshold = 0.2,
 }: RevealProps) {
   const Tag = (as ?? 'div') as ElementType
@@ -64,6 +66,7 @@ export function Reveal({
 
   return (
     <Tag
+      id={id}
       ref={ref}
       data-reveal={variant === 'up' ? '' : variant}
       data-visible={visible ? 'true' : 'false'}

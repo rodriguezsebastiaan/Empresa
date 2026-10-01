@@ -6,7 +6,7 @@ import { getAvailabilitySnapshot } from '@/lib/availability-service'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Disponibilidad de asesorías | Konamy Systems',
+  title: 'Disponibilidad de asesorías | Conexacod',
   robots: {
     index: false,
     follow: false,

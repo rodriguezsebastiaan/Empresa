@@ -11,6 +11,7 @@ import {
   buildRateLimitResponse,
   evaluateRateLimit,
 } from '@/lib/rate-limit'
+import { readLimitedRequestText } from '@/lib/request-body'
 
 export async function POST(request: Request) {
   const rateLimit = evaluateRateLimit(request, {
@@ -39,12 +40,23 @@ export async function POST(request: Request) {
     )
   }
 
-  const formData = await request.formData()
-  const email = String(formData.get('email') ?? '').trim()
-  const password = String(formData.get('password') ?? '')
-  const next = getSafeAdminReturnTo(String(formData.get('next') ?? '/admin'))
+  if (request.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/x-www-form-urlencoded') {
+    return applyRateLimitHeaders(NextResponse.json({ success: false, message: 'Formato de formulario inválido.' }, { status: 415 }), rateLimit)
+  }
+  const body = await readLimitedRequestText(request, 8 * 1024)
+  if (!body.success) {
+    return applyRateLimitHeaders(NextResponse.json({ success: false, message: body.message }, { status: body.status }), rateLimit)
+  }
+  const formData = new URLSearchParams(body.text)
+  if ([...formData.keys()].some((key) => !['email', 'password', 'next'].includes(key)) ||
+    ['email', 'password', 'next'].some((key) => formData.getAll(key).length > 1)) {
+    return applyRateLimitHeaders(NextResponse.json({ success: false, message: 'Formulario inválido.' }, { status: 400 }), rateLimit)
+  }
+  const email = (formData.get('email') ?? '').trim()
+  const password = formData.get('password') ?? ''
+  const next = getSafeAdminReturnTo(formData.get('next'))
 
-  if (!email || !password) {
+  if (!email || email.length > 191 || !password || password.length > 1024) {
     return NextResponse.redirect(new URL(buildAdminLoginUrl(next, 'invalid'), request.url), {
       status: 303,
     })

@@ -1,11 +1,13 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { siteConfig } from '@/config/site'
-import { absoluteUrl } from '@/lib/site'
+import { seoIndexingEnabled, seoOrigin, seoUrl } from '@/config/seo'
+import { JsonLd } from '@/components/seo/json-ld'
+import { buildSiteStructuredData } from '@/lib/structured-data'
 import './globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(seoOrigin),
   title: siteConfig.seo.defaultTitle,
   description: siteConfig.seo.defaultDescription,
   applicationName: siteConfig.name,
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
     email: false,
     telephone: false,
   },
-  robots: siteConfig.domainIsPlaceholder
+  robots: !seoIndexingEnabled
     ? {
         index: false,
         follow: false,
@@ -30,31 +32,19 @@ export const metadata: Metadata = {
         follow: true,
       },
   icons: {
-    icon: [
-      { url: siteConfig.seo.faviconIcoPath },
-      { url: siteConfig.seo.faviconSvgPath, type: 'image/svg+xml' },
-      { url: siteConfig.seo.faviconPngPath, sizes: '32x32', type: 'image/png' },
-    ],
-    shortcut: [siteConfig.seo.faviconIcoPath],
-    apple: [
-      {
-        url: siteConfig.seo.appleTouchIconPath,
-        sizes: '180x180',
-        type: 'image/png',
-      },
-    ],
+    icon: [{ url: siteConfig.seo.faviconSvgPath, type: 'image/svg+xml' }],
   },
   manifest: siteConfig.seo.manifestPath,
   openGraph: {
     type: 'website',
     locale: siteConfig.seo.locale,
-    url: siteConfig.url,
+    url: seoUrl(),
     siteName: siteConfig.seo.siteName,
     title: siteConfig.seo.defaultTitle,
     description: siteConfig.description,
     images: [
       {
-        url: absoluteUrl(siteConfig.seo.openGraphImagePath),
+        url: seoUrl(siteConfig.seo.openGraphImagePath),
         alt: siteConfig.seo.openGraphImageAlt,
       },
     ],
@@ -63,7 +53,7 @@ export const metadata: Metadata = {
     card: siteConfig.seo.twitterCard,
     title: siteConfig.seo.defaultTitle,
     description: siteConfig.seo.defaultDescription,
-    images: [absoluteUrl(siteConfig.seo.openGraphImagePath)],
+    images: [seoUrl(siteConfig.seo.openGraphImagePath)],
   },
 }
 
@@ -91,6 +81,7 @@ export default function RootLayout({
       }
     >
       <body className="font-sans antialiased">
+        <JsonLd data={buildSiteStructuredData()} />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

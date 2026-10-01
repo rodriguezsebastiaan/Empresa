@@ -40,10 +40,10 @@ export function SiteHeader() {
       >
         <a
           href="#inicio"
-          aria-label="Konamy Systems - Inicio"
+          aria-label="ConexaCod - Inicio"
           className="ks-enter rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/60 [--enter-delay:80ms]"
         >
-          <Logo />
+          <Logo decorative />
         </a>
 
         <nav

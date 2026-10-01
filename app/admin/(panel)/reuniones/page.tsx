@@ -21,7 +21,7 @@ import { buildAdminDetailHref, buildAdminListHref } from '@/lib/admin-routes'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Asesorías agendadas | Konamy Systems',
+  title: 'Asesorías agendadas | Conexacod',
 }
 
 type ReunionesPageProps = {

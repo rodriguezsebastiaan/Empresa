@@ -887,17 +887,15 @@ export function PortalHeroVisual() {
                   strokeOpacity="0.66"
                   strokeWidth="1.4"
                 />
-                <text
-                  x="350"
-                  y="302"
-                  textAnchor="middle"
-                  fontSize="54"
-                  fontWeight="700"
-                  fill="#f5ffff"
-                  letterSpacing="-2"
-                >
-                  KS
-                </text>
+                <path
+                  d="M326 302L350 278L374 302L350 326L326 302Z"
+                  fill="none"
+                  stroke="#f5ffff"
+                  strokeWidth="2.2"
+                  strokeLinejoin="round"
+                />
+                <path d="M326 302H374M350 278V326" stroke="#9cfbff" strokeOpacity="0.78" strokeWidth="1.2" />
+                <circle cx="350" cy="302" r="4" fill="#f5ffff" />
               </g>
               <g className="ks-portal-network">
                 {allNodes.map((node) => {

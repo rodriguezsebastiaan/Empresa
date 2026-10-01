@@ -1,4 +1,4 @@
-# Konamy Systems · Producción 1.0
+# Conexacod · Producción 1.0
 
 Esta base queda preparada para publicar la versión 1.0 del sitio sin crear nuevas páginas para `/automatizaciones`, `/sectores` o `/proyectos`.
 
@@ -118,7 +118,7 @@ Sin credenciales válidas, la interfaz debe bloquear disponibilidad y reservas r
 
 ## Datos todavía pendientes
 
-Los siguientes placeholders siguen centralizados en [config/site.ts](C:/xampp/htdocs/KONAMY/config/site.ts):
+Los siguientes placeholders siguen centralizados en [config/site.ts](./config/site.ts):
 
 - Dominio final público.
 - Correo de contacto real.

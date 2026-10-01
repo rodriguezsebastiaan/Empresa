@@ -195,6 +195,12 @@ export async function submitAdvisoryBooking(
   const existingBooking = await loadExistingBooking(payload.requestId)
 
   if (existingBooking) {
+    if (normalizeEmail(existingBooking.email) !== payload.emailNormalized) {
+      return {
+        status: 409,
+        body: { success: false, message: 'No fue posible reutilizar esta solicitud. Recargue la página.' },
+      }
+    }
     return {
       status: 200,
       body: {
@@ -209,6 +215,9 @@ export async function submitAdvisoryBooking(
   }
 
   const slotCheck = await assertSlotAvailable(payload.date, payload.time)
+  // These readonly fields are controlled by the server's availability settings.
+  payload.modality = slotCheck.snapshot.settings.defaultModality
+  payload.timezone = slotCheck.snapshot.settings.timezoneLabel
   const calendarAdapter = getCalendarAdapter(slotCheck.snapshot.settings.calendarMockMode)
   const calendarRecord = await calendarAdapter.createEvent({
     requestId: payload.requestId,

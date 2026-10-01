@@ -50,6 +50,10 @@ export async function POST(request: Request) {
     )
   }
 
-  const submission = await submitContactForm(result.data, request)
-  return respond(submission.body, submission.status)
+  try {
+    const submission = await submitContactForm(result.data, request)
+    return respond(submission.body, submission.status)
+  } catch {
+    return respond({ success: false, message: 'No fue posible registrar la solicitud en este momento.' }, 502)
+  }
 }

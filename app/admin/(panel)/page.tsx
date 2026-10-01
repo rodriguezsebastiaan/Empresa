@@ -6,7 +6,7 @@ import { getAdminDashboardSnapshot } from '@/lib/admin-data'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Panel administrativo | Konamy Systems',
+  title: 'Panel administrativo | Conexacod',
 }
 
 export default async function AdminDashboardPage() {

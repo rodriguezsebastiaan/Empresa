@@ -6,19 +6,19 @@ import { SiteAction } from '@/components/site-action'
 const steps = [
   {
     icon: Search,
-    title: 'Entendemos',
+    title: 'Entender',
     description:
       'Analizamos su operación, sus problemas reales y lo que realmente necesita resolver.',
   },
   {
     icon: PencilRuler,
-    title: 'Diseñamos',
+    title: 'Diseñar',
     description:
       'Definimos la solución digital adecuada, clara, administrable y pensada para crecer.',
   },
   {
     icon: Blocks,
-    title: 'Construimos',
+    title: 'Construir',
     description:
       'Desarrollamos e implementamos el sistema y lo dejamos funcionando en su empresa.',
   },
@@ -26,41 +26,31 @@ const steps = [
 
 export function HomeApproach() {
   return (
-    <section className="relative border-t border-border/60">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-2">
+    <section id="approach" data-scene="approach" className="ks-scene border-t border-border/60">
+      <div className="ks-scene-content mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div className="max-w-lg">
-            <Reveal
-              as="p"
-              variant="fade"
-              className="mb-6 text-xs font-semibold tracking-[0.3em] text-primary"
-            >
-              NUESTRO ENFOQUE
-            </Reveal>
             <Reveal
               as="h2"
               delay={80}
-              className="text-balance text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl"
+              className="ks-type-section font-semibold"
             >
-              No empezamos por la tecnología. Empezamos por entender su
-              operación.
+              Antes de construir una solución, entendemos lo que realmente
+              necesita tu negocio.
             </Reveal>
             <Reveal
               as="p"
               delay={160}
-              className="mt-6 text-pretty leading-relaxed text-muted-foreground"
+              className="ks-copy-primary mt-7"
             >
-              Konamy Systems analiza problemas operativos y los transforma en
-              soluciones digitales funcionales, administrables y preparadas para
-              crecer.
+              Analizamos cómo funciona su operación, identificamos qué está
+              frenando el proceso y definimos una ruta clara antes de desarrollar.
             </Reveal>
           </div>
 
-          <div className="flex items-end justify-start border-l border-border/60 pl-0 lg:justify-end lg:pl-12">
-            <Reveal delay={220} variant="fade">
-              <SiteAction href={siteConfig.routes.about} variant="text">
-                CONOCER KONAMY SYSTEMS
-              </SiteAction>
+          <div className="max-w-md border-l border-primary/35 pl-6 lg:justify-self-end lg:pl-12">
+            <Reveal as="p" delay={220} variant="fade" className="ks-type-statement text-pretty font-medium">
+              La tecnología cobra valor cuando resuelve problemas reales.
             </Reveal>
           </div>
         </div>
@@ -88,14 +78,14 @@ export function HomeApproach() {
                       strokeWidth={1.5}
                     />
                   </span>
-                  <span className="text-[0.7rem] font-semibold tracking-[0.3em] text-muted-foreground">
+                  <span className="text-[0.78rem] font-semibold tracking-[0.24em] text-foreground/80">
                     0{i + 1}
                   </span>
                 </div>
-                <h3 className="mt-5 text-lg font-medium text-foreground">
+                <h3 className="ks-type-card-title mt-5 font-semibold">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="ks-card-copy mt-3">
                   {description}
                 </p>
                 <span className="mt-4 block h-px w-10 origin-left scale-x-0 bg-primary shadow-[0_0_8px_var(--primary)] transition-transform duration-300 group-hover:scale-x-100" />

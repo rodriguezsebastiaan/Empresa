@@ -48,7 +48,7 @@ export function Approach() {
               delay={160}
               className="mt-6 text-pretty leading-relaxed text-muted-foreground"
             >
-              Konamy Systems analiza problemas operativos y los transforma en
+              ConexaCod analiza problemas operativos y los transforma en
               soluciones digitales funcionales, administrables y preparadas para
               crecer.
             </Reveal>
@@ -60,7 +60,7 @@ export function Approach() {
                 href="#nosotros"
                 className="group inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-primary outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary/60"
               >
-                CONOCER KONAMY SYSTEMS
+                CONOCER CONEXACOD
                 <ArrowRight className="ks-arrow size-4" />
               </a>
             </Reveal>

@@ -1,0 +1,710 @@
+[
+  {
+    "mode": "network",
+    "profile": "desktop",
+    "network": {
+      "latency": 80,
+      "downloadBytesPerSecond": 1125000,
+      "uploadBytesPerSecond": 187500
+    },
+    "fcp": 400,
+    "inserted": 172.69999999925494,
+    "loadeddata": 1461.8999999994412,
+    "firstFrame": 1264.2,
+    "firstUsable": 1514.2,
+    "playing": 1462.0999999996275,
+    "video1Loaded": 1371.5,
+    "video1FirstFrame": 1264.2,
+    "complete": {
+      "t": 9666,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "lcp": {
+      "t": 7792,
+      "renderTime": 7792,
+      "text": "Transformamos problemas empresariales en ",
+      "tag": "SPAN"
+    },
+    "firstHeadingOpaque": {
+      "t": 1414.3999999994412,
+      "top": 1083.98681640625,
+      "bottom": 1290.00244140625,
+      "opacity": "0.999827",
+      "parentOpacity": "0",
+      "reveal": "0.0000",
+      "videoTime": 0,
+      "state": "running",
+      "video1": 3
+    },
+    "firstReveal": {
+      "t": 7823.799999999814,
+      "top": 459.93438720703125,
+      "bottom": 665.9500122070312,
+      "opacity": "1",
+      "parentOpacity": "0.004",
+      "reveal": "0.0048",
+      "videoTime": 4.167109,
+      "state": "running",
+      "video1": 4
+    },
+    "headingVisible": {
+      "t": 7823.799999999814,
+      "top": 459.93438720703125,
+      "bottom": 665.9500122070312,
+      "opacity": "1",
+      "parentOpacity": "0.004",
+      "reveal": "0.0048",
+      "videoTime": 4.167109,
+      "state": "running",
+      "video1": 4
+    },
+    "stalls": [
+      {
+        "at": 1866.199999999255,
+        "mediaTime": 0.385921,
+        "until": 2267.199999999255,
+        "d": 401
+      },
+      {
+        "at": 2764.2999999998137,
+        "mediaTime": 0.849042,
+        "until": 3213,
+        "d": 448.70000000018626
+      },
+      {
+        "at": 3749.199999999255,
+        "mediaTime": 1.352228,
+        "until": 4023.7999999998137,
+        "d": 274.6000000005588
+      },
+      {
+        "at": 4636.199999999255,
+        "mediaTime": 1.934643,
+        "until": 5273.399999999441,
+        "d": 637.2000000001863
+      },
+      {
+        "at": 5707.899999999441,
+        "mediaTime": 2.350998,
+        "until": 6009.299999999814,
+        "d": 301.40000000037253
+      }
+    ],
+    "stallMs": 2062.900000001304,
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": {
+        "body": 3662874,
+        "encoded": 3662874
+      },
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": {
+        "body": 2035489,
+        "encoded": 2035489
+      }
+    },
+    "totalMediaBodyBytes": 5698363,
+    "totalMediaEncodedBytes": 5698363,
+    "resourceTimingMedia": [
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "t": 534.2999999998137,
+        "end": 7997.199999999255,
+        "transfer": 3663174,
+        "encoded": 3662874
+      },
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "t": 534.6999999992549,
+        "end": 6447.0999999996275,
+        "transfer": 300,
+        "encoded": 0
+      }
+    ],
+    "errors": [],
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "network",
+    "profile": "mobile",
+    "network": {
+      "latency": 80,
+      "downloadBytesPerSecond": 1125000,
+      "uploadBytesPerSecond": 187500
+    },
+    "fcp": 524,
+    "inserted": 172.79999999981374,
+    "loadeddata": 915.7999999998137,
+    "firstFrame": 828,
+    "firstUsable": 967,
+    "playing": 916,
+    "video1Loaded": 917.4000000003725,
+    "video1FirstFrame": 848.8,
+    "complete": {
+      "t": 6921.200000000186,
+      "state": "complete",
+      "scrollY": 844,
+      "video1": 4
+    },
+    "lcp": {
+      "t": 5060,
+      "renderTime": 5060,
+      "text": "Transformamos problemas empresariales en ",
+      "tag": "SPAN"
+    },
+    "firstHeadingOpaque": {
+      "t": 1400.2999999998137,
+      "top": 900.9550170898438,
+      "bottom": 1053.580078125,
+      "opacity": "0.999864",
+      "parentOpacity": "0",
+      "reveal": "0.0000",
+      "videoTime": 0.484834,
+      "state": "running",
+      "video1": 4
+    },
+    "firstReveal": {
+      "t": 5157.9000000003725,
+      "top": 372.8031311035156,
+      "bottom": 525.4281005859375,
+      "opacity": "1",
+      "parentOpacity": "0.0122",
+      "reveal": "0.0146",
+      "videoTime": 4.242461,
+      "state": "running",
+      "video1": 4
+    },
+    "headingVisible": {
+      "t": 5157.9000000003725,
+      "top": 372.8031311035156,
+      "bottom": 525.4281005859375,
+      "opacity": "1",
+      "parentOpacity": "0.0122",
+      "reveal": "0.0146",
+      "videoTime": 4.242461,
+      "state": "running",
+      "video1": 4
+    },
+    "stalls": [],
+    "stallMs": 0,
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4": {
+        "body": 692989,
+        "encoded": 686989
+      },
+      "http://127.0.0.1:4173/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4": {
+        "body": 1184291,
+        "encoded": 1184291
+      }
+    },
+    "totalMediaBodyBytes": 1877280,
+    "totalMediaEncodedBytes": 1871280,
+    "resourceTimingMedia": [
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+        "t": 528.2999999998137,
+        "end": 3520.600000000559,
+        "transfer": 1184591,
+        "encoded": 1184291
+      },
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+        "t": 528.9000000003725,
+        "end": 2599.4000000003725,
+        "transfer": 300,
+        "encoded": 0
+      }
+    ],
+    "errors": [],
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "network-repeat",
+    "profile": "desktop",
+    "network": {
+      "latency": 80,
+      "downloadBytesPerSecond": 1125000,
+      "uploadBytesPerSecond": 187500
+    },
+    "fcp": 424,
+    "inserted": 184.79999999981374,
+    "loadeddata": 1476,
+    "firstFrame": 1281.2,
+    "firstUsable": 1531.2,
+    "playing": 1476.3999999994412,
+    "video1Loaded": 1397.7999999998137,
+    "video1FirstFrame": 1295,
+    "complete": {
+      "t": 10873.700000000186,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "lcp": {
+      "t": 9004,
+      "renderTime": 9004,
+      "text": "Transformamos problemas empresariales en ",
+      "tag": "SPAN"
+    },
+    "firstHeadingOpaque": {
+      "t": 1444.5999999996275,
+      "top": 1083.98583984375,
+      "bottom": 1290.00146484375,
+      "opacity": "0.999896",
+      "parentOpacity": "0",
+      "reveal": "0.0000",
+      "videoTime": 0,
+      "state": "running",
+      "video1": 3
+    },
+    "firstReveal": {
+      "t": 9097.399999999441,
+      "top": 453.90435791015625,
+      "bottom": 659.9199829101562,
+      "opacity": "1",
+      "parentOpacity": "0.0065",
+      "reveal": "0.0078",
+      "videoTime": 4.229784,
+      "state": "running",
+      "video1": 4
+    },
+    "headingVisible": {
+      "t": 9097.399999999441,
+      "top": 453.90435791015625,
+      "bottom": 659.9199829101562,
+      "opacity": "1",
+      "parentOpacity": "0.0065",
+      "reveal": "0.0078",
+      "videoTime": 4.229784,
+      "state": "running",
+      "video1": 4
+    },
+    "stalls": [
+      {
+        "at": 1919.7000000001863,
+        "mediaTime": 0.392817,
+        "until": 2356.2999999998137,
+        "d": 436.59999999962747
+      },
+      {
+        "at": 2838,
+        "mediaTime": 0.853281,
+        "until": 3179.5,
+        "d": 341.5
+      },
+      {
+        "at": 3911.7000000001863,
+        "mediaTime": 1.560945,
+        "until": 4098,
+        "d": 186.29999999981374
+      },
+      {
+        "at": 4406.899999999441,
+        "mediaTime": 1.848915,
+        "until": 4933.899999999441,
+        "d": 527
+      },
+      {
+        "at": 5335.200000000186,
+        "mediaTime": 2.226053,
+        "until": 6165.5,
+        "d": 830.2999999998137
+      },
+      {
+        "at": 6832.700000000186,
+        "mediaTime": 2.856343,
+        "until": 7217.200000000186,
+        "d": 384.5
+      },
+      {
+        "at": 7814.299999999814,
+        "mediaTime": 3.435383,
+        "until": 8304.299999999814,
+        "d": 490
+      }
+    ],
+    "stallMs": 3196.199999999255,
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": {
+        "body": 3662874,
+        "encoded": 3662874
+      },
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": {
+        "body": 2032489,
+        "encoded": 2032489
+      }
+    },
+    "totalMediaBodyBytes": 5695363,
+    "totalMediaEncodedBytes": 5695363,
+    "resourceTimingMedia": [
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "t": 542.8999999994412,
+        "end": 9558.599999999627,
+        "transfer": 3663174,
+        "encoded": 3662874
+      },
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "t": 543.5999999996275,
+        "end": 7069.399999999441,
+        "transfer": 300,
+        "encoded": 0
+      }
+    ],
+    "errors": [],
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "network-isolation",
+    "profile": "desktop",
+    "network": {
+      "latency": 80,
+      "downloadBytesPerSecond": 1125000,
+      "uploadBytesPerSecond": 187500
+    },
+    "fcp": 404,
+    "inserted": 175.40000000037253,
+    "loadeddata": 1244.9000000003725,
+    "firstFrame": 1102.4,
+    "firstUsable": 1303.9,
+    "playing": 1245.0999999996275,
+    "complete": {
+      "t": 7449.299999999814,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 0
+    },
+    "lcp": {
+      "t": 5604,
+      "renderTime": 5604,
+      "text": "Transformamos problemas empresariales en ",
+      "tag": "SPAN"
+    },
+    "firstHeadingOpaque": {
+      "t": 1427.4000000003725,
+      "top": 1056.98681640625,
+      "bottom": 1263.00244140625,
+      "opacity": "0.999827",
+      "parentOpacity": "0",
+      "reveal": "0.0000",
+      "videoTime": 0.185315,
+      "state": "running",
+      "video1": 0
+    },
+    "firstReveal": {
+      "t": 5770.799999999814,
+      "top": 438.6343688964844,
+      "bottom": 644.6500244140625,
+      "opacity": "1",
+      "parentOpacity": "0.0291",
+      "reveal": "0.0343",
+      "videoTime": 4.323836,
+      "state": "running",
+      "video1": 0
+    },
+    "headingVisible": {
+      "t": 5770.799999999814,
+      "top": 438.6343688964844,
+      "bottom": 644.6500244140625,
+      "opacity": "1",
+      "parentOpacity": "0.0291",
+      "reveal": "0.0343",
+      "videoTime": 4.323836,
+      "state": "running",
+      "video1": 0
+    },
+    "stalls": [
+      {
+        "at": 2154.5,
+        "mediaTime": 0.895583,
+        "until": 2342.9000000003725,
+        "d": 188.40000000037253
+      }
+    ],
+    "stallMs": 188.40000000037253,
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": {
+        "body": 3662874,
+        "encoded": 3662874
+      }
+    },
+    "totalMediaBodyBytes": 3662874,
+    "totalMediaEncodedBytes": 3662874,
+    "resourceTimingMedia": [
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "t": 504.70000000018626,
+        "end": 6441.0999999996275,
+        "transfer": 3663174,
+        "encoded": 3662874
+      },
+      {
+        "url": "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "t": 505.90000000037253,
+        "end": 505.90000000037253,
+        "transfer": 0,
+        "encoded": 0
+      }
+    ],
+    "errors": [],
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "1",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true,
+        "error": 4
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  }
+]

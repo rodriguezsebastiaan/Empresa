@@ -1,0 +1,170 @@
+[
+  {
+    "profile": "desktop",
+    "automatic": "complete",
+    "forwardScroll": 6492,
+    "reverseScroll": 900,
+    "indices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "0"
+    ],
+    "emptySamples": 0,
+    "samples": 26,
+    "swaps": [
+      {
+        "earlyHold": 1,
+        "hold": 0,
+        "active": [
+          {
+            "index": "2",
+            "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+            "ready": 4
+          }
+        ],
+        "errors": []
+      },
+      {
+        "earlyHold": 0,
+        "hold": 0,
+        "active": [
+          {
+            "index": "2",
+            "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+            "ready": 4
+          }
+        ],
+        "errors": []
+      }
+    ],
+    "interruption": "interrupted",
+    "introPaused": true,
+    "internal": [
+      {
+        "url": "/nosotros",
+        "videos": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+            "ready": 4,
+            "time": 1.264706,
+            "opacity": "",
+            "visibility": "",
+            "paused": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": 0
+      },
+      {
+        "url": "/soluciones",
+        "videos": [
+          {
+            "src": "/videos/cinematic/optimized/desktop/video3_Col_Iceberg_h264.mp4",
+            "ready": 4,
+            "time": 2.017607,
+            "opacity": "",
+            "visibility": "",
+            "paused": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": 0
+      }
+    ],
+    "exceptions": [],
+    "diagnostics": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "profile": "mobile",
+    "automatic": "complete",
+    "forwardScroll": 8427,
+    "reverseScroll": 844,
+    "indices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "0"
+    ],
+    "emptySamples": 0,
+    "samples": 32,
+    "swaps": [
+      {
+        "earlyHold": 0,
+        "hold": 0,
+        "active": [
+          {
+            "index": "2",
+            "src": "/videos/cinematic/optimized/desktop/video2_Colombia_h264.mp4",
+            "ready": 4
+          }
+        ],
+        "errors": []
+      },
+      {
+        "earlyHold": 1,
+        "hold": 0,
+        "active": [
+          {
+            "index": "2",
+            "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+            "ready": 4
+          }
+        ],
+        "errors": []
+      }
+    ],
+    "interruption": "interrupted",
+    "introPaused": true,
+    "internal": [
+      {
+        "url": "/nosotros",
+        "videos": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video2_Colombia_720p_h264.mp4",
+            "ready": 4,
+            "time": 0.794788,
+            "opacity": "",
+            "visibility": "",
+            "paused": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": 0
+      },
+      {
+        "url": "/soluciones",
+        "videos": [
+          {
+            "src": "/videos/cinematic/optimized/mobile/video3_Col_Iceberg_720p_h264.mp4",
+            "ready": 4,
+            "time": 1.014844,
+            "opacity": "",
+            "visibility": "",
+            "paused": true
+          }
+        ],
+        "errors": [],
+        "diagnostics": 0
+      }
+    ],
+    "exceptions": [],
+    "diagnostics": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+]

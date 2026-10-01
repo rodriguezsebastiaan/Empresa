@@ -103,8 +103,8 @@ export function HeroVisual() {
 
         <div className="ks-enter-fade relative aspect-square w-full [--enter-delay:900ms] [mask-image:radial-gradient(ellipse_62%_68%_at_50%_50%,#000_30%,transparent_74%)] [-webkit-mask-image:radial-gradient(ellipse_62%_68%_at_50%_50%,#000_30%,transparent_74%)]">
           <Image
-            src="/hero-monument.png"
-            alt="Sistema tecnológico central de Konamy Systems con núcleo KS y módulos conectados"
+            src="/hero-monument-conexacod.png"
+            alt="Sistema tecnológico central de ConexaCod con módulos conectados"
             fill
             priority
             sizes="(max-width: 1024px) 90vw, 45vw"

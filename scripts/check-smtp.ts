@@ -50,15 +50,15 @@ async function main() {
 
   await sendEmail({
     to,
-    subject: 'Prueba SMTP · Konamy Systems',
+    subject: 'Prueba SMTP · Conexacod',
     text: [
-      'Prueba de correo transaccional de Konamy Systems.',
+      'Prueba de correo transaccional de Conexacod.',
       '',
       'Si recibió este mensaje, la conexión SMTP quedó verificada correctamente.',
       'No se incluyeron credenciales ni datos sensibles en esta prueba.',
     ].join('\n'),
     html: [
-      '<p>Prueba de correo transaccional de <strong>Konamy Systems</strong>.</p>',
+      '<p>Prueba de correo transaccional de <strong>Conexacod</strong>.</p>',
       '<p>Si recibió este mensaje, la conexión SMTP quedó verificada correctamente.</p>',
       '<p>No se incluyeron credenciales ni datos sensibles en esta prueba.</p>',
     ].join(''),

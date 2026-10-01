@@ -209,11 +209,11 @@ export function DiagnosticWizard() {
           <p className="text-xs font-semibold tracking-[0.3em] text-primary">
             DIAGNÓSTICO ENVIADO
           </p>
-          <h2 className="mt-4 text-2xl font-medium text-foreground">
+          <h2 className="ks-type-card-title mt-4 font-semibold">
             Su diagnóstico fue enviado con éxito.
           </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            La información quedó guardada en el panel administrativo de Konamy Systems para su
+          <p className="ks-copy-secondary mt-4 max-w-2xl">
+            La información quedó guardada en el panel administrativo de ConexaCod para su
             revisión y seguimiento.
           </p>
 
@@ -243,7 +243,7 @@ export function DiagnosticWizard() {
           <p className="text-xs font-semibold tracking-[0.3em] text-primary">
             SIGUIENTE PASO
           </p>
-          <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+          <p className="ks-copy-secondary mt-5">
             Revisaremos el diagnóstico y podremos usarlo como base para una asesoría inicial. Si
             quiere avanzar de una vez, puede reservar un horario disponible.
           </p>
@@ -252,7 +252,7 @@ export function DiagnosticWizard() {
             <button
               type="button"
               onClick={() => setConfirmation(null)}
-              className="inline-flex items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3.5 text-xs font-semibold tracking-widest text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+              className="ks-form-action inline-flex items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3.5 font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary"
             >
               ENVIAR OTRO DIAGNÓSTICO
             </button>
@@ -270,11 +270,11 @@ export function DiagnosticWizard() {
             <p className="text-xs font-semibold tracking-[0.3em] text-primary">
               PASO {step + 1} DE {steps.length}
             </p>
-            <h2 className="mt-3 text-2xl font-medium text-foreground">
+          <h2 className="ks-type-card-title mt-3 font-semibold">
               {steps[step]}
             </h2>
           </div>
-          <p className="text-sm text-muted-foreground">{Math.round(progress)}%</p>
+          <p className="ks-form-support">{Math.round(progress)}%</p>
         </div>
 
         <div className="mt-5 h-2 rounded-full bg-background/70">
@@ -463,10 +463,10 @@ export function DiagnosticWizard() {
                     key={label}
                     className="rounded-xl border border-border/70 bg-background/40 px-4 py-3"
                   >
-                    <p className="text-xs tracking-[0.18em] text-muted-foreground">
+                    <p className="ks-form-support tracking-[0.12em]">
                       {label}
                     </p>
-                    <p className="mt-1 break-words text-sm leading-relaxed text-foreground">
+                    <p className="ks-card-copy mt-1 break-words">
                       {formatSummaryValue(value)}
                     </p>
                   </div>
@@ -496,7 +496,7 @@ export function DiagnosticWizard() {
           ) : null}
         </div>
 
-        <div aria-live="polite" className="mt-5 min-h-6 text-sm">
+        <div aria-live="polite" className="ks-form-feedback mt-5 min-h-6">
           {status.message ? (
             <p
               className={
@@ -517,7 +517,7 @@ export function DiagnosticWizard() {
             <button
               type="button"
               onClick={previousStep}
-              className="inline-flex items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3.5 text-xs font-semibold tracking-widest text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+              className="ks-form-action inline-flex items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3.5 font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary"
             >
               VOLVER
             </button>
@@ -527,7 +527,7 @@ export function DiagnosticWizard() {
             <button
               type="button"
               onClick={nextStep}
-              className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 text-xs font-semibold tracking-widest text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
+              className="ks-form-action inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90"
             >
               CONTINUAR
             </button>
@@ -535,7 +535,7 @@ export function DiagnosticWizard() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 text-xs font-semibold tracking-widest text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="ks-form-action inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? 'ENVIANDO...' : 'ENVIAR DIAGNÓSTICO'}
             </button>
@@ -547,7 +547,7 @@ export function DiagnosticWizard() {
         <p className="text-xs font-semibold tracking-[0.3em] text-primary">
           QUÉ OCURRE DESPUÉS
         </p>
-        <div className="mt-5 space-y-4 text-sm text-muted-foreground">
+        <div className="ks-copy-secondary mt-5 space-y-4">
           <p>
             Este diagnóstico está pensado para entender su operación sin hacerlo
             llenar un formulario interminable.

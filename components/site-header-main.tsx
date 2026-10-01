@@ -38,11 +38,11 @@ export function SiteHeaderMain() {
       >
         <Link
           href={siteConfig.routes.home}
-          aria-label="Konamy Systems - Inicio"
+          aria-label="ConexaCod - Inicio"
           onClick={() => setOpen(false)}
           className="ks-enter rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/60 [--enter-delay:80ms]"
         >
-          <Logo />
+          <Logo decorative />
         </Link>
 
         <nav
@@ -60,7 +60,7 @@ export function SiteHeaderMain() {
                 style={{ ['--enter-delay' as string]: `${170 + index * 60}ms` }}
                 className={cn(
                   'ks-enter group relative rounded-sm text-[0.95rem] font-medium tracking-wide outline-none transition-colors duration-300 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                  active ? 'text-primary' : 'text-foreground/85',
+                  active ? 'text-primary' : 'text-foreground/90',
                 )}
               >
                 {item.label}
@@ -106,7 +106,7 @@ export function SiteHeaderMain() {
                   onClick={() => setOpen(false)}
                   className={cn(
                     'text-base font-medium transition-colors hover:text-primary',
-                    active ? 'text-primary' : 'text-foreground/85',
+                    active ? 'text-primary' : 'text-foreground/90',
                   )}
                 >
                   {item.label}

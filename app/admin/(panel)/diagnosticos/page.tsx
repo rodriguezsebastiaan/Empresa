@@ -22,7 +22,7 @@ import { buildAdminDetailHref, buildAdminListHref } from '@/lib/admin-routes'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Diagnósticos empresariales | Konamy Systems',
+  title: 'Diagnósticos empresariales | Conexacod',
 }
 
 type DiagnosticosPageProps = {

@@ -1,0 +1,83 @@
+[
+  {
+    "profile": "desktop",
+    "run": 1,
+    "phase": "boundaries",
+    "key": "scrollY",
+    "t": 7804.4000000003725,
+    "d": 56.09999999962747,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at V (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:2704)\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:6538)"
+  },
+  {
+    "profile": "desktop",
+    "run": 1,
+    "phase": "boundaries",
+    "key": "scrollY",
+    "t": 7954.9000000003725,
+    "d": 30.59999999962747,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at V (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:2704)\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:6538)"
+  },
+  {
+    "profile": "desktop",
+    "run": 3,
+    "phase": "boundaries",
+    "key": "scrollY",
+    "t": 9665.200000000186,
+    "d": 81.29999999981374,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at V (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:2704)\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:6538)"
+  },
+  {
+    "profile": "mobile",
+    "run": 1,
+    "phase": "intro",
+    "key": "innerHeight",
+    "t": 4091.4000000003725,
+    "d": 46.5,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4025\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4451)"
+  },
+  {
+    "profile": "mobile",
+    "run": 1,
+    "phase": "intro",
+    "key": "innerHeight",
+    "t": 4142,
+    "d": 30.200000000186265,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4025\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4451)"
+  },
+  {
+    "profile": "mobile",
+    "run": 2,
+    "phase": "intro",
+    "key": "innerHeight",
+    "t": 1390.199999999255,
+    "d": 33.5,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4025\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4451)"
+  },
+  {
+    "profile": "mobile",
+    "run": 2,
+    "phase": "boundaries",
+    "key": "innerHeight",
+    "t": 11101.399999999441,
+    "d": 74,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4025\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4451)"
+  },
+  {
+    "profile": "mobile",
+    "run": 2,
+    "phase": "boundaries",
+    "key": "innerHeight",
+    "t": 11192.399999999441,
+    "d": 42.5,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4025\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4451)"
+  },
+  {
+    "profile": "mobile",
+    "run": 3,
+    "phase": "intro",
+    "key": "innerHeight",
+    "t": 4732.200000000186,
+    "d": 35,
+    "stack": "Error\n    at get (<anonymous>:5:324)\n    at http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4025\n    at W (http://127.0.0.1:4173/_next/static/chunks/0fk3y_yob4hqy.js:1:4451)"
+  }
+]

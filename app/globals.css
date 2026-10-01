@@ -36,6 +36,35 @@
   color-scheme: dark;
   --radius: 0.375rem;
 
+  /* Official brand values are isolated from the broader UI color system. */
+  --brand-background: #05080d;
+  --brand-petroleum: #0f262b;
+  --brand-turquoise: #39dbd3;
+  --brand-turquoise-soft: #6de8e1;
+  --brand-white: #e3e6e8;
+  --brand-ice: #cfe8e8;
+
+  /* Landing narrative rhythm — tuned here before the cinematic system arrives. */
+  --ks-scene-min-height: 100svh;
+  --ks-scene-min-height-tall: 110svh;
+  --ks-scene-padding-mobile: clamp(5rem, 14vw, 7rem);
+  --ks-scene-padding-desktop: clamp(6rem, 10vw, 10rem);
+  --ks-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ks-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Readable cinematic type scale — semantic values shared by public pages. */
+  --ks-type-hero: clamp(3rem, 4.5vw, 4.75rem);
+  --ks-type-section: clamp(2.25rem, 3.2vw, 3.6rem);
+  --ks-type-page-hero: clamp(2.65rem, 3.7vw, 4.5rem);
+  --ks-type-statement: clamp(1.2rem, 1.55vw, 1.6rem);
+  --ks-type-body: clamp(1.05rem, 1.12vw, 1.2rem);
+  --ks-type-secondary: clamp(1rem, 1vw, 1.08rem);
+  --ks-type-card-title: clamp(1.2rem, 1.3vw, 1.38rem);
+  --ks-type-card-copy: clamp(1rem, 1.04vw, 1.1rem);
+  --ks-type-footer: clamp(0.95rem, 0.96vw, 1.05rem);
+  --ks-type-form: clamp(1rem, 1vw, 1.08rem);
+  --ks-type-form-support: clamp(0.9rem, 0.94vw, 0.98rem);
+
   /* Deep navy/black background */
   --background: oklch(0.16 0.02 240);
   --foreground: oklch(0.95 0.005 240);
@@ -54,7 +83,7 @@
   --secondary-foreground: oklch(0.95 0.005 240);
 
   --muted: oklch(0.24 0.03 240);
-  --muted-foreground: oklch(0.68 0.02 235);
+  --muted-foreground: oklch(0.78 0.018 235);
 
   --accent: oklch(0.82 0.13 190);
   --accent-foreground: oklch(0.16 0.02 240);
@@ -66,6 +95,72 @@
   --ring: oklch(0.82 0.13 190);
 }
 
+/* Shared public lockup: an unfiltered official image plus live HTML/CSS text. */
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.brand-lockup__symbol {
+  display: block;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: "Segoe UI Variable Display", "Segoe UI", "Trebuchet MS", sans-serif;
+  font-size: clamp(1rem, 1.1vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.brand-wordmark__white { color: var(--brand-white); }
+.brand-wordmark__turquoise { color: var(--brand-turquoise); }
+
+.brand-wordmark__x {
+  position: relative;
+  display: inline-block;
+  width: 0.72em;
+  height: 0.82em;
+  margin: 0 0.025em;
+  vertical-align: -0.06em;
+}
+
+.brand-wordmark__x::before,
+.brand-wordmark__x::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.9em;
+  height: 0.14em;
+  border-radius: 999px;
+  content: "";
+  transform-origin: center;
+}
+
+.brand-wordmark__x::before {
+  background: var(--brand-white);
+  transform: translate(-50%, -50%) rotate(47deg);
+}
+
+.brand-wordmark__x::after {
+  background: var(--brand-turquoise);
+  transform: translate(-50%, -50%) rotate(-47deg);
+}
+
+@media (max-width: 639px) {
+  .brand-lockup { gap: 0.55rem; }
+  .brand-lockup__symbol { width: 2.25rem; height: 2.25rem; }
+  .brand-wordmark { font-size: 1rem; }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -73,17 +168,384 @@
   html {
     scroll-behavior: smooth;
   }
+  html[data-cinematic-autoscroll='true'] {
+    scroll-behavior: auto;
+  }
   body {
     @apply bg-background text-foreground;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 72%, transparent);
+    color: var(--primary-foreground);
+  }
+
+  * {
+    scrollbar-color: color-mix(in oklch, var(--primary) 48%, transparent)
+      color-mix(in oklch, var(--background) 88%, transparent);
+    scrollbar-width: thin;
+  }
+
+  *::-webkit-scrollbar {
+    height: 0.7rem;
+    width: 0.7rem;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: color-mix(in oklch, var(--background) 88%, transparent);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border: 2px solid var(--background);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--primary) 48%, transparent);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--primary) 70%, transparent);
   }
 }
 
 /* ==========================================================================
-   Motion system — Konamy Systems
+   Motion system — Conexacod
    Lightweight CSS-only animations (transforms + opacity). No heavy libs.
    ========================================================================== */
 
 @layer utilities {
+  .ks-type-hero,
+  .ks-type-page-hero,
+  .ks-type-section,
+  .ks-type-statement,
+  .ks-type-card-title {
+    color: var(--foreground);
+    text-wrap: balance;
+  }
+
+  .ks-type-hero {
+    font-size: var(--ks-type-hero);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+  }
+
+  .ks-type-page-hero {
+    font-size: var(--ks-type-page-hero);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .ks-type-section {
+    font-size: var(--ks-type-section);
+    line-height: 1.1;
+    letter-spacing: -0.028em;
+  }
+
+  .ks-type-statement {
+    font-size: var(--ks-type-statement);
+    line-height: 1.45;
+    color: color-mix(in oklch, var(--foreground) 92%, transparent);
+  }
+
+  .ks-type-statement.text-primary {
+    color: var(--primary);
+  }
+
+  .ks-copy-primary,
+  .ks-copy-secondary,
+  .ks-card-copy {
+    text-wrap: pretty;
+  }
+
+  .ks-copy-primary {
+    max-inline-size: 62ch;
+    font-size: var(--ks-type-body);
+    line-height: 1.65;
+    color: color-mix(in oklch, var(--foreground) 90%, transparent);
+  }
+
+  .ks-copy-secondary {
+    max-inline-size: 68ch;
+    font-size: var(--ks-type-secondary);
+    line-height: 1.62;
+    color: color-mix(in oklch, var(--foreground) 82%, transparent);
+  }
+
+  .ks-type-card-title {
+    font-size: var(--ks-type-card-title);
+    line-height: 1.25;
+    letter-spacing: -0.012em;
+  }
+
+  .ks-card-copy {
+    font-size: var(--ks-type-card-copy);
+    line-height: 1.6;
+    color: color-mix(in oklch, var(--foreground) 84%, transparent);
+  }
+
+  .ks-footer-copy {
+    font-size: var(--ks-type-footer);
+    line-height: 1.6;
+    color: color-mix(in oklch, var(--foreground) 82%, transparent);
+  }
+
+  /* Public pages inherit the approved Inicio reading scale without touching admin. */
+  [data-public-content] .text-sm {
+    font-size: var(--ks-type-secondary);
+  }
+
+  [data-public-content] .text-sm.leading-relaxed {
+    line-height: 1.62;
+    color: color-mix(in oklch, var(--foreground) 84%, transparent);
+  }
+
+  .ks-form-label {
+    font-size: var(--ks-type-form);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--foreground);
+  }
+
+  .ks-form-control {
+    min-height: 2.85rem;
+    font-size: var(--ks-type-form);
+    line-height: 1.5;
+  }
+
+  .ks-form-support,
+  .ks-form-feedback {
+    font-size: var(--ks-type-form-support);
+    line-height: 1.5;
+  }
+
+  .ks-form-support {
+    color: color-mix(in oklch, var(--foreground) 78%, transparent);
+  }
+
+  .ks-form-action {
+    min-height: 2.75rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+  }
+
+  .ks-cinematic-page-root [data-cinematic-page-content] .text-sm {
+    font-size: var(--ks-type-secondary);
+  }
+
+  .ks-cinematic-page-root [data-cinematic-page-content] .text-sm.leading-relaxed {
+    line-height: 1.62;
+    color: color-mix(in oklch, var(--foreground) 84%, transparent);
+  }
+
+  /* --- Landing scenes --- */
+  .ks-scene {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-height: var(--ks-scene-min-height);
+    align-items: center;
+    scroll-margin-top: 5rem;
+  }
+
+  .ks-scene--tall {
+    min-height: var(--ks-scene-min-height-tall);
+  }
+
+  .ks-scene-content {
+    width: 100%;
+    padding-block: var(--ks-scene-padding-mobile);
+  }
+
+  @media (min-width: 1024px) {
+    .ks-scene {
+      align-items: center;
+    }
+
+    .ks-scene-content {
+      padding-block: var(--ks-scene-padding-desktop);
+    }
+  }
+
+  /* --- One continuous cinematic background for the landing --- */
+  .ks-cinematic-root {
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    --cinematic-global-progress: 0;
+    --cinematic-intro-reveal: 0;
+  }
+
+  .ks-cinematic-stage,
+  .ks-cinematic-page-stage {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: var(--background);
+  }
+
+  .ks-cinematic-video,
+  .ks-cinematic-page-video {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: var(--cinematic-object-position, 50% 50%);
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .ks-cinematic-page-video {
+    will-change: opacity;
+  }
+
+  .ks-cinematic-video[data-cinematic-video='0'] {
+    visibility: visible;
+  }
+
+  .ks-cinematic-overlay,
+  .ks-cinematic-page-overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ks-cinematic-overlay {
+    background:
+      linear-gradient(90deg, rgba(3, 9, 16, 0.78) 0%, rgba(3, 9, 16, 0.42) 42%, rgba(3, 9, 16, 0.16) 72%, rgba(3, 9, 16, 0.28) 100%),
+      linear-gradient(180deg, rgba(3, 8, 14, 0.3) 0%, transparent 32%, rgba(3, 8, 14, 0.48) 100%);
+  }
+
+  /* --- Configurable single-film narratives for internal public pages --- */
+  .ks-cinematic-page-root {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    overflow-x: clip;
+    background: transparent;
+    --cinematic-page-progress: 0;
+  }
+
+  .ks-cinematic-page-stage {
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+  }
+
+  .ks-cinematic-page-video {
+    visibility: visible;
+    opacity: 0;
+  }
+
+  .ks-cinematic-page-root[data-video-ready='true']
+    .ks-cinematic-page-video {
+    opacity: 1;
+  }
+
+  .ks-cinematic-page-overlay[data-overlay='balanced'] {
+    background:
+      linear-gradient(90deg, rgba(3, 9, 16, 0.76) 0%, rgba(3, 9, 16, 0.44) 46%, rgba(3, 9, 16, 0.24) 100%),
+      linear-gradient(180deg, rgba(3, 8, 14, 0.48) 0%, rgba(3, 8, 14, 0.2) 38%, rgba(3, 8, 14, 0.7) 100%);
+  }
+
+  .ks-cinematic-page-overlay[data-overlay='strong'] {
+    background:
+      linear-gradient(90deg, rgba(3, 9, 16, 0.86) 0%, rgba(3, 9, 16, 0.61) 54%, rgba(3, 9, 16, 0.45) 100%),
+      linear-gradient(180deg, rgba(3, 8, 14, 0.6) 0%, rgba(3, 8, 14, 0.34) 38%, rgba(3, 8, 14, 0.78) 100%);
+  }
+
+  .ks-cinematic-page-foreground {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ks-cinematic-page-root [data-cinematic-page-content] > section {
+    opacity: var(--cinematic-page-content-opacity, 1);
+    transform: translate3d(
+      0,
+      var(--cinematic-page-content-shift, 0px),
+      0
+    );
+    will-change: opacity, transform;
+  }
+
+  .ks-cinematic-intro-runway {
+    position: relative;
+    z-index: 1;
+    height: 100svh;
+  }
+
+  .ks-cinematic-root[data-intro-state='skipped']
+    .ks-cinematic-intro-runway {
+    display: none;
+  }
+
+  .ks-cinematic-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ks-cinematic-root .ks-scene-content {
+    opacity: var(--cinematic-content-opacity, 1);
+    transform: translate3d(
+      0,
+      var(--cinematic-content-shift, 0px),
+      0
+    );
+  }
+
+  .ks-cinematic-root[data-intro-state='pending']
+    [data-scene='hero']
+    > .ks-scene-content,
+  .ks-cinematic-root[data-intro-state='running']
+    [data-scene='hero']
+    > .ks-scene-content {
+    --cinematic-content-opacity: 0;
+    --cinematic-content-shift: 12px;
+  }
+
+  .ks-cinematic-debug {
+    position: fixed;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    z-index: 70;
+    min-width: 12.5rem;
+    border: 1px solid color-mix(in oklch, var(--primary) 38%, transparent);
+    border-radius: 0.35rem;
+    background: rgba(2, 8, 14, 0.82);
+    padding: 0.65rem 0.75rem;
+    color: color-mix(in oklch, var(--primary) 88%, white 12%);
+    font-size: 0.68rem;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    box-shadow: 0 0 24px rgba(41, 232, 246, 0.08);
+    backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 767px) {
+    .ks-cinematic-video,
+    .ks-cinematic-page-video {
+      object-position: var(--cinematic-object-position-mobile, 50% 50%);
+    }
+
+    .ks-cinematic-overlay {
+      background:
+        linear-gradient(180deg, rgba(3, 8, 14, 0.48) 0%, rgba(3, 8, 14, 0.2) 34%, rgba(3, 8, 14, 0.7) 100%),
+        linear-gradient(90deg, rgba(3, 8, 14, 0.58), rgba(3, 8, 14, 0.2));
+    }
+
+    .ks-cinematic-page-overlay[data-overlay='balanced'] {
+      background:
+        linear-gradient(180deg, rgba(3, 8, 14, 0.66) 0%, rgba(3, 8, 14, 0.34) 34%, rgba(3, 8, 14, 0.78) 100%),
+        linear-gradient(90deg, rgba(3, 8, 14, 0.68), rgba(3, 8, 14, 0.32));
+    }
+
+    .ks-cinematic-page-overlay[data-overlay='strong'] {
+      background:
+        linear-gradient(180deg, rgba(3, 8, 14, 0.8) 0%, rgba(3, 8, 14, 0.54) 38%, rgba(3, 8, 14, 0.86) 100%),
+        linear-gradient(90deg, rgba(3, 8, 14, 0.78), rgba(3, 8, 14, 0.52));
+    }
+  }
+
   /* --- Scroll reveal (driven by IntersectionObserver adding data-visible) --- */
   [data-reveal] {
     opacity: 0;
@@ -667,6 +1129,17 @@
   }
   .ks-enter,
   .ks-enter-fade {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ks-cinematic-intro-runway {
+    display: none !important;
+  }
+  .ks-cinematic-root .ks-scene-content {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ks-cinematic-page-root [data-cinematic-page-content] > section {
     opacity: 1 !important;
     transform: none !important;
   }

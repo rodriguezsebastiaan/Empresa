@@ -75,11 +75,15 @@ export const metadata = buildPageMetadata('solutions')
 
 export default function SolutionsPage() {
   return (
-    <SiteShell>
+    <SiteShell seoPage="solutions" cinematicPage="solutions">
       <PageHero
-        eyebrow="SOLUCIONES"
-        title="Soluciones digitales diseñadas alrededor de la operación real de su empresa."
-        description="Konamy Systems interviene donde la operación se desordena, la información se dispersa o el crecimiento empieza a depender de demasiadas tareas manuales. Cada solución se construye según el problema, no según una plantilla rígida."
+        title="Cada solución empieza por encontrar el problema correcto."
+        description="Organizamos información dispersa, conectamos herramientas y automatizamos tareas repetitivas. Entendemos su operación antes de definir la solución digital."
+        aside={
+          <p className="ks-type-statement font-medium">
+            No empezamos por la tecnología. Empezamos por entender qué necesita resolver su empresa.
+          </p>
+        }
         actions={
           <>
             <SiteAction href={siteConfig.routes.services}>CONOCER SERVICIOS</SiteAction>
@@ -88,6 +92,9 @@ export default function SolutionsPage() {
             </SiteAction>
             <SiteAction href={siteConfig.routes.advisory} variant="secondary">
               AGENDAR ASESORÍA
+            </SiteAction>
+            <SiteAction href={siteConfig.routes.process} variant="text">
+              CÓMO CONSTRUIMOS LA SOLUCIÓN
             </SiteAction>
           </>
         }
@@ -109,10 +116,10 @@ export default function SolutionsPage() {
               className="grid gap-6 rounded-3xl border border-border/70 bg-background/45 px-6 py-8 backdrop-blur-sm lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
             >
               <div>
-                <h2 className="text-2xl font-medium text-foreground">
+                <h2 className="ks-type-card-title font-semibold">
                   {group.title}
                 </h2>
-                <p className="mt-4 leading-relaxed text-muted-foreground">
+                <p className="ks-card-copy mt-4">
                   {group.summary}
                 </p>
               </div>
@@ -122,7 +129,7 @@ export default function SolutionsPage() {
                     as="li"
                     key={item}
                     delay={index * 100 + itemIndex * 70}
-                    className="rounded-2xl border border-border/70 bg-background/55 px-4 py-4 text-sm text-foreground/90"
+                    className="ks-card-copy rounded-2xl border border-border/70 bg-background/55 px-4 py-4"
                   >
                     {item}
                   </Reveal>
@@ -152,10 +159,10 @@ export default function SolutionsPage() {
                 <p className="text-xs font-semibold tracking-[0.3em] text-primary">
                   0{index + 1}
                 </p>
-                <h3 className="mt-4 text-xl font-medium text-foreground">
+                <h3 className="ks-type-card-title mt-4 font-semibold">
                   {step.title}
                 </h3>
-                <p className="mt-4 leading-relaxed text-muted-foreground">
+                <p className="ks-card-copy mt-4">
                   {step.description}
                 </p>
               </Reveal>

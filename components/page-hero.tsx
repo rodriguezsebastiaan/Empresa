@@ -3,7 +3,7 @@ import { Reveal } from '@/components/reveal'
 import { cn } from '@/lib/utils'
 
 type PageHeroProps = {
-  eyebrow: string
+  eyebrow?: string
   title: string
   description: string
   actions?: ReactNode
@@ -31,24 +31,26 @@ export function PageHero({
       <div className="mx-auto max-w-7xl px-6 pb-16 lg:px-10 lg:pb-20">
         <div className="grid gap-12 border-b border-border/60 pb-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)] lg:items-end">
           <div className="max-w-3xl">
-            <Reveal
-              as="p"
-              variant="fade"
-              className="mb-6 text-xs font-semibold tracking-[0.3em] text-primary"
-            >
-              {eyebrow}
-            </Reveal>
+            {eyebrow ? (
+              <Reveal
+                as="p"
+                variant="fade"
+                className="mb-6 text-xs font-semibold tracking-[0.3em] text-primary"
+              >
+                {eyebrow}
+              </Reveal>
+            ) : null}
             <Reveal
               as="h1"
               delay={80}
-              className="text-balance text-4xl font-semibold leading-[1.06] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+              className="ks-type-page-hero font-semibold"
             >
               {title}
             </Reveal>
             <Reveal
               as="p"
               delay={160}
-              className="mt-6 max-w-2xl text-pretty leading-relaxed text-muted-foreground"
+              className="ks-copy-primary mt-7 max-w-2xl"
             >
               {description}
             </Reveal>

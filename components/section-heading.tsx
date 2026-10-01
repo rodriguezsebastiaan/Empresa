@@ -39,7 +39,7 @@ export function SectionHeading({
       <Reveal
         as="h2"
         delay={80}
-        className="text-balance text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl"
+        className="ks-type-section font-semibold"
       >
         {title}
       </Reveal>
@@ -47,7 +47,7 @@ export function SectionHeading({
         <Reveal
           as="p"
           delay={160}
-          className="mt-5 text-pretty leading-relaxed text-muted-foreground"
+          className="ks-copy-primary mt-6"
         >
           {description}
         </Reveal>

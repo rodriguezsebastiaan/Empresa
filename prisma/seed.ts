@@ -16,7 +16,7 @@ async function main() {
   const prisma = getDb()
   const email = process.env.ADMIN_SEED_EMAIL?.trim()
   const password = process.env.ADMIN_SEED_PASSWORD?.trim()
-  const name = sanitizeInline(process.env.ADMIN_SEED_NAME?.trim() || 'Administrador Konamy')
+  const name = sanitizeInline(process.env.ADMIN_SEED_NAME?.trim() || 'Administrador Conexacod')
 
   if (!email || !password) {
     throw new Error(

@@ -61,15 +61,40 @@ function toBooleanValue(value: unknown) {
 }
 
 function isEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  // Accept one bare mailbox, never display names, comments or recipient lists.
+  if (value.length > 191) return false
+  const [local] = value.split('@')
+  return local.length <= 64 && !local.startsWith('.') && !local.endsWith('.') &&
+    !local.includes('..') &&
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/.test(value)
 }
 
 function isIsoDate(value: string) {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const date = new Date(`${value}T00:00:00Z`)
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value
 }
 
 function isTimeValue(value: string) {
-  return /^\d{2}:\d{2}$/.test(value)
+  return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)
+}
+
+function validatePayloadShape(input: unknown, fields: string[]): FieldErrors {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    return { form: 'La solicitud debe contener un objeto válido.' }
+  }
+  const record = input as Record<string, unknown>
+  const errors: FieldErrors = {}
+  if (Object.keys(record).some((key) => !fields.includes(key))) {
+    errors.form = 'La solicitud contiene campos inesperados.'
+  }
+  for (const key of fields) {
+    if (key === 'website' && record[key] === undefined) continue
+    if (typeof record[key] !== (key === 'privacyAccepted' ? 'boolean' : 'string')) {
+      errors.form = 'La solicitud contiene valores de tipo inválido.'
+    }
+  }
+  return errors
 }
 
 function applyLengthRule(
@@ -112,7 +137,7 @@ function contactBase(input: unknown) {
 
 export function validateContactForm(input: unknown): ValidationResult<ContactFormData> {
   const data = contactBase(input)
-  const errors: FieldErrors = {}
+  const errors = validatePayloadShape(input, Object.keys(data))
 
   if (data.website) {
     errors.website = 'Spam detectado.'
@@ -167,7 +192,7 @@ export function validateAdvisoryBookingForm(
     website: toStringValue(record.website),
   }
 
-  const errors: FieldErrors = {}
+  const errors = validatePayloadShape(input, Object.keys(data))
 
   if (data.website) {
     errors.website = 'Spam detectado.'
@@ -197,7 +222,7 @@ export function validateAdvisoryBookingForm(
     errors.phone = 'Ingrese un teléfono válido.'
   }
 
-  if (!data.modality) {
+  if (!data.modality || data.modality.length > 80) {
     errors.modality = 'La modalidad es obligatoria.'
   }
 
@@ -209,11 +234,11 @@ export function validateAdvisoryBookingForm(
     errors.time = 'Seleccione una hora válida.'
   }
 
-  if (!data.timezone) {
+  if (!data.timezone || data.timezone.length > 80) {
     errors.timezone = 'La zona horaria es obligatoria.'
   }
 
-  if (!data.requestId || data.requestId.length < 8) {
+  if (!/^[a-zA-Z0-9_-]{8,80}$/.test(data.requestId)) {
     errors.requestId = 'No se pudo preparar la solicitud. Recargue la página.'
   }
 
@@ -252,7 +277,10 @@ export function validateDiagnosticForm(input: unknown): ValidationResult<Diagnos
     website: toStringValue(record.website),
   }
 
-  const errors = validateDiagnosticStep(7, data)
+  const errors = {
+    ...validatePayloadShape(input, Object.keys(data)),
+    ...validateDiagnosticStep(7, data),
+  }
 
   if (Object.keys(errors).length > 0) {
     return { success: false, errors }
@@ -359,11 +387,11 @@ export function validateDiagnosticStep(
   }
 
   if (step >= 6) {
-    if (!input.contactPreference?.trim()) {
+    if (!['Correo', 'WhatsApp', 'Llamada'].includes(input.contactPreference?.trim() ?? '')) {
       errors.contactPreference = 'Seleccione una preferencia de contacto.'
     }
 
-    if (!input.wantsMeeting?.trim()) {
+    if (!['Sí', 'No'].includes(input.wantsMeeting?.trim() ?? '')) {
       errors.wantsMeeting = 'Indique si desea agendar una asesoría.'
     }
   }

@@ -11,7 +11,7 @@ import { renderEmailTemplate } from '@/lib/email-templates'
 function sampleMessage(to = 'cliente@example.com'): EmailMessage {
   return {
     to,
-    subject: 'Confirmación Konamy',
+    subject: 'Confirmación Conexacod',
     html: '<p>Contenido seguro</p>',
     text: 'Contenido seguro',
   }

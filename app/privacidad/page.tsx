@@ -31,7 +31,7 @@ export const metadata: Metadata = buildPageMetadata('privacy')
 
 export default function PrivacyPage() {
   return (
-    <SiteShell>
+    <SiteShell seoPage="privacy">
       <section className="mx-auto max-w-7xl px-6 py-18 lg:px-10 lg:py-24">
         <Reveal className="rounded-[2rem] border border-border/70 bg-background/45 px-6 py-10 backdrop-blur-sm lg:px-10">
           <Reveal
@@ -44,20 +44,20 @@ export default function PrivacyPage() {
           <Reveal
             as="h1"
             delay={80}
-            className="mt-5 max-w-3xl text-balance text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl"
+            className="ks-type-page-hero mt-5 max-w-3xl font-semibold"
           >
             Versión provisional de la política de privacidad para la salida 1.0.
           </Reveal>
           <Reveal
             as="p"
             delay={160}
-            className="mt-5 max-w-3xl leading-relaxed text-muted-foreground"
+            className="ks-copy-primary mt-5 max-w-3xl"
           >
             {siteConfig.legal.privacyPolicyNotice}
           </Reveal>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            <div className="rounded-2xl border border-border/70 bg-background/45 px-5 py-5 text-sm text-muted-foreground">
+            <div className="ks-card-copy rounded-2xl border border-border/70 bg-background/45 px-5 py-5">
               <p className="text-xs font-semibold tracking-[0.24em] text-primary">
                 RESPONSABLE
               </p>
@@ -75,7 +75,9 @@ export default function PrivacyPage() {
                     Correo legal
                   </dt>
                   <dd className="mt-1 text-foreground">
-                    {siteConfig.legal.privacyPolicyOwnerEmail}
+                    {siteConfig.legal.privacyPolicyOwnerEmail.includes('.invalid')
+                      ? 'PENDIENTE · correo legal'
+                      : siteConfig.legal.privacyPolicyOwnerEmail}
                   </dd>
                 </div>
                 <div>
@@ -97,7 +99,7 @@ export default function PrivacyPage() {
               </dl>
             </div>
 
-            <div className="rounded-2xl border border-primary/25 bg-primary/[0.06] px-5 py-5 text-sm text-muted-foreground">
+            <div className="ks-card-copy rounded-2xl border border-primary/25 bg-primary/[0.06] px-5 py-5">
               <p className="text-xs font-semibold tracking-[0.24em] text-primary">
                 ESTADO DEL DOCUMENTO
               </p>
@@ -131,7 +133,7 @@ export default function PrivacyPage() {
                 delay={index * 90}
                 className="rounded-3xl border border-border/70 bg-background/50 px-6 py-6 backdrop-blur-sm"
               >
-                <p className="text-sm leading-relaxed text-muted-foreground">{item}</p>
+                <p className="ks-card-copy">{item}</p>
               </Reveal>
             ))}
           </div>
@@ -147,7 +149,7 @@ export default function PrivacyPage() {
               description="Estas finalidades describen la intención operativa del sitio, pero deben revisarse con el texto legal definitivo antes del despliegue público final."
             />
 
-            <ul className="mt-8 space-y-4 text-sm leading-relaxed text-muted-foreground">
+            <ul className="ks-copy-secondary mt-8 space-y-4">
               {intendedPurposes.map((item) => (
                 <li
                   key={item}
@@ -169,7 +171,7 @@ export default function PrivacyPage() {
               description="Los siguientes elementos siguen pendientes de confirmación y deben reemplazarse con información real antes del despliegue final."
             />
 
-            <ul className="mt-8 space-y-4 text-sm leading-relaxed text-muted-foreground">
+            <ul className="ks-copy-secondary mt-8 space-y-4">
               {pendingItems.map((item) => (
                 <li
                   key={item}

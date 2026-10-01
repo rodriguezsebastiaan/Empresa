@@ -3,12 +3,12 @@ import { Reveal } from '@/components/reveal'
 import { SiteAction } from '@/components/site-action'
 import { SiteShell } from '@/components/site-shell'
 import { siteConfig } from '@/config/site'
-import { absoluteUrl } from '@/lib/site'
+import { seoUrl } from '@/config/seo'
 
 export const metadata: Metadata = {
-  title: 'Ruta no disponible | Konamy Systems',
+  title: 'Ruta no disponible | ConexaCod',
   description:
-    'La ruta solicitada no forma parte de la versión 1.0 publicada de Konamy Systems.',
+    'La ruta solicitada no forma parte de la versión 1.0 publicada de ConexaCod.',
   robots: {
     index: false,
     follow: false,
@@ -22,24 +22,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: siteConfig.seo.locale,
-    url: siteConfig.url,
+    url: seoUrl(),
     siteName: siteConfig.seo.siteName,
-    title: 'Ruta no disponible | Konamy Systems',
+    title: 'Ruta no disponible | ConexaCod',
     description:
-      'La ruta solicitada no forma parte de la versión 1.0 publicada de Konamy Systems.',
+      'La ruta solicitada no forma parte de la versión 1.0 publicada de ConexaCod.',
     images: [
       {
-        url: absoluteUrl(siteConfig.seo.openGraphImagePath),
+        url: seoUrl(siteConfig.seo.openGraphImagePath),
         alt: siteConfig.seo.openGraphImageAlt,
       },
     ],
   },
   twitter: {
     card: siteConfig.seo.twitterCard,
-    title: 'Ruta no disponible | Konamy Systems',
+    title: 'Ruta no disponible | ConexaCod',
     description:
-      'La ruta solicitada no forma parte de la versión 1.0 publicada de Konamy Systems.',
-    images: [absoluteUrl(siteConfig.seo.openGraphImagePath)],
+      'La ruta solicitada no forma parte de la versión 1.0 publicada de ConexaCod.',
+    images: [seoUrl(siteConfig.seo.openGraphImagePath)],
   },
 }
 
@@ -52,9 +52,9 @@ export default function NotFound() {
           <h1 className="mt-6 text-4xl font-semibold text-foreground sm:text-5xl">
             Esta ruta no está disponible.
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+          <p className="ks-copy-secondary mx-auto mt-5 max-w-2xl">
             La página que intenta abrir no existe, cambió de ubicación o todavía no forma
-            parte de la versión 1.0 publicada de Konamy Systems.
+            parte de la versión 1.0 publicada de ConexaCod.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

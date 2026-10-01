@@ -35,7 +35,7 @@ export const metadata = buildPageMetadata('diagnostics')
 
 export default function DiagnosticPage() {
   return (
-    <SiteShell>
+    <SiteShell seoPage="diagnostics">
       <PageHero
         eyebrow="DIAGNÓSTICO"
         title="Explique su problema por etapas y convirtámoslo en un siguiente paso claro."
@@ -49,7 +49,7 @@ export default function DiagnosticPage() {
           </>
         }
         aside={
-          <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+          <div className="ks-copy-secondary space-y-4">
             <p>
               El formulario no guarda datos personales en `localStorage` y deja
               preparado el flujo para integraciones reales cuando existan
@@ -97,8 +97,8 @@ export default function DiagnosticPage() {
                   <div className="flex size-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
                     <Icon className="size-5" />
                   </div>
-                  <h2 className="mt-5 text-xl font-medium text-foreground">{item.title}</h2>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  <h2 className="ks-type-card-title mt-5 font-semibold">{item.title}</h2>
+                  <p className="ks-card-copy mt-3">
                     {item.description}
                   </p>
                 </Reveal>

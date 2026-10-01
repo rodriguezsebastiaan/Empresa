@@ -3,7 +3,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
-  "connect-src 'self' ws: wss: https://oauth2.googleapis.com https://www.googleapis.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+  `connect-src 'self'${isProduction ? '' : ' ws: wss:'} https://va.vercel-scripts.com`,
   "font-src 'self' data:",
   "form-action 'self'",
   "frame-ancestors 'none'",
@@ -61,11 +61,13 @@ const securityHeaders = [
 if (isProduction) {
   securityHeaders.push({
     key: 'Strict-Transport-Security',
-    value: 'max-age=31536000; includeSubDomains; preload',
+    // Scope to this HTTPS host; subdomain TLS coverage/preload is not verified.
+    value: 'max-age=31536000',
   })
 }
 
 const nextConfig = {
+  poweredByHeader: false,
   images: {
     unoptimized: true,
   },

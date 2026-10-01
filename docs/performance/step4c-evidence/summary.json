@@ -1,0 +1,1789 @@
+[
+  {
+    "mode": "baseline",
+    "profile": "desktop",
+    "run": 1,
+    "fcp": 376,
+    "firstUsable": 1506.9,
+    "playing": 1433.9000000003725,
+    "stallCount": 5,
+    "stallMs": 2064.399999999441,
+    "longestStall": 659.2000000001863,
+    "stalls": [
+      {
+        "at": 1782.4000000003725,
+        "mediaTime": 0.348455,
+        "end": 2163.9000000003725,
+        "censored": false,
+        "d": 381.5
+      },
+      {
+        "at": 2699.100000000559,
+        "mediaTime": 0.851839,
+        "end": 3205.9000000003725,
+        "censored": false,
+        "d": 506.79999999981374
+      },
+      {
+        "at": 3810.4000000003725,
+        "mediaTime": 1.431427,
+        "end": 3946.9000000003725,
+        "censored": false,
+        "d": 136.5
+      },
+      {
+        "at": 4401.100000000559,
+        "mediaTime": 1.85337,
+        "end": 4781.5,
+        "censored": false,
+        "d": 380.3999999994412
+      },
+      {
+        "at": 5308.5,
+        "mediaTime": 2.350768,
+        "end": 5967.700000000186,
+        "censored": false,
+        "d": 659.2000000001863
+      }
+    ],
+    "video1Loaded": 1358.6000000005588,
+    "promotion": 488.6630000000878,
+    "handoff": {
+      "t": 9622.799999999814,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 9430.3,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2033989
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "baseline",
+    "profile": "desktop",
+    "run": 2,
+    "fcp": 588,
+    "firstUsable": 1689.5,
+    "playing": 1641.7000000001863,
+    "stallCount": 4,
+    "stallMs": 1601.6000000005588,
+    "longestStall": 574.8000000007451,
+    "stalls": [
+      {
+        "at": 2003.7000000001863,
+        "mediaTime": 0.361735,
+        "end": 2366.7000000001863,
+        "censored": false,
+        "d": 363
+      },
+      {
+        "at": 2867.600000000559,
+        "mediaTime": 0.851699,
+        "end": 3276.4000000003725,
+        "censored": false,
+        "d": 408.79999999981374
+      },
+      {
+        "at": 4285.4000000003725,
+        "mediaTime": 1.848463,
+        "end": 4540.4000000003725,
+        "censored": false,
+        "d": 255
+      },
+      {
+        "at": 5053.5,
+        "mediaTime": 2.352194,
+        "end": 5628.300000000745,
+        "censored": false,
+        "d": 574.8000000007451
+      }
+    ],
+    "video1Loaded": 1563.4000000003725,
+    "promotion": 719.4709999994302,
+    "handoff": {
+      "t": 9283.600000000559,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 9085.2,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2036989
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "baseline",
+    "profile": "desktop",
+    "run": 3,
+    "fcp": 596,
+    "firstUsable": 1684.5,
+    "playing": 1628.6000000005588,
+    "stallCount": 5,
+    "stallMs": 2051.5999999996275,
+    "longestStall": 648.4000000003725,
+    "stalls": [
+      {
+        "at": 2024.6000000005588,
+        "mediaTime": 0.389822,
+        "end": 2437.4000000003725,
+        "censored": false,
+        "d": 412.79999999981374
+      },
+      {
+        "at": 2927.800000000745,
+        "mediaTime": 0.852633,
+        "end": 3309.600000000559,
+        "censored": false,
+        "d": 381.79999999981374
+      },
+      {
+        "at": 3840.600000000559,
+        "mediaTime": 1.354835,
+        "end": 4099.700000000186,
+        "censored": false,
+        "d": 259.09999999962747
+      },
+      {
+        "at": 4616.800000000745,
+        "mediaTime": 1.849928,
+        "end": 4966.300000000745,
+        "censored": false,
+        "d": 349.5
+      },
+      {
+        "at": 5496.4000000003725,
+        "mediaTime": 2.353718,
+        "end": 6144.800000000745,
+        "censored": false,
+        "d": 648.4000000003725
+      }
+    ],
+    "video1Loaded": 1549.5,
+    "promotion": 720.7480000006399,
+    "handoff": {
+      "t": 9794.900000000373,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 9600.9,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2038489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead15",
+    "profile": "desktop",
+    "run": 1,
+    "fcp": 372,
+    "firstUsable": 1313.8,
+    "playing": 1256.2999999998137,
+    "stallCount": 6,
+    "stallMs": 1621.4999999981374,
+    "longestStall": 497.3999999994412,
+    "stalls": [
+      {
+        "at": 1776.7999999998137,
+        "mediaTime": 0.509775,
+        "end": 1874.699999999255,
+        "censored": false,
+        "d": 97.8999999994412
+      },
+      {
+        "at": 2320,
+        "mediaTime": 0.935568,
+        "end": 2363.899999999441,
+        "censored": false,
+        "d": 43.89999999944121
+      },
+      {
+        "at": 3787.2999999998137,
+        "mediaTime": 2.331232,
+        "end": 4284.699999999255,
+        "censored": false,
+        "d": 497.3999999994412
+      },
+      {
+        "at": 4838,
+        "mediaTime": 2.854538,
+        "end": 5218.799999999814,
+        "censored": false,
+        "d": 380.79999999981374
+      },
+      {
+        "at": 5830.399999999441,
+        "mediaTime": 3.436856,
+        "end": 6263.0999999996275,
+        "censored": false,
+        "d": 432.70000000018626
+      },
+      {
+        "at": 8184.799999999814,
+        "mediaTime": 5.349237,
+        "end": 8353.599999999627,
+        "censored": false,
+        "d": 168.79999999981374
+      }
+    ],
+    "video1Loaded": 4413.0999999996275,
+    "promotion": 3537.336999999752,
+    "bufferAtPromotion": {
+      "t": 3521.199999999255,
+      "index": "0",
+      "type": "progress",
+      "time": 2.093761,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          2.626
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 9007.199999999255,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 8806.9,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2032489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead15",
+    "profile": "desktop",
+    "run": 2,
+    "fcp": 608,
+    "firstUsable": 1529.9,
+    "playing": 1480.6000000005588,
+    "stallCount": 4,
+    "stallMs": 1098.5999999996275,
+    "longestStall": 402.09999999962747,
+    "stalls": [
+      {
+        "at": 2376.100000000559,
+        "mediaTime": 0.88358,
+        "end": 2571,
+        "censored": false,
+        "d": 194.8999999994412
+      },
+      {
+        "at": 4649.5,
+        "mediaTime": 2.933423,
+        "end": 4827.4000000003725,
+        "censored": false,
+        "d": 177.90000000037253
+      },
+      {
+        "at": 5355.300000000745,
+        "mediaTime": 3.435291,
+        "end": 5757.4000000003725,
+        "censored": false,
+        "d": 402.09999999962747
+      },
+      {
+        "at": 6286.700000000186,
+        "mediaTime": 3.937547,
+        "end": 6610.4000000003725,
+        "censored": false,
+        "d": 323.70000000018626
+      }
+    ],
+    "video1Loaded": 4673.4000000003725,
+    "promotion": 3762.9959999994753,
+    "bufferAtPromotion": {
+      "t": 3722.7000000001863,
+      "index": "0",
+      "type": "progress",
+      "time": 2.035424,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          2.995
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 8674.800000000745,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 8481.2,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2041489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead15",
+    "profile": "desktop",
+    "run": 3,
+    "fcp": 432,
+    "firstUsable": 1353,
+    "playing": 1301.2000000001863,
+    "stallCount": 5,
+    "stallMs": 1446.6000000005588,
+    "longestStall": 384.70000000018626,
+    "stalls": [
+      {
+        "at": 2202.2000000001863,
+        "mediaTime": 0.885934,
+        "end": 2360.0999999996275,
+        "censored": false,
+        "d": 157.8999999994412
+      },
+      {
+        "at": 4021.7999999998137,
+        "mediaTime": 2.519076,
+        "end": 4355.700000000186,
+        "censored": false,
+        "d": 333.90000000037253
+      },
+      {
+        "at": 4742.5999999996275,
+        "mediaTime": 2.852273,
+        "end": 5070.9000000003725,
+        "censored": false,
+        "d": 328.30000000074506
+      },
+      {
+        "at": 5675.0999999996275,
+        "mediaTime": 3.434803,
+        "end": 6059.799999999814,
+        "censored": false,
+        "d": 384.70000000018626
+      },
+      {
+        "at": 6659.5,
+        "mediaTime": 4.020172,
+        "end": 6901.299999999814,
+        "censored": false,
+        "d": 241.79999999981374
+      }
+    ],
+    "video1Loaded": 4449.5,
+    "promotion": 3602.227999999741,
+    "bufferAtPromotion": {
+      "t": 3566.2999999998137,
+      "index": "0",
+      "type": "progress",
+      "time": 2.092549,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          2.727
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 8887.099999999627,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 8679.2,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2035489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead25",
+    "profile": "desktop",
+    "run": 1,
+    "fcp": 356,
+    "firstUsable": 1304.6,
+    "playing": 1254,
+    "stallCount": 1,
+    "stallMs": 159.59999999962747,
+    "longestStall": 159.59999999962747,
+    "stalls": [
+      {
+        "at": 2154.699999999255,
+        "mediaTime": 0.884677,
+        "end": 2314.2999999988824,
+        "censored": false,
+        "d": 159.59999999962747
+      }
+    ],
+    "video1Loaded": 6109.799999998882,
+    "promotion": 5531.224000000293,
+    "bufferAtPromotion": {
+      "t": 5488.199999999255,
+      "index": "0",
+      "type": "timeupdate",
+      "time": 4.05877,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          5.064
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 7451.5,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 3
+    },
+    "heroVisible": {
+      "t": 7242,
+      "ready": 3,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 1144489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead25",
+    "profile": "desktop",
+    "run": 2,
+    "fcp": 628,
+    "firstUsable": 1548.1,
+    "playing": 1496.699999999255,
+    "stallCount": 2,
+    "stallMs": 505.8000000026077,
+    "longestStall": 312.7000000011176,
+    "stalls": [
+      {
+        "at": 2395.39999999851,
+        "mediaTime": 0.88534,
+        "end": 2588.5,
+        "censored": false,
+        "d": 193.10000000149012
+      },
+      {
+        "at": 6878.39999999851,
+        "mediaTime": 5.144051,
+        "end": 7191.0999999996275,
+        "censored": false,
+        "d": 312.7000000011176
+      }
+    ],
+    "video1Loaded": 6366.199999999255,
+    "promotion": 5783.473999999842,
+    "bufferAtPromotion": {
+      "t": 5766.0999999996275,
+      "index": "0",
+      "type": "timeupdate",
+      "time": 4.063112,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          4.835
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 8050.5,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 3
+    },
+    "heroVisible": {
+      "t": 7853.6,
+      "ready": 3,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 1261489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead25",
+    "profile": "desktop",
+    "run": 3,
+    "fcp": 588,
+    "firstUsable": 1487.6,
+    "playing": 1428.7999999988824,
+    "stallCount": 4,
+    "stallMs": 8127.599999997765,
+    "longestStall": 7239.299999998882,
+    "stalls": [
+      {
+        "at": 2331.0999999996275,
+        "mediaTime": 0.89285,
+        "end": 2531.199999999255,
+        "censored": false,
+        "d": 200.09999999962747
+      },
+      {
+        "at": 4004.2999999988824,
+        "mediaTime": 2.349602,
+        "end": 4344.0999999996275,
+        "censored": false,
+        "d": 339.80000000074506
+      },
+      {
+        "at": 5872.9000000003725,
+        "mediaTime": 3.849043,
+        "end": 6221.299999998882,
+        "censored": false,
+        "d": 348.3999999985099
+      },
+      {
+        "at": 7732.9000000003725,
+        "mediaTime": 5.35184,
+        "censored": true,
+        "d": 7239.299999998882
+      }
+    ],
+    "video1Loaded": 6338.5999999996275,
+    "promotion": 5738.023999998404,
+    "bufferAtPromotion": {
+      "t": 5680.699999999255,
+      "index": "0",
+      "type": "timeupdate",
+      "time": 3.687887,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          4.275
+        ]
+      ]
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 2032489
+    },
+    "errors": [],
+    "state": "running",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 2,
+        "time": 5.35184,
+        "opacity": "1",
+        "visibility": "visible",
+        "paused": false
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead25-repeat",
+    "profile": "desktop",
+    "run": 1,
+    "fcp": 392,
+    "firstUsable": 1294.2,
+    "playing": 1237.8999999985099,
+    "stallCount": 3,
+    "stallMs": 532.5,
+    "longestStall": 278.09999999962747,
+    "stalls": [
+      {
+        "at": 1641.8999999985099,
+        "mediaTime": 0.383419,
+        "end": 1799.699999999255,
+        "censored": false,
+        "d": 157.80000000074506
+      },
+      {
+        "at": 5461.199999999255,
+        "mediaTime": 4.017597,
+        "end": 5557.799999998882,
+        "censored": false,
+        "d": 96.59999999962747
+      },
+      {
+        "at": 6498.799999998882,
+        "mediaTime": 4.935114,
+        "end": 6776.89999999851,
+        "censored": false,
+        "d": 278.09999999962747
+      }
+    ],
+    "video1Loaded": 6163,
+    "promotion": 5518.707999999606,
+    "bufferAtPromotion": {
+      "t": 5461.199999999255,
+      "index": "0",
+      "type": "waiting",
+      "time": 4.017597,
+      "ready": 2,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          4.644
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 7848.0999999996275,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 3
+    },
+    "heroVisible": {
+      "t": 7648.2,
+      "ready": 3,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 1331989
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead25-repeat",
+    "profile": "desktop",
+    "run": 2,
+    "fcp": 320,
+    "firstUsable": 1187.1,
+    "playing": 1139.7000000011176,
+    "stallCount": 4,
+    "stallMs": 701.9000000003725,
+    "longestStall": 282,
+    "stalls": [
+      {
+        "at": 1534.800000000745,
+        "mediaTime": 0.38157,
+        "end": 1700.9000000003725,
+        "censored": false,
+        "d": 166.09999999962747
+      },
+      {
+        "at": 5534.200000001118,
+        "mediaTime": 4.181185,
+        "end": 5654.9000000003725,
+        "censored": false,
+        "d": 120.69999999925494
+      },
+      {
+        "at": 6441.9000000003725,
+        "mediaTime": 4.944439,
+        "end": 6723.9000000003725,
+        "censored": false,
+        "d": 282
+      },
+      {
+        "at": 7156.5,
+        "mediaTime": 5.354363,
+        "end": 7289.60000000149,
+        "censored": false,
+        "d": 133.10000000149012
+      }
+    ],
+    "video1Loaded": 6201.60000000149,
+    "promotion": 5552.95599999954,
+    "bufferAtPromotion": {
+      "t": 5534.200000001118,
+      "index": "0",
+      "type": "waiting",
+      "time": 4.181185,
+      "ready": 2,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          4.798
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 7949.60000000149,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 3
+    },
+    "heroVisible": {
+      "t": 7763.4,
+      "ready": 3,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 1081489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "lead25-repeat",
+    "profile": "desktop",
+    "run": 3,
+    "fcp": 400,
+    "firstUsable": 1326.8,
+    "playing": 1275.5,
+    "stallCount": 1,
+    "stallMs": 156.60000000149012,
+    "longestStall": 156.60000000149012,
+    "stalls": [
+      {
+        "at": 1681.5999999996275,
+        "mediaTime": 0.385504,
+        "end": 1838.2000000011176,
+        "censored": false,
+        "d": 156.60000000149012
+      }
+    ],
+    "video1Loaded": 6153.4000000003725,
+    "promotion": 5568.360999999641,
+    "bufferAtPromotion": {
+      "t": 5464.700000001118,
+      "index": "0",
+      "type": "progress",
+      "time": 4.012198,
+      "ready": 4,
+      "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+      "paused": false,
+      "buffered": [
+        [
+          0,
+          5.015
+        ]
+      ]
+    },
+    "handoff": {
+      "t": 7461.4000000003725,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 3
+    },
+    "heroVisible": {
+      "t": 7285,
+      "ready": 3,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 865489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "fast",
+    "profile": "desktop",
+    "run": 1,
+    "fcp": 224,
+    "firstUsable": 457.3,
+    "playing": 407.40000000037253,
+    "stallCount": 0,
+    "stallMs": 0,
+    "longestStall": 0,
+    "stalls": [],
+    "video1Loaded": 406.09999999962747,
+    "promotion": 311.7689999999129,
+    "handoff": {
+      "t": 6422.5999999996275,
+      "state": "complete",
+      "scrollY": 900,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 6235,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4": 3662874,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4": 5088201
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/desktop/video0_Galaxia_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/desktop/video1_SistemaSolar_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  },
+  {
+    "mode": "mobile",
+    "profile": "mobile",
+    "run": 1,
+    "fcp": 532,
+    "firstUsable": 948,
+    "playing": 894.5999999996275,
+    "stallCount": 0,
+    "stallMs": 0,
+    "longestStall": 0,
+    "stalls": [],
+    "video1Loaded": 895.7999999988824,
+    "promotion": 514.113000001089,
+    "handoff": {
+      "t": 6911.199999999255,
+      "state": "complete",
+      "scrollY": 844,
+      "video1": 4
+    },
+    "heroVisible": {
+      "t": 6718.8,
+      "ready": 4,
+      "time": 0
+    },
+    "bytes": {
+      "http://127.0.0.1:4173/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4": 1184291,
+      "http://127.0.0.1:4173/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4": 688489
+    },
+    "errors": [],
+    "state": "complete",
+    "videos": [
+      {
+        "index": "0",
+        "src": "/videos/cinematic/optimized/mobile/video0_Galaxia_720p_h264.mp4",
+        "ready": 4,
+        "time": 6,
+        "opacity": "0.18",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "1",
+        "src": "/videos/cinematic/optimized/mobile/video1_SistemaSolar_720p_h264.mp4",
+        "ready": 4,
+        "time": 0,
+        "opacity": "0.82",
+        "visibility": "visible",
+        "paused": true
+      },
+      {
+        "index": "2",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "3",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "4",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "5",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      },
+      {
+        "index": "6",
+        "src": null,
+        "ready": 0,
+        "time": 0,
+        "opacity": "0",
+        "visibility": "",
+        "paused": true
+      }
+    ]
+  }
+]

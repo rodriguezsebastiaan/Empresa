@@ -11,7 +11,7 @@ import {
 import { fieldClassName, panelClassName } from '@/components/form-controls'
 
 export const metadata: Metadata = {
-  title: 'Acceso administrativo | Konamy Systems',
+  title: 'Acceso administrativo | Conexacod',
   robots: {
     index: false,
     follow: false,
@@ -59,7 +59,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
                 PANEL ADMINISTRATIVO
               </p>
               <h1 className="mt-4 text-4xl font-semibold leading-tight text-foreground">
-                Gestión interna de diagnósticos y asesorías de Konamy Systems.
+                Gestión interna de diagnósticos y asesorías de Conexacod.
               </h1>
               <p className="mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground">
                 Este acceso permite revisar prospectos, actualizar estados, agregar notas internas,
@@ -154,4 +154,3 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
     </main>
   )
 }
-

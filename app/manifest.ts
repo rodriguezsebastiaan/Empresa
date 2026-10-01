@@ -13,28 +13,9 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: 'es-CO',
     icons: [
       {
-        src: siteConfig.seo.faviconIcoPath,
-        sizes: '32x32',
-        type: 'image/x-icon',
-      },
-      {
-        src: '/icon-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: '/icon-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
         src: siteConfig.seo.faviconSvgPath,
+        sizes: 'any',
         type: 'image/svg+xml',
-      },
-      {
-        src: siteConfig.seo.appleTouchIconPath,
-        sizes: '180x180',
-        type: 'image/png',
       },
     ],
   }

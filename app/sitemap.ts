@@ -1,18 +1,23 @@
 import type { MetadataRoute } from 'next'
+import { publishedPortfolioProjects } from '@/config/portfolio'
 import { siteConfig } from '@/config/site'
-import { absoluteUrl } from '@/lib/site'
+import { isPageIndexable, seoIndexingEnabled, seoUrl } from '@/config/seo'
+import type { SitePageKey } from '@/config/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  if (siteConfig.domainIsPlaceholder) {
+  if (!seoIndexingEnabled) {
     return []
   }
 
-  const lastModified = new Date()
+  const publicPages = (Object.keys(siteConfig.pages) as SitePageKey[])
+    .filter(isPageIndexable)
+    .map((key) => ({ url: seoUrl(siteConfig.pages[key].path) }))
 
-  return Object.values(siteConfig.pages).map((page) => ({
-    url: absoluteUrl(page.path),
-    lastModified,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }))
+  const projectPages = publishedPortfolioProjects
+    .filter((project) => project.detailPageEnabled)
+    .map((project) => ({
+      url: seoUrl(`/proyectos/${project.slug}`),
+    }))
+
+  return [...publicPages, ...projectPages]
 }

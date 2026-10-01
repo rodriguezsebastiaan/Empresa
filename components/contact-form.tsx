@@ -5,6 +5,7 @@ import { CheckboxField, TextareaField, TextField, panelClassName } from '@/compo
 import { PrivacyConsentCopy } from '@/components/privacy-consent-copy'
 import { SiteAction } from '@/components/site-action'
 import { siteConfig } from '@/config/site'
+import { cn } from '@/lib/utils'
 import { validateContactForm, type ContactFormData, type FieldErrors } from '@/lib/validation'
 
 const initialState: ContactFormData = {
@@ -18,7 +19,11 @@ const initialState: ContactFormData = {
   website: '',
 }
 
-export function ContactForm() {
+type ContactFormProps = {
+  className?: string
+}
+
+export function ContactForm({ className }: ContactFormProps) {
   const [form, setForm] = useState<ContactFormData>(initialState)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [submitting, setSubmitting] = useState(false)
@@ -94,7 +99,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={panelClassName}>
+    <form onSubmit={handleSubmit} className={cn(panelClassName, className)}>
       <div className="grid gap-5 sm:grid-cols-2">
         <TextField
           label="Nombre"
@@ -182,7 +187,7 @@ export function ContactForm() {
 
       <div
         aria-live="polite"
-        className="mt-5 min-h-6 text-sm"
+        className="ks-form-feedback mt-5 min-h-6"
       >
         {status.message ? (
           <p
@@ -203,7 +208,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 text-xs font-semibold tracking-widest text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className="ks-form-action inline-flex items-center justify-center rounded-md bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-[0_0_24px_-8px_var(--primary)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? 'ENVIANDO...' : 'ENVIAR CONSULTA'}
         </button>

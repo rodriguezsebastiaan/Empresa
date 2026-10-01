@@ -60,7 +60,7 @@ function renderLayout(title: string, intro: string, rows: Array<[string, string 
     })
     .join('')
 
-  return `<!doctype html><html><body style="margin:0;background:#061014;padding:28px;font-family:Arial,sans-serif;color:#0f1720"><main style="max-width:620px;margin:auto;background:#f8fbfb;border-radius:18px;overflow:hidden"><section style="padding:28px"><p style="margin:0 0 10px;color:#00bfc3;font-size:12px;font-weight:700;letter-spacing:.18em">KONAMY SYSTEMS</p><h1 style="margin:0 0 12px;font-size:26px;line-height:1.2">${title}</h1><p style="margin:0 0 22px;color:#42515a;line-height:1.6">${intro}</p><table style="width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden">${rowHtml}</table></section></main></body></html>`
+  return `<!doctype html><html><body style="margin:0;background:#061014;padding:28px;font-family:Arial,sans-serif;color:#0f1720"><main style="max-width:620px;margin:auto;background:#f8fbfb;border-radius:18px;overflow:hidden"><section style="padding:28px"><p style="margin:0 0 10px;color:#00bfc3;font-size:12px;font-weight:700;letter-spacing:.18em">CONEXACOD</p><h1 style="margin:0 0 12px;font-size:26px;line-height:1.2">${title}</h1><p style="margin:0 0 22px;color:#42515a;line-height:1.6">${intro}</p><table style="width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden">${rowHtml}</table></section></main></body></html>`
 }
 
 function buildCustomerConfirmation(input: BookingEmailInput) {
@@ -74,7 +74,7 @@ function buildCustomerConfirmation(input: BookingEmailInput) {
   ]
 
   return {
-    subject: 'Confirmación de asesoría · Konamy Systems',
+    subject: 'Confirmación de asesoría · Conexacod',
     html: renderLayout(
       'Su asesoría quedó confirmada',
       'Estos son los datos principales de la reunión. Conserve este correo para tener trazabilidad de la reserva.',
@@ -110,7 +110,7 @@ function buildCompanyNotification(input: BookingEmailInput) {
     subject: `[Asesoría] ${input.company} · ${input.fullName}`,
     html: renderLayout(
       'Nueva asesoría reservada',
-      'Se registró una nueva reserva desde el sitio corporativo de Konamy Systems.',
+      'Se registró una nueva reserva desde el sitio corporativo de Conexacod.',
       rows,
     ),
     text: rows.map(([label, value]) => `${label}: ${value ?? 'No disponible'}`).join('\n'),
@@ -121,12 +121,12 @@ function buildCancellation(input: BookingEmailInput & { cancellationReason?: str
   const rows: Array<[string, string | null]> = [
     ['Fecha', input.dateLabel],
     ['Hora', input.timeLabel],
-    ['Motivo', input.cancellationReason ?? 'Cancelación registrada por Konamy Systems.'],
+    ['Motivo', input.cancellationReason ?? 'Cancelación registrada por Conexacod.'],
     ['Contacto', getReplyTo() ?? 'Pendiente'],
   ]
 
   return {
-    subject: 'Cancelación de asesoría · Konamy Systems',
+    subject: 'Cancelación de asesoría · Conexacod',
     html: renderLayout(
       'Su asesoría fue cancelada',
       'Le compartimos la confirmación de cancelación para mantener trazabilidad del proceso.',
@@ -249,7 +249,7 @@ export class ResendRealAdapter implements ResendAdapter {
     return sendResendEmail({
       to,
       replyTo: getReplyTo(),
-      subject: '[Konamy] Error de sincronización de asesoría',
+      subject: '[Conexacod] Error de sincronización de asesoría',
       html: renderLayout('Error de sincronización', input.error, [
         ['Cliente', input.fullName],
         ['Empresa', input.company],
